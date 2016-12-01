@@ -1,0 +1,8 @@
+# Creative Tab
+itemGroup.storagebank=倉儲銀行
+
+# Block
+tile.storagebank.ATM.name=ATM
+
+# Item
+item.storagebank.IDCard.name=倉銀會員卡

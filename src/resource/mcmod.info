@@ -1,0 +1,17 @@
+[
+{
+  "modid": "storagebank",
+  "name": "Storage Bank",
+  "description": "Secure private storage on multiple player servers",
+  "version": "",
+  "mcversion": "",
+  "logoFile": "",
+  "url": "http://minecraft.momocow.me/mods",
+  "updateUrl": "http://minecraft.momocow.me/mods/storagebank.versions.json",
+  "authorList": ["MomoCow"],
+  "credits": "",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
