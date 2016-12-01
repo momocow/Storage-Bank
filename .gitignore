@@ -17,6 +17,8 @@ out
 build
 .gradle
 
+# windows cmd
+*.cmd
 # other
 eclipse
 run
