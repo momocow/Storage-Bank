@@ -25,7 +25,7 @@ public class StorageBank {
     	LogHelper.info("Stage: Pre-Init");
     	proxy.init();
     	proxy.registerRender();
-//    	proxy.registerChannel();
+    	proxy.registerChannel();
     }
         
     @EventHandler

@@ -6,10 +6,12 @@ import java.util.List;
 import me.momocow.general.item.BasicItem;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.item.IDCard;
+import me.momocow.storagebank.item.RawCard;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems {
+	public static BasicItem RawCard;
 	public static BasicItem IDCard;
 	
 	//item list
@@ -18,6 +20,7 @@ public class ModItems {
 	public static void init() throws Exception{
 		Items = new ArrayList<BasicItem>();
 		
+		RawCard = initItem(RawCard.class);
 		IDCard = initItem(IDCard.class);
 		LogHelper.info("\tMod Items init... Done");
 	}
@@ -37,7 +40,7 @@ public class ModItems {
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
         for(BasicItem item: Items){
-        	item.initModel();        
+        	item.initModel(); 
         }
         LogHelper.info("\tItem Models init... Done");
     }

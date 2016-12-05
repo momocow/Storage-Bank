@@ -1,0 +1,28 @@
+{
+  "parent": "builtin/generated",
+  "textures": {
+    "layer0": "storagebank:item/RawCard"
+  },
+  "display": {
+    "thirdperson_righthand": {
+        "rotation": [ 60, 282, 36 ],
+        "translation": [ -0.75, 2.25, -1.25 ],
+        "scale": [ 0.40, 0.40, 0.40 ]
+    },
+    "firstperson_righthand": {
+        "rotation": [ 350, 344, 12 ],
+        "translation": [ 0.00, 0.75, -1.00 ],
+        "scale": [ 0.70, 0.70, 0.70 ]
+    },
+    "gui": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0.00, 0.00, 0.00 ],
+        "scale": [ 1.00, 1.00, 1.00 ]
+    },
+    "ground": {
+        "rotation": [ 60, 282, 36 ],
+        "translation": [ 0, 0, 0 ],
+        "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  }
+}
