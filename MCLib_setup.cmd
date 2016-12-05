@@ -1,2 +1,3 @@
-start cmd /c "gradlew setupDecompWorkspace;gradlew eclipse;"
+gradlew setupDecompWorkspace
+gradlew eclipse
 pause

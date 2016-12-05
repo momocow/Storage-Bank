@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -33,8 +34,11 @@ public class RawCard extends BasicItem{
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
-		ItemStack toSign = new ItemStack(ModItems.RawCard, 1);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, toSign);
+		itemStackIn.stackSize--;
+		ItemStack toSign = new ItemStack(ModItems.IDCard, 1);
+		IDCard.signUp(toSign, worldIn, playerIn);
+		playerIn.inventory.addItemStackToInventory(toSign);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ public class ID {
 		public static final byte S2CGuiSync = 2;
 	}
 	
-	public final class PacketHandler{
-
+	public final class Gui{
+		public static final byte GuiIDCard = 1;
 	}
 }

@@ -10,8 +10,9 @@ item.storagebank.RawCard.desc1=持卡右鍵以署名、開卡
 item.storagebank.IDCard.name=倉銀提款卡
 item.storagebank.IDCard.desc1=持卡人
 item.storagebank.IDCard.desc2=持卡右鍵以檢視更多資訊
+item.storagebank.IDCard.announce.signedUp=歡迎加入倉儲銀行！
 
-#Gui
+# Gui
 gui.storagebank.GuiIDCard.textTitle=倉銀提款卡
 gui.storagebank.GuiIDCard.textOwner=持卡人
 gui.storagebank.GuiIDCard.textDepositoryList=倉庫列表

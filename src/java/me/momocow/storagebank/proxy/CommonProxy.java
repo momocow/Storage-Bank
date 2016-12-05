@@ -27,10 +27,22 @@ public abstract class CommonProxy implements MoProxy{
 		}
 	}
 	
+	public void registerKeyBindings() {}
+
+	/**
+	 * [CLIENT only]
+	 */
+	public void registerRender() throws Exception {}
+	
 	public void registerChannel() {
 		//GUIinfo-exchange channel, requests from client for certain GUI data, responses from server aftrer fetching NBT data
 		guiChannel = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.GUI_CHANNEL_NAME);
 		guiChannel.registerMessage(C2SGuiPacket.Handler.class, C2SGuiPacket.class, ID.Packet.C2SGuiInput, Side.SERVER);
 		guiChannel.registerMessage(S2CGuiPacket.Handler.class, S2CGuiPacket.class, ID.Packet.S2CGuiSync, Side.CLIENT);
     }
+	
+	/**
+	 * [CLIENT only]
+	 */
+	public void displayGui(int guiID, Object... objects){}
 }

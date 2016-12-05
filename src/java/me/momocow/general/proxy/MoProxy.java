@@ -4,6 +4,9 @@ public interface MoProxy {
 	//mod elements initialization
 	public void init() throws Exception;
 	
+	//display gui
+	public void displayGui(int guiID, Object... objects);
+	
 	//key binding
 	public void registerKeyBindings();
 	
