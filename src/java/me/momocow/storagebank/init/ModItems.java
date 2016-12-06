@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModItems {
 	public static BasicItem RawCard;
 	public static BasicItem IDCard;
+	public int[] a =null;
 	
 	//item list
 	private static List<BasicItem> Items;

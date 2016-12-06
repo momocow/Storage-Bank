@@ -25,6 +25,7 @@ public class GuiIDCard extends MoGuiScreen{
 	 * Construct the Gui with a bundle of essetial data
 	 */
 	public GuiIDCard(NBTTagCompound data){
+		super(300, 200);
 		setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		
 		//gui text init
@@ -58,7 +59,9 @@ public class GuiIDCard extends MoGuiScreen{
      */
     @Override
     public void drawScreen(int parWidth, int parHeight, float p_73863_3_){
-    	this.drawCenteredString(fontRendererObj, textTitle, 0, 50, 16777215);
+    	this.drawCenteredString(fontRendererObj, textTitle, width/2, height/2 - guiHeight/2, fontRendererObj.getColorCode('3'));
+    	this.drawCenteredString(fontRendererObj, textOwner + ": " + textOwnerName, width/2, height/2 - guiHeight/2 + rowHeight, fontRendererObj.getColorCode('1'));
+    	this.drawCenteredString(fontRendererObj, textDepository + ": ", width/2, height/2 - guiHeight/2 + 2*rowHeight, fontRendererObj.getColorCode('2'));
     }
     
     /**

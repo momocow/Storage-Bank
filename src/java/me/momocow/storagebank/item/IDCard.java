@@ -105,7 +105,6 @@ public class IDCard extends BasicItem{
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced){
 		String textOwner = "";
 		if(stack.hasTagCompound()) textOwner = stack.getTagCompound().getString("ownerName");
