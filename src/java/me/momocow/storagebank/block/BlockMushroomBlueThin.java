@@ -2,24 +2,16 @@ package me.momocow.storagebank.block;
 
 import java.util.Random;
 
-import com.jcraft.jorbis.Block;
-
-import me.momocow.general.block.MoCrop;
-import me.momocow.storagebank.creativetab.CreativeTab;
-import me.momocow.storagebank.reference.Reference;
-import net.minecraft.block.SoundType;
+import me.momocow.general.block.MoPlant;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockMushroomBlueThin extends MoCrop{
+public class BlockMushroomBlueThin extends MoPlant{
 	private static final String NAME = "MushroomBlueThin";
 	protected int maxGrowthStage = 3;
 	
 	public BlockMushroomBlueThin(){
-		this.setCreativeTab(CreativeTab.MO_TAB);
-		this.setRegistryName(NAME);
-		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 	}
 	
 	
