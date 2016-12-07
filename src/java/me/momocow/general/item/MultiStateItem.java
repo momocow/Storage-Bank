@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class MultiStateItem extends BasicItem{
+public class MultiStateItem extends MoItem{
 	public static List<ModelResourceLocation> models = new ArrayList<ModelResourceLocation>();
 	
 	public MultiStateItem(){

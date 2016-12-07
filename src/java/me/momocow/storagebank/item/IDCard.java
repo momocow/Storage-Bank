@@ -3,7 +3,7 @@ package me.momocow.storagebank.item;
 import java.util.List;
 import java.util.UUID;
 
-import me.momocow.general.item.BasicItem;
+import me.momocow.general.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
@@ -22,10 +22,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class IDCard extends BasicItem{
+public class IDCard extends MoItem{
 	private static final String NAME = "IDCard";
 	
 	public IDCard(){

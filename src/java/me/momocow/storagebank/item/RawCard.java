@@ -2,7 +2,7 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.general.item.BasicItem;
+import me.momocow.general.item.MoItem;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class RawCard extends BasicItem{
+public class RawCard extends MoItem{
 	private static final String NAME = "RawCard";
 	
 	public RawCard(){

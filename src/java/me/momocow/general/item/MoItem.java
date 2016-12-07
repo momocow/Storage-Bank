@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 
-abstract public class BasicItem extends Item implements MoCustomModel{
-	public BasicItem(){
+abstract public class MoItem extends Item implements MoCustomModel{
+	public MoItem(){
 		super();
 	}
 	

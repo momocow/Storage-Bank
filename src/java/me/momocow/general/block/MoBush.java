@@ -1,0 +1,28 @@
+package me.momocow.general.block;
+
+import me.momocow.general.client.render.MoCustomModel;
+import me.momocow.storagebank.creativetab.CreativeTab;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
+
+public abstract class MoBush extends BlockBush implements MoCustomModel{
+	public MoBush()
+	{
+		this(Material.PLANTS);
+	}
+	
+	protected MoBush(Material materialIn)
+    {
+		this(materialIn, materialIn.getMaterialMapColor());
+    }
+
+    protected MoBush(Material materialIn, MapColor mapColorIn)
+    {
+    	super(materialIn, mapColorIn);
+    	this.setTickRandomly(true);
+        this.setCreativeTab(CreativeTab.MO_TAB);
+    }
+	
+	public void initModel(){}
+}

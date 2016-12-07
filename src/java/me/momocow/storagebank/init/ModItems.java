@@ -3,7 +3,7 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.momocow.general.item.BasicItem;
+import me.momocow.general.item.MoItem;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.item.RawCard;
@@ -11,24 +11,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems {
-	public static BasicItem RawCard;
-	public static BasicItem IDCard;
-	public int[] a =null;
+	public static RawCard RawCard;
+	public static IDCard IDCard;
 	
 	//item list
-	private static List<BasicItem> Items;
+	private static List<MoItem> Items;
 	
-	public static void init() throws Exception{
-		Items = new ArrayList<BasicItem>();
+	public static void init() throws Exception
+	{
+		Items = new ArrayList<MoItem>();
 		
-		RawCard = initItem(RawCard.class);
-		IDCard = initItem(IDCard.class);
-		LogHelper.info("\tMod Items init... Done");
+		RawCard = (RawCard) initItem(RawCard.class);
+		IDCard = (IDCard) initItem(IDCard.class);
+		
+		LogHelper.info("Mod Items init... Done");
 	}
 	
-	private static BasicItem initItem(Class<? extends BasicItem> itemClass) throws Exception{
+	private static MoItem initItem(Class<? extends MoItem> itemClass) throws Exception
+	{
 		try{
-			BasicItem i = itemClass.newInstance();
+			MoItem i = itemClass.newInstance();
 			Items.add(i);
 			return i;
 		}
@@ -39,10 +41,11 @@ public class ModItems {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public static void initModels() {
-        for(BasicItem item: Items){
+    public static void initModels() 
+	{
+        for(MoItem item: Items){
         	item.initModel(); 
         }
-        LogHelper.info("\tItem Models init... Done");
+        LogHelper.info("Item Models init... Done");
     }
 }
