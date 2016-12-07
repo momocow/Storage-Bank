@@ -23,10 +23,12 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class IDCard extends MoItem{
+public class IDCard extends MoItem
+{
 	private static final String NAME = "IDCard";
 	
-	public IDCard(){
+	public IDCard()
+	{
 		this.setCreativeTab(CreativeTab.MO_TAB);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
@@ -40,7 +42,8 @@ public class IDCard extends MoItem{
 	 * [CLIENT only]Display the GUIScreen for the card infomation
 	 */
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){	
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{	
 		if(worldIn.isRemote){
 			NBTTagCompound nbt = null;
 			//Every IDCard is supposed to has its NBT data after signed up from raw card
@@ -67,7 +70,8 @@ public class IDCard extends MoItem{
 	 * @param worldIn
 	 * @param playerIn
 	 */
-	public static void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn){
+	public static void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	{
 		if(!worldIn.isRemote){
 			if(!itemStackIn.hasTagCompound()){
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -90,7 +94,8 @@ public class IDCard extends MoItem{
 	 * @param worldIn
 	 * @param playerIn
 	 */
-	public static void addDepository(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, float depoX, float depoY, float depoZ, String depoName){
+	public static void addDepository(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, float depoX, float depoY, float depoZ, String depoName)
+	{
 		if(!worldIn.isRemote && itemStackIn.hasTagCompound()){
 			//write NBT tag
 			NBTTagCompound depo = new NBTTagCompound();
@@ -103,7 +108,8 @@ public class IDCard extends MoItem{
 	}
 	
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced){
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	{
 		String textOwner = "";
 		if(stack.hasTagCompound()) textOwner = stack.getTagCompound().getString("ownerName");
 		tooltip.add(TextFormatting.YELLOW + I18n.format(getUnlocalizedName() + ".desc1") + ": " + textOwner);

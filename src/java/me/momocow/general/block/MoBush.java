@@ -5,8 +5,12 @@ import me.momocow.storagebank.creativetab.CreativeTab;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.model.ModelLoader;
 
-public abstract class MoBush extends BlockBush implements MoCustomModel{
+public abstract class MoBush extends BlockBush implements MoCustomModel
+{
 	public MoBush()
 	{
 		this(Material.PLANTS);
@@ -24,5 +28,8 @@ public abstract class MoBush extends BlockBush implements MoCustomModel{
         this.setCreativeTab(CreativeTab.MO_TAB);
     }
 	
-	public void initModel(){}
+	public void initModel() 
+	{
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	}
 }

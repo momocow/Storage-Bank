@@ -1,6 +1,7 @@
 package me.momocow.storagebank.proxy;
 
 import me.momocow.storagebank.client.render.gui.GuiIDCard;
+import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.ID;
 import net.minecraft.client.Minecraft;
@@ -10,6 +11,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void registerRender() throws Exception {
 		ModItems.initModels();
+		ModBlocks.initModels();
 	}
 
 	@Override

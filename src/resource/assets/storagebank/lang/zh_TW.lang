@@ -12,6 +12,10 @@ item.storagebank.IDCard.desc1=持卡人
 item.storagebank.IDCard.desc2=持卡右鍵以檢視更多資訊
 item.storagebank.IDCard.announce.signedUp=歡迎加入倉儲銀行！
 
+# Tile
+tile.storagebank.MushroomBlueThin.name=藍瘦香菇
+tile.storagebank.MushroomBlueThin.desc1=真的好難受...想哭...。･ﾟ･(╥  ╥)･ﾟ･
+
 # Gui
 gui.storagebank.GuiIDCard.textTitle=倉銀提款卡
 gui.storagebank.GuiIDCard.textOwner=持卡人
