@@ -1,7 +1,10 @@
 package me.momocow.storagebank.item;
 
-import me.momocow.general.block.MoBush;
+import javax.annotation.Nullable;
+
+import me.momocow.general.block.MoCrop;
 import me.momocow.general.item.MoItem;
+import me.momocow.general.item.MoSeed;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.reference.Reference;
@@ -11,13 +14,11 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class SorusBlueThin extends MoItem{
+public class SorusBlueThin extends MoItem implements MoSeed{
 	private static final String NAME = "SorusBlueThin";
-	private static final MoBush plantable = ModBlocks.BlockMushroomBlueThin;
 	
 	public SorusBlueThin(){
 		this.setCreativeTab(CreativeTab.MO_TAB);
@@ -28,11 +29,20 @@ public class SorusBlueThin extends MoItem{
 		GameRegistry.register(this);
 	}
 	
+	/**
+	 * Should be called after preInit othrwise null will be returned
+	 */
+	@Nullable
+	public MoCrop getGrowable()
+	{
+		return ModBlocks.BlockMushroomBlueThin;
+	}
+	
 	@Override
 	//register to the game
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		playerIn.addChatComponentMessage(new TextComponentString(""+ plantable.getUnlocalizedName()));
-		return EnumActionResult.PASS;
+		if(!worldIn.isRemote) return getGrowable().plantToSoil(stack, playerIn, worldIn, pos, facing);
+		return EnumActionResult.FAIL;
     }
 }

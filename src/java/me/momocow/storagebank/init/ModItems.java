@@ -6,6 +6,7 @@ import java.util.List;
 import me.momocow.general.item.MoItem;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.item.IDCard;
+import me.momocow.storagebank.item.MushroomBlueThin;
 import me.momocow.storagebank.item.RawCard;
 import me.momocow.storagebank.item.SorusBlueThin;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,6 +16,7 @@ public class ModItems {
 	public static RawCard RawCard;
 	public static IDCard IDCard;
 	public static SorusBlueThin SorusBlueThin;
+	public static MushroomBlueThin MushroomBlueThin;
 	
 	//item list
 	private static List<MoItem> Items;
@@ -26,6 +28,7 @@ public class ModItems {
 		RawCard = (RawCard) initItem(RawCard.class);
 		IDCard = (IDCard) initItem(IDCard.class);
 		SorusBlueThin = (SorusBlueThin) initItem(SorusBlueThin.class);
+		MushroomBlueThin = (MushroomBlueThin) initItem(MushroomBlueThin.class);
 		
 		LogHelper.info("Mod Items init... Done");
 	}

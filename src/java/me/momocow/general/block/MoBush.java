@@ -10,23 +10,16 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 
 public abstract class MoBush extends BlockBush implements MoCustomModel
 {
-	protected int maxGrowthLightness = 15;
-	protected int minGrowthLightness = 8;
-	/** A set of suitable soils' block IDs for the plant **/
-	protected Set<Integer> soilList = new HashSet<Integer>();	
-	
 	public MoBush()
 	{
 		this(Material.PLANTS);
@@ -47,12 +40,15 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
     @Override
 	protected boolean canSustainBush(IBlockState soilState)
     {
-        return soilList.contains(Block.getIdFromBlock((soilState.getBlock())));
+        return this.getSuitableSoilList().contains(Block.getIdFromBlock((soilState.getBlock())));
     }
 	
 	@Override
 	public boolean canBlockStay(World worldIn, BlockPos plantablePos, IBlockState soilState)
 	{
+		if(soilState.getBlock() == this){
+			soilState = worldIn.getBlockState(plantablePos.down());
+		}
         return (worldIn.getLight(plantablePos) >= this.getMinGrowthLightness() || worldIn.canSeeSky(plantablePos)) && this.canSustainBush(soilState);
     }
 	
@@ -65,6 +61,15 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 		return this.canBlockStay(worldIn, plantablePos, worldIn.getBlockState(plantablePos.down()));
     }
 	
+	/**
+	 * Plantable Planted by Player
+	 * @param stack ItemStack held by player
+	 * @param playerIn planter
+	 * @param worldIn the world
+	 * @param pos soil position
+	 * @param facing the side to plant the Plantable
+	 * @return
+	 */
 	public EnumActionResult plantToSoil(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
 	{
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && this.canPlaceBlockAt(worldIn, pos.up()) && worldIn.isAirBlock(pos.up()))
@@ -76,68 +81,34 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
         return EnumActionResult.FAIL;
 	}
 	
-	public void initModel() 
-	{
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-	}
+	public void initModel() {}
 	
-	public void setMaxGrowthLightness(int max)
-	{
-		this.maxGrowthLightness = Math.min(max, 15);
-	}
-	
-	public void setMinGrowthLightness(int min)
-	{
-		this.minGrowthLightness = Math.max(min, 0);
-	}
-	
+	/**
+	 * Override it to change the setting
+	 * @return max lightness value to grow
+	 */
 	public int getMaxGrowthLightness()
 	{
-		return this.maxGrowthLightness;
+		return 15;
 	}
 	
+	/**
+	 * Override it to change the setting
+	 * @return min lightness value to grow
+	 */
 	public int getMinGrowthLightness()
 	{
-		return this.minGrowthLightness;
+		return 8;
 	}
 	
+	/**
+	 * Override it to change the setting
+	 * @return a set of blocks for the Plantable to be planted on
+	 */
 	public Set<Integer> getSuitableSoilList()
 	{
-		return new HashSet<Integer>(soilList);
-	}
-
-	public void setSuitableSoilList(Set<Integer> listIn)
-	{
-		if(listIn != null) soilList = listIn;
-	}
-	
-	public void addSuitableSoilList(Integer blockIdIn)
-	{
-		soilList.add(blockIdIn);
-	}
-	
-	public void addSuitableSoilList(Block blockIn)
-	{
-		this.addSuitableSoilList(Block.getIdFromBlock(blockIn));
-	}
-	
-	public void addSuitableSoilList(IBlockState blockStateIn)
-	{
-		this.addSuitableSoilList(blockStateIn.getBlock());
-	}
-	
-	public void removeSuitableSoilList(Integer blockIdIn)
-	{
-		this.soilList.remove(blockIdIn);
-	}
-	
-	public void removeSuitableSoilList(Block blockIn)
-	{
-		this.removeSuitableSoilList(Block.getIdFromBlock(blockIn));
-	}
-	
-	public void removeSuitableSoilList(IBlockState blockStateIn)
-	{
-		this.removeSuitableSoilList(blockStateIn.getBlock());
+		Set<Integer> ret = new HashSet<Integer>();
+		ret.add(Block.getIdFromBlock(Blocks.FARMLAND));
+		return ret;
 	}
 }
