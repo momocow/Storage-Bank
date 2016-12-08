@@ -5,16 +5,14 @@ import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
 import me.momocow.storagebank.creativetab.CreativeTab;
+import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockMushroomBlueThin extends MoCrop
@@ -33,28 +31,34 @@ public class BlockMushroomBlueThin extends MoCrop
 	@Override
     protected Item getCrop()
     {
-        return Item.getItemFromBlock(this.withAge(15).getBlock());
+        return Item.getItemFromBlock(this);
     }
 	
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-	{
-		super.updateTick(worldIn, pos, state, rand);
+	@Override
+    protected Item getSeed()
+    {
+        return ModItems.SorusBlueThin;
+    }
+	
+	@Override
+	public int quantityDropped(Random random)
+    {
+		int i = random.nextInt(100);
+		if(i == 0)	//1%
+		{
+			return 10;
+		}
+		else if( i < 6)	//5%
+		{
+			return 5;
+		}
+		else if(i < 26)	//20%
+		{
+			return 3;
+		}
 		
-        if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
-        {
-            int i = this.getAge(state);
-
-            if (i < this.getMaxAge())
-            {
-                float f = getGrowthChance(this, worldIn, pos);
-
-                if (rand.nextInt((int)(25.0F / f) + 1) == 0)
-                {
-                    worldIn.setBlockState(pos, this.withAge(i + 1), 2);
-                }
-            }
-        }
-	}
+        return 1;	//74%
+    }
 	
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)

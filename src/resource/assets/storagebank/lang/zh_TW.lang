@@ -11,6 +11,7 @@ item.storagebank.IDCard.name=倉銀提款卡
 item.storagebank.IDCard.desc1=持卡人
 item.storagebank.IDCard.desc2=持卡右鍵以檢視更多資訊
 item.storagebank.IDCard.announce.signedUp=歡迎加入倉儲銀行！
+item.storagebank.SorusBlueThin.name=藍瘦孢子
 
 # Tile
 tile.storagebank.MushroomBlueThin.name=藍瘦香菇

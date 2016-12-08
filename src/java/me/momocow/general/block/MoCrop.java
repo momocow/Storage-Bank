@@ -1,9 +1,7 @@
 package me.momocow.general.block;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -25,10 +23,6 @@ import net.minecraft.world.World;
 public abstract class MoCrop extends MoBush implements IGrowable
 {
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
-	protected int maxGrowthLightness = 15;
-	protected int minGrowthLightness = 8;
-	/** A set of suitable soils' block IDs for the plant **/
-	protected Set<Integer> soilList = new HashSet<Integer>();	
 	
 	public MoCrop()
 	{
@@ -42,19 +36,22 @@ public abstract class MoCrop extends MoBush implements IGrowable
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
 	{
 		super.updateTick(worldIn, pos, state, rand);
+		
+		if (worldIn.getLightFromNeighbors(pos.up()) >= this.getMinGrowthLightness() + 1)
+        {
+            int i = this.getAge(state);
+
+            if (i < this.getMaxAge())
+            {
+                float f = getGrowthChance(this, worldIn, pos);
+
+                if (rand.nextInt((int)(25.0F / f) + 1) == 0)
+                {
+                    worldIn.setBlockState(pos, this.withAge(i + 1), 2);
+                }
+            }
+        }
 	}
-	
-	@Override
-	protected boolean canSustainBush(IBlockState state)
-    {
-        return soilList.contains(Block.getIdFromBlock((state.getBlock())));
-    }
-	
-	@Override
-	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
-	{
-        return (worldIn.getLight(pos) >= getMinGrowthLightness() || worldIn.canSeeSky(pos)) && this.canSustainBush(state);
-    }
 	
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
@@ -239,66 +236,6 @@ public abstract class MoCrop extends MoBush implements IGrowable
     {
         return ((Integer)state.getValue(this.getAgeProperty())).intValue();
     }
-
-	public void setMaxGrowthLightness(int max)
-	{
-		this.maxGrowthLightness = Math.min(max, 15);
-	}
-	
-	public void setMinGrowthLightness(int min)
-	{
-		this.minGrowthLightness = Math.max(min, 0);
-	}
-	
-	public int getMaxGrowthLightness()
-	{
-		return this.maxGrowthLightness;
-	}
-	
-	public int getMinGrowthLightness()
-	{
-		return this.minGrowthLightness;
-	}
-	
-	public Set<Integer> getSuitableSoilList()
-	{
-		return new HashSet<Integer>(soilList);
-	}
-
-	public void setSuitableSoilList(Set<Integer> listIn)
-	{
-		if(listIn != null) soilList = listIn;
-	}
-	
-	public void addSuitableSoilList(Integer blockIdIn)
-	{
-		soilList.add(blockIdIn);
-	}
-	
-	public void addSuitableSoilList(Block blockIn)
-	{
-		this.addSuitableSoilList(Block.getIdFromBlock(blockIn));
-	}
-	
-	public void addSuitableSoilList(IBlockState blockStateIn)
-	{
-		this.addSuitableSoilList(blockStateIn.getBlock());
-	}
-	
-	public void removeSuitableSoilList(Integer blockIdIn)
-	{
-		this.soilList.remove(blockIdIn);
-	}
-	
-	public void removeSuitableSoilList(Block blockIn)
-	{
-		this.removeSuitableSoilList(Block.getIdFromBlock(blockIn));
-	}
-	
-	public void removeSuitableSoilList(IBlockState blockStateIn)
-	{
-		this.removeSuitableSoilList(blockStateIn.getBlock());
-	}
 	
 //	TODO figure out the class of the elements in colleIn and its corresponding casting into Integer (for Block ID)
 //	public void removeSuitableSoilList(Collection<Object> colleIn)
