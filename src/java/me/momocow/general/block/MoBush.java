@@ -11,7 +11,6 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +19,8 @@ import net.minecraft.world.World;
 
 public abstract class MoBush extends BlockBush implements MoCustomModel
 {
+	public static Set<Integer> soilList = new HashSet<Integer>();
+	
 	public MoBush()
 	{
 		this(Material.PLANTS);
@@ -36,6 +37,8 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
     	this.setTickRandomly(true);
         this.setCreativeTab(CreativeTab.MO_TAB);
     }
+    
+    public void init() {}
 	
     @Override
 	protected boolean canSustainBush(IBlockState soilState)
@@ -49,7 +52,7 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 		if(soilState.getBlock() == this){
 			soilState = worldIn.getBlockState(plantablePos.down());
 		}
-        return (worldIn.getLight(plantablePos) >= this.getMinGrowthLightness() || worldIn.canSeeSky(plantablePos)) && this.canSustainBush(soilState);
+        return (worldIn.getLight(plantablePos) <= this.getMaxGrowthLightness() || worldIn.getLight(plantablePos) >= this.getMinGrowthLightness() || worldIn.canSeeSky(plantablePos)) && this.canSustainBush(soilState);
     }
 	
 	/**
@@ -101,14 +104,21 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 		return 8;
 	}
 	
+	public void setSuitableSoilList(Block b)
+	{
+		setSuitableSoilList(Block.getIdFromBlock(b));
+	}
+	
+	public void setSuitableSoilList(Integer i)
+	{
+		soilList.add(i);
+	}
+	
 	/**
-	 * Override it to change the setting
 	 * @return a set of blocks for the Plantable to be planted on
 	 */
 	public Set<Integer> getSuitableSoilList()
 	{
-		Set<Integer> ret = new HashSet<Integer>();
-		ret.add(Block.getIdFromBlock(Blocks.FARMLAND));
-		return ret;
+		return soilList;
 	}
 }

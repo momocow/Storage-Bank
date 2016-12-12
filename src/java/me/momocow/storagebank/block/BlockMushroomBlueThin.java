@@ -1,9 +1,7 @@
 package me.momocow.storagebank.block;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import me.momocow.general.block.MoCrop;
 import me.momocow.storagebank.creativetab.CreativeTab;
@@ -18,15 +16,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockMushroomBlueThin extends MoCrop
 {
-	private static final String NAME = "MushroomBlueThin";
+	private static final String NAME = "BlockMushroomBlueThin";
 	private static final AxisAlignedBB[] AABB = new AxisAlignedBB[]
 			{
+					new AxisAlignedBB(0.3D, 0.0D, 0.3D, 0.7D, 0.3D, 0.7D),
 					new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.5D, 0.8D),
 					new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.9D, 0.9D)
 			};
@@ -40,10 +41,23 @@ public class BlockMushroomBlueThin extends MoCrop
 		GameRegistry.register(this);
 	}
 	
+	public void init()
+	{
+		this.setSuitableSoilList(Blocks.FARMLAND);
+		this.setSuitableSoilList(Blocks.DIRT);
+		this.setSuitableSoilList(Blocks.COBBLESTONE);
+		this.setSuitableSoilList(Blocks.STONE);
+		this.setSuitableSoilList(Blocks.LOG);
+		this.setSuitableSoilList(Blocks.LOG2);
+		this.setSuitableSoilList(Blocks.GRASS);
+		this.setSuitableSoilList(Blocks.PLANKS);
+	}
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		if(this.getAge(state) == this.getMaxAge()) return AABB[1];
+		if(this.getAge(state) == this.getMaxAge()) return AABB[2];
+		else if(this.getAge(state) >= 10) return AABB[1];
 		return AABB[0];
 	}
 	
@@ -57,20 +71,6 @@ public class BlockMushroomBlueThin extends MoCrop
 	public int getMinGrowthLightness()
 	{
 		return 0;
-	}
-	
-	@Override
-	public Set<Integer> getSuitableSoilList()
-	{
-		Set<Integer> ret = new HashSet<Integer>();
-		ret.add(Block.getIdFromBlock(Blocks.FARMLAND));
-		ret.add(Block.getIdFromBlock(Blocks.DIRT));
-		ret.add(Block.getIdFromBlock(Blocks.COBBLESTONE));
-		ret.add(Block.getIdFromBlock(Blocks.STONE));
-		ret.add(Block.getIdFromBlock(Blocks.LOG));
-		ret.add(Block.getIdFromBlock(Blocks.LOG2));
-		ret.add(Block.getIdFromBlock(Blocks.GRASS));
-		return ret;
 	}
 	
 	@Override
@@ -110,13 +110,56 @@ public class BlockMushroomBlueThin extends MoCrop
 	{
 		tooltip.add(TextFormatting.AQUA + I18n.format(getUnlocalizedName() + ".desc1"));
 	}
-
-//	@Override
-//	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-//		return false;
-//	}
-
-//	@Override
-//	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {	
-//	}
+	
+	@Override
+	protected float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
+	{
+//		float chance = new Random().nextFloat();
+//		return chance;
+		//return 8.3~12.5 for 1/3 chance
+		if(worldIn.getWorldInfo())
+		{
+			
+		}
+		return 8.0f;
+	}
+	
+	@Override
+	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
+	{
+		super.grow(worldIn, pos, state);
+		
+		if(rand.nextInt(5) == 0)
+		{
+			generateGiantMushroom(worldIn, pos, pos);
+		}
+	}
+	
+	//TODO
+	public void generateGiantMushroom(World worldIn, BlockPos pos, BlockPos state)
+	{
+//		orignal in BlockMushrooms.generateBigMushroom(...)
+		
+//		worldIn.setBlockToAir(pos);
+//        WorldGenerator worldgenerator = null;
+//
+//        if (this == Blocks.BROWN_MUSHROOM)
+//        {
+//            worldgenerator = new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
+//        }
+//        else if (this == Blocks.RED_MUSHROOM)
+//        {
+//            worldgenerator = new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK);
+//        }
+//
+//        if (worldgenerator != null && worldgenerator.generate(worldIn, rand, pos))
+//        {
+//            return true;
+//        }
+//        else
+//        {
+//            worldIn.setBlockState(pos, state, 3);
+//            return false;
+//        }
+	}
 }

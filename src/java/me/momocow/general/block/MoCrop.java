@@ -43,7 +43,7 @@ public abstract class MoCrop extends MoBush implements IGrowable
 
             if (i < this.getMaxAge())
             {
-                float f = getGrowthChance(this, worldIn, pos);
+                float f = this.getGrowthChance(this, worldIn, pos);
 
                 if (rand.nextInt((int)(25.0F / f) + 1) == 0)
                 {
@@ -84,7 +84,7 @@ public abstract class MoCrop extends MoBush implements IGrowable
         worldIn.setBlockState(pos, this.withAge(i), 2);
     }
 	
-	protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
+	protected float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
     {
         float f = 1.0F;
         BlockPos blockpos = pos.down();

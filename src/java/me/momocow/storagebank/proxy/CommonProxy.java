@@ -1,9 +1,6 @@
 package me.momocow.storagebank.proxy;
 
 import me.momocow.general.proxy.MoProxy;
-import me.momocow.general.util.LogHelper;
-import me.momocow.storagebank.init.ModBlocks;
-import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.network.C2SGuiPacket;
 import me.momocow.storagebank.network.S2CGuiPacket;
 import me.momocow.storagebank.reference.ID;
@@ -18,20 +15,6 @@ public abstract class CommonProxy implements MoProxy
 	 * channel_gui: gui sync and client input
 	 */
 	public static SimpleNetworkWrapper guiChannel;	//GUI channel instance
-	
-	public void init() throws Exception
-	{
-		try
-		{
-			ModItems.init();
-			ModBlocks.init();
-		}
-		catch(Exception e)
-		{
-			LogHelper.error("Elements initialization fails");
-			throw e;
-		}
-	}
 	
 	public void registerKeyBindings() {}
 

@@ -9,9 +9,12 @@ import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.item.MushroomBlueThin;
 import me.momocow.storagebank.item.RawCard;
 import me.momocow.storagebank.item.SorusBlueThin;
+import me.momocow.storagebank.reference.Reference;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModItems {
 	public static RawCard RawCard;
 	public static IDCard IDCard;
@@ -21,7 +24,7 @@ public class ModItems {
 	//item list
 	private static List<MoItem> Items;
 	
-	public static void init() throws Exception
+	public static void preinit() throws Exception
 	{
 		Items = new ArrayList<MoItem>();
 		
@@ -30,7 +33,7 @@ public class ModItems {
 		SorusBlueThin = (SorusBlueThin) initItem(SorusBlueThin.class);
 		MushroomBlueThin = (MushroomBlueThin) initItem(MushroomBlueThin.class);
 		
-		LogHelper.info("Mod Items init... Done");
+		LogHelper.info("Mod Items pre-init... Done");
 	}
 	
 	private static MoItem initItem(Class<? extends MoItem> itemClass) throws Exception
@@ -52,6 +55,6 @@ public class ModItems {
         for(MoItem item: Items){
         	item.initModel(); 
         }
-        LogHelper.info("Item Models init... Done");
+        LogHelper.info("Item Models register... Done");
     }
 }

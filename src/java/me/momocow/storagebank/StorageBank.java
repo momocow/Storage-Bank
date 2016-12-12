@@ -2,6 +2,8 @@ package me.momocow.storagebank;
 
 import me.momocow.general.proxy.MoProxy;
 import me.momocow.general.util.LogHelper;
+import me.momocow.storagebank.init.ModBlocks;
+import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -23,14 +25,19 @@ public class StorageBank {
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) throws Exception{
     	LogHelper.info("Stage: Pre-Init");
-    	proxy.init();
+    	
+    	ModItems.preinit();
+		ModBlocks.preinit();
+		
     	proxy.registerRender();
     	proxy.registerChannel();
     }
         
     @EventHandler
-    public void init(FMLInitializationEvent e) {
+    public void init(FMLInitializationEvent e) throws Exception{
     	LogHelper.info("Stage: Init");
+    	
+    	ModBlocks.init();
     }
         
     @EventHandler
