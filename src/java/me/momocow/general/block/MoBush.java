@@ -52,7 +52,7 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 		if(soilState.getBlock() == this){
 			soilState = worldIn.getBlockState(plantablePos.down());
 		}
-        return (worldIn.getLight(plantablePos) <= this.getMaxGrowthLightness() || worldIn.getLight(plantablePos) >= this.getMinGrowthLightness() || worldIn.canSeeSky(plantablePos)) && this.canSustainBush(soilState);
+        return worldIn.getLight(plantablePos) <= this.getMaxGrowthLightness() && worldIn.getLight(plantablePos) >= this.getMinGrowthLightness() && this.canSustainBush(soilState);
     }
 	
 	/**

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -47,6 +48,7 @@ public abstract class MoCrop extends MoBush implements IGrowable
 
                 if (rand.nextInt((int)(25.0F / f) + 1) == 0)
                 {
+                	worldIn.getPlayerEntityByName("MomoCow").addChatMessage(new TextComponentString("Grow from "+this.getAge(state)+" to "+(this.getAge(state)+1)));
                     worldIn.setBlockState(pos, this.withAge(i + 1), 2);
                 }
             }

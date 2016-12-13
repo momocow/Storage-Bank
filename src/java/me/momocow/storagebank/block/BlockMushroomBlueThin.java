@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -27,7 +26,7 @@ public class BlockMushroomBlueThin extends MoCrop
 	private static final String NAME = "BlockMushroomBlueThin";
 	private static final AxisAlignedBB[] AABB = new AxisAlignedBB[]
 			{
-					new AxisAlignedBB(0.3D, 0.0D, 0.3D, 0.7D, 0.3D, 0.7D),
+					new AxisAlignedBB(0.3D, 0.0D, 0.3D, 0.7D, 0.4D, 0.7D),
 					new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.5D, 0.8D),
 					new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.9D, 0.9D)
 			};
@@ -114,14 +113,19 @@ public class BlockMushroomBlueThin extends MoCrop
 	@Override
 	protected float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
 	{
-//		float chance = new Random().nextFloat();
-//		return chance;
-		//return 8.3~12.5 for 1/3 chance
-		if(worldIn.getWorldInfo())
+		Random r = new Random();
+		
+		if (worldIn.getWorldInfo().isThundering() && worldIn.canSeeSky(pos))
 		{
-			
+			return 30f;
+					
 		}
-		return 8.0f;
+		else if (worldIn.getWorldInfo().isRaining() && worldIn.canSeeSky(pos))
+		{
+			return 10f + 16f * r.nextFloat();	//float: 10 ~ 26 for 1/3 ~ 1 chance
+		}
+		
+		return 6f + 2f * r.nextFloat();	//float: 6 ~ 8 for 1/5 ~ 1/4 chance
 	}
 	
 	@Override
