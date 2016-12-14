@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.momocow.general.item.MoItem;
 import me.momocow.general.util.LogHelper;
+import me.momocow.storagebank.item.DriedMushroomBlueThin;
 import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.item.MushroomBlueThin;
 import me.momocow.storagebank.item.RawCard;
@@ -20,6 +21,7 @@ public class ModItems {
 	public static IDCard IDCard;
 	public static SorusBlueThin SorusBlueThin;
 	public static MushroomBlueThin MushroomBlueThin;
+	public static DriedMushroomBlueThin DriedMushroomBlueThin;
 	
 	//item list
 	private static List<MoItem> Items;
@@ -32,6 +34,7 @@ public class ModItems {
 		IDCard = (IDCard) initItem(IDCard.class);
 		SorusBlueThin = (SorusBlueThin) initItem(SorusBlueThin.class);
 		MushroomBlueThin = (MushroomBlueThin) initItem(MushroomBlueThin.class);
+		DriedMushroomBlueThin = (DriedMushroomBlueThin) initItem(DriedMushroomBlueThin.class);
 		
 		LogHelper.info("Mod Items pre-init... Done");
 	}

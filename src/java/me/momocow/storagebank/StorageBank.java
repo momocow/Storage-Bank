@@ -2,8 +2,11 @@ package me.momocow.storagebank;
 
 import me.momocow.general.proxy.MoProxy;
 import me.momocow.general.util.LogHelper;
+import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
+import me.momocow.storagebank.init.ModEvents;
 import me.momocow.storagebank.init.ModItems;
+import me.momocow.storagebank.init.ModRecipes;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -21,10 +24,15 @@ public class StorageBank {
 	//proxy for client/server event
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
 	public static MoProxy proxy;
+	
+	public static Config config;
      
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) throws Exception{
     	LogHelper.info("Stage: Pre-Init");
+    	
+    	config = new Config(e.getModConfigurationDirectory());
+    	config.read();
     	
     	ModItems.preinit();
 		ModBlocks.preinit();
@@ -38,10 +46,14 @@ public class StorageBank {
     	LogHelper.info("Stage: Init");
     	
     	ModBlocks.init();
+    	ModRecipes.init();
+    	ModEvents.init();
     }
         
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
     	LogHelper.info("Stage: Post-Init");
+    	
+    	config.save();
     }
 }

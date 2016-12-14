@@ -1,6 +1,5 @@
 package me.momocow.storagebank.block;
 
-import java.util.List;
 import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
@@ -9,14 +8,10 @@ import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -103,12 +98,6 @@ public class BlockMushroomBlueThin extends MoCrop
 		
         return 1;	//74%
     }
-	
-	@Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
-	{
-		tooltip.add(TextFormatting.AQUA + I18n.format(getUnlocalizedName() + ".desc1"));
-	}
 	
 	@Override
 	protected float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)

@@ -65,7 +65,7 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
     }
 	
 	/**
-	 * Plantable Planted by Player
+	 * Planted by Player
 	 * @param stack ItemStack held by player
 	 * @param playerIn planter
 	 * @param worldIn the world
@@ -75,13 +75,31 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 	 */
 	public EnumActionResult plantToSoil(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
 	{
-		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && this.canPlaceBlockAt(worldIn, pos.up()) && worldIn.isAirBlock(pos.up()))
+		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
         {
-			worldIn.setBlockState(pos.up(), this.getDefaultState());
-			--stack.stackSize;
-			return EnumActionResult.SUCCESS;
+			if (this.plantToSoil(worldIn, pos.up()))
+			{
+				--stack.stackSize;
+				return EnumActionResult.SUCCESS;
+			}
         }
         return EnumActionResult.FAIL;
+	}
+	
+	/**
+	 * Planted to the soil at the certain position
+	 * @param worldIn the world
+	 * @param pos the position to plant
+	 * @return true if it is planted successfully; false if it does not
+	 */
+	public boolean plantToSoil(World worldIn, BlockPos pos){
+		if(this.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos))
+		{
+			worldIn.setBlockState(pos, this.getDefaultState());
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void initModel() {}

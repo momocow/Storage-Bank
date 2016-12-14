@@ -5,6 +5,8 @@ import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.ID;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ClientProxy extends CommonProxy{
@@ -23,5 +25,20 @@ public class ClientProxy extends CommonProxy{
 				break;
 			default:
 		}
+	}
+	
+	public static Minecraft getGame()
+	{
+		return Minecraft.getMinecraft();
+	}
+	
+	public static WorldClient getWorld()
+	{
+		return Minecraft.getMinecraft().theWorld;
+	}
+	
+	public static EntityPlayer getPlayer()
+	{
+		return Minecraft.getMinecraft().thePlayer;
 	}
 }

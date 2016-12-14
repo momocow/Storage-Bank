@@ -11,16 +11,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class MushroomBlueThin extends MoItem{
-	private static final String NAME = "MushroomBlueThin";
+public class DriedMushroomBlueThin extends MoItem{
+	private static String NAME = "DriedMushroomBlueThin";
 	
-	public MushroomBlueThin(){
+	public DriedMushroomBlueThin()
+	{
 		this.setCreativeTab(CreativeTab.MO_TAB);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
 		this.setMaxStackSize(64);
 		
-		//register to the game
 		GameRegistry.register(this);
 	}
 	
