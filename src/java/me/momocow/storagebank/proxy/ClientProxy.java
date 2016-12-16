@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IThreadListener;
 
 public class ClientProxy extends CommonProxy{
 	@Override
@@ -27,17 +28,22 @@ public class ClientProxy extends CommonProxy{
 		}
 	}
 	
-	public static Minecraft getGame()
+	public Minecraft getGame()
 	{
 		return Minecraft.getMinecraft();
 	}
 	
-	public static WorldClient getWorld()
+	public WorldClient getWorld(int worldId)
 	{
 		return Minecraft.getMinecraft().theWorld;
 	}
 	
-	public static EntityPlayer getPlayer()
+	public WorldClient[] getWorlds()
+	{
+		return new WorldClient[]{this.getWorld(0)};
+	}
+	
+	public EntityPlayer getPlayer()
 	{
 		return Minecraft.getMinecraft().thePlayer;
 	}

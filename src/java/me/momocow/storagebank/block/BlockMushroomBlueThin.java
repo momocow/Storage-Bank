@@ -3,8 +3,11 @@ package me.momocow.storagebank.block;
 import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
+import me.momocow.general.util.NaturalBushManager;
+import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
+import me.momocow.storagebank.proxy.ServerProxy;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockMushroomBlueThin extends MoCrop
 {
+	public static NaturalBushManager manager;
 	private static final String NAME = "BlockMushroomBlueThin";
 	private static final AxisAlignedBB[] AABB = new AxisAlignedBB[]
 			{
@@ -35,8 +39,16 @@ public class BlockMushroomBlueThin extends MoCrop
 		GameRegistry.register(this);
 	}
 	
+	/**
+	 * Called in FMLInitializationEvent
+	 */
 	public void init()
 	{
+		if(StorageBank.proxy.)
+		{
+			manager = NaturalBushManager.get(ServerProxy.getWorld(0), "", this);
+		}
+		
 		this.setSuitableSoilList(Blocks.FARMLAND);
 		this.setSuitableSoilList(Blocks.DIRT);
 		this.setSuitableSoilList(Blocks.COBBLESTONE);

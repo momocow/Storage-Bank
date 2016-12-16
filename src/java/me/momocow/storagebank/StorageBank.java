@@ -1,12 +1,12 @@
 package me.momocow.storagebank;
 
-import me.momocow.general.proxy.MoProxy;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModEvents;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.init.ModRecipes;
+import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -23,7 +23,7 @@ public class StorageBank {
 	
 	//proxy for client/server event
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
-	public static MoProxy proxy;
+	public static CommonProxy proxy;
 	
 	public static Config config;
      

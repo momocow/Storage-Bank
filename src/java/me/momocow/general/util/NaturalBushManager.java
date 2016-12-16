@@ -1,6 +1,7 @@
 package me.momocow.general.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class NaturalBushManager extends WorldSavedData
 	private Block blockBush;
 	private int world;
 	private Map<BlockPos, Set<BlockPos>> bushMap;
+	private int totalBushCount = 0;
 	
 	/**
 	 * <p>This constructor is supposed to be call from {@link MapStorage#getOrLoadData(Class, String)}. 
@@ -44,15 +46,76 @@ public class NaturalBushManager extends WorldSavedData
 		this.world = wd;
 		this.bushMap = new HashMap<BlockPos, Set<BlockPos>>();
 	}
+	
+	public boolean addBush(BlockPos bush)
+	{
+		if(!this.bushExist(bush))
+		{
+			this.totalBushCount++;
+			this.bushMap.get(this.calcChunk(bush)).add(bush);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean removeBush(BlockPos bush)
+	{
+		if(this.bushExist(bush))
+		{
+			this.totalBushCount--;
+			this.bushMap.get(this.calcChunk(bush)).remove(bush);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean bushExist(BlockPos bush)
+	{
+		return (this.chunkExist(bush))? this.bushMap.get(this.calcChunk(bush)).contains(bush): false;
+	}
+	
+	public boolean chunkExist(BlockPos anyPosInChunk)
+	{
+		return this.bushMap.containsKey(this.calcChunk(anyPosInChunk));
+	}
+	
+	public BlockPos calcChunk(BlockPos bush)
+	{
+		return new BlockPos(bush.getX() >> 4, 0, bush.getZ() >> 4);
+	}
+	
+	public int countBush(BlockPos anyPosInChunk)
+	{
+		return (this.chunkExist(anyPosInChunk))? this.bushMap.get(this.calcChunk(anyPosInChunk)).size(): 0;
+	}
+	
+	public int countBush()
+	{
+		return this.totalBushCount;
+	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(NBTTagCompound nbt)
+	{
 		this.world = nbt.getInteger("world");
 		this.blockBush = Block.getBlockById(nbt.getInteger("blockId"));
 		this.bushMap = new HashMap<BlockPos, Set<BlockPos>>();
 		
-		for(NBTTagCompound chunk: (NBTTagList) nbt.getTagList("chunkList", Constants.NBT.TAG_COMPOUND)){
+		NBTTagList chunkList = (NBTTagList) nbt.getTagList("chunkList", Constants.NBT.TAG_COMPOUND);
+		for(int chunkIdx = 0; chunkIdx < chunkList.tagCount(); chunkIdx ++)
+		{
+			NBTTagCompound chunk = chunkList.getCompoundTagAt(chunkIdx);
+			int[] chunkPos = chunk.getIntArray("chunkPos");
 			
+			Set<BlockPos> bushes = new HashSet<BlockPos>();
+			NBTTagList bushList = (NBTTagList) chunk.getTagList("bushList", Constants.NBT.TAG_COMPOUND);
+			for(int bushIdx = 0; bushIdx < bushList.tagCount(); bushIdx ++)
+			{
+				int[] bushPos = bushList.getCompoundTagAt(bushIdx).getIntArray("bushPos");
+				bushes.add(new BlockPos(bushPos[0], bushPos[1], bushPos[2]));
+			}
+			
+			this.bushMap.put(new BlockPos(chunkPos[0], chunkPos[1], chunkPos[2]), bushes);
 		}
 	}
 
@@ -142,23 +205,28 @@ public class NaturalBushManager extends WorldSavedData
 	}
 	
 	/**
-	 * get the instance of NaturalBushManager, differed by dataId
+	 * <p>Get the instance of NaturalBushManager, differed by dataId</p>
 	 * @param world
 	 * @param dataId
 	 * @param bush the block instance of the bush
-	 * @return
+	 * @return Null is returned if any one of the parameters is null or the dataId is empty, otherwise an instance of NaturalBushManager will be returned.
 	 */
 	public static NaturalBushManager get(World world, String dataId, Block bush)
 	{
-		MapStorage storage = world.getPerWorldStorage();
-		NaturalBushManager nbm = (NaturalBushManager) storage.getOrLoadData(NaturalBushManager.class, dataId);
-
-		if(nbm == null)
+		if(world != null || (dataId != null && !dataId.isEmpty()) || bush != null)
 		{
-			nbm = new NaturalBushManager(dataId, bush, world.provider.getDimension());
-			storage.setData(dataId, nbm);
+			MapStorage storage = world.getPerWorldStorage();
+			NaturalBushManager nbm = (NaturalBushManager) storage.getOrLoadData(NaturalBushManager.class, dataId);
+	
+			if(nbm == null)
+			{
+				nbm = new NaturalBushManager(dataId, bush, world.provider.getDimension());
+				storage.setData(dataId, nbm);
+			}
+			
+			return nbm;
 		}
 		
-		return nbm;
+		return null;
 	}
 }

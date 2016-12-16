@@ -2,9 +2,9 @@ package me.momocow.storagebank.handler;
 
 import java.util.Random;
 
+import me.momocow.general.util.NaturalBushManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,6 +35,7 @@ public class EventHandler {
 							             playerChunkEndPos.south(nexDistanceInblocks).east(nexDistanceInblocks));
 					nexDistanceInblocks = (++distanceInChunks + 1) * chunkSize) {}
 				maxAreaLength = (distanceInChunks * 2 + 1) * chunkSize;
+				
 								
 //				p.addChatMessage(new TextComponentString("MaxSpawn: " + Config.MushroomBlueThin.MaxSpawn + " SpawnCooldown: " + Config.MushroomBlueThin.SpawnCooldown));
 				

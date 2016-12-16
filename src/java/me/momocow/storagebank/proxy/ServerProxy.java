@@ -7,23 +7,23 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ServerProxy extends CommonProxy{
-	public static MinecraftServer getGame()
+	public MinecraftServer getGame()
 	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance();
 	}
 	
-	public static WorldServer[] getWorlds()
+	public WorldServer[] getWorlds()
 	{
 		return getGame().worldServers;
 	}
 	
-	public static WorldServer getWorld(int worldID)
+	public WorldServer getWorld(int worldId)
 	{
 		WorldServer[] worlds = getWorlds();
 				
 		for (WorldServer w : worlds)
 		{
-			if (w.provider.getDimension() == worldID)
+			if (w.provider.getDimension() == worldId)
 			{
 				return w;
 			}
