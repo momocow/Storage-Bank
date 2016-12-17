@@ -5,8 +5,8 @@ import me.momocow.storagebank.network.C2SGuiPacket;
 import me.momocow.storagebank.network.S2CGuiPacket;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -14,11 +14,18 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class CommonProxy implements MoProxy
 {
+	public boolean isRemote = true;
+	
 	public IThreadListener getGame() { return null; }
 	
-	public World[] getWorlds() { return null; }
-	
 	public World getWorld(int worldId) { return null; }
+		
+	public void broadcast(ITextComponent text){}
+	
+	public boolean isRemote()
+	{
+		return this.getWorld(0).isRemote;
+	}
 	
 	/**packet system
 	 * channel_gui: gui sync and client input

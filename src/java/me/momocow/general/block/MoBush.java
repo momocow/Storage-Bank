@@ -73,7 +73,7 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 	 * @param facing the side to plant the Plantable
 	 * @return
 	 */
-	public EnumActionResult plantToSoil(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
+	public EnumActionResult plantToSoilByPlayer(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
 	{
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
         {

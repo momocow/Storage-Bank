@@ -8,9 +8,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IThreadListener;
 
 public class ClientProxy extends CommonProxy{
+	public ClientProxy()
+	{
+		super.isRemote = true;
+	}
+	
 	@Override
 	public void registerRender() throws Exception {
 		ModItems.initModels();
@@ -28,22 +32,19 @@ public class ClientProxy extends CommonProxy{
 		}
 	}
 	
+	@Override
 	public Minecraft getGame()
 	{
 		return Minecraft.getMinecraft();
 	}
 	
+	@Override
 	public WorldClient getWorld(int worldId)
 	{
 		return Minecraft.getMinecraft().theWorld;
 	}
 	
-	public WorldClient[] getWorlds()
-	{
-		return new WorldClient[]{this.getWorld(0)};
-	}
-	
-	public EntityPlayer getPlayer()
+	public static EntityPlayer getPlayer()
 	{
 		return Minecraft.getMinecraft().thePlayer;
 	}

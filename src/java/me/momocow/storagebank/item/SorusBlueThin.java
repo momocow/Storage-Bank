@@ -42,7 +42,7 @@ public class SorusBlueThin extends MoItem implements MoSeed{
 	//register to the game
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(!worldIn.isRemote) return getGrowable().plantToSoil(stack, playerIn, worldIn, pos, facing);
+		if(!worldIn.isRemote) return getGrowable().plantToSoilByPlayer(stack, playerIn, worldIn, pos, facing);
 		return EnumActionResult.FAIL;
     }
 }
