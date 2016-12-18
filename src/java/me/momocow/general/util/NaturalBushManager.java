@@ -5,21 +5,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import me.momocow.storagebank.StorageBank;
+import me.momocow.storagebank.handler.EventHandler;
+import me.momocow.storagebank.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class NaturalBushManager extends WorldSavedData
 {
 	private Block blockBush;
 	private int world;
-	private Map<BlockPos, Set<BlockPos>> bushMap;
+	private Map<ChunkPos, Set<BlockPos>> bushMap;
 	private int totalBushCount = 0;
 	
 	/**
@@ -44,15 +53,31 @@ public class NaturalBushManager extends WorldSavedData
 		super(name);
 		this.blockBush = bush;
 		this.world = wd;
-		this.bushMap = new HashMap<BlockPos, Set<BlockPos>>();
+		this.bushMap = new HashMap<ChunkPos, Set<BlockPos>>();
 	}
 	
 	public boolean addBush(BlockPos bush)
 	{
-		if(!this.bushExist(bush))
+		if(this.chunkExist(bush) && !this.bushExist(bush))
 		{
 			this.totalBushCount++;
-			this.bushMap.get(this.calcChunk(bush)).add(bush);
+			this.bushMap.get(new ChunkPos(bush)).add(bush);
+			StorageBank.proxy.broadcast(new TextComponentString(this.toString()));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addChunk(BlockPos anyPosInChunk)
+	{
+		return this.addChunk(new ChunkPos(anyPosInChunk));
+	}
+	
+	public boolean addChunk(ChunkPos chunk)
+	{
+		if(!this.chunkExist(chunk))
+		{
+			this.bushMap.put(chunk, new HashSet<BlockPos>());
 			return true;
 		}
 		return false;
@@ -60,10 +85,26 @@ public class NaturalBushManager extends WorldSavedData
 	
 	public boolean removeBush(BlockPos bush)
 	{
-		if(this.bushExist(bush))
+		if(this.chunkExist(bush) && this.bushExist(bush))
 		{
 			this.totalBushCount--;
-			this.bushMap.get(this.calcChunk(bush)).remove(bush);
+			this.bushMap.get(new ChunkPos(bush)).remove(bush);
+			StorageBank.proxy.broadcast(new TextComponentString(this.toString()));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean removeChunk(BlockPos anyPosInChunk)
+	{
+		return this.removeChunk(new ChunkPos(anyPosInChunk));
+	}
+	
+	public boolean removeChunk(ChunkPos chunk)
+	{
+		if(this.chunkExist(chunk))
+		{
+			this.bushMap.remove(chunk);
 			return true;
 		}
 		return false;
@@ -71,27 +112,32 @@ public class NaturalBushManager extends WorldSavedData
 	
 	public boolean bushExist(BlockPos bush)
 	{
-		return (this.chunkExist(bush))? this.bushMap.get(this.calcChunk(bush)).contains(bush): false;
+		return (this.chunkExist(bush))? this.bushMap.get(new ChunkPos(bush)).contains(bush): false;
 	}
 	
 	public boolean chunkExist(BlockPos anyPosInChunk)
 	{
-		return this.bushMap.containsKey(this.calcChunk(anyPosInChunk));
+		return this.chunkExist(new ChunkPos(anyPosInChunk));
 	}
 	
-	public BlockPos calcChunk(BlockPos bush)
+	public boolean chunkExist(ChunkPos chunk)
 	{
-		return new BlockPos(bush.getX() >> 4, 0, bush.getZ() >> 4);
+		return this.bushMap.containsKey(chunk);
 	}
 	
 	public int countBush(BlockPos anyPosInChunk)
 	{
-		return (this.chunkExist(anyPosInChunk))? this.bushMap.get(this.calcChunk(anyPosInChunk)).size(): 0;
+		return (this.chunkExist(anyPosInChunk))? this.bushMap.get(new ChunkPos(anyPosInChunk)).size(): 0;
 	}
 	
 	public int countBush()
 	{
 		return this.totalBushCount;
+	}
+	
+	public Set<ChunkPos> getChunkSet()
+	{
+		return this.bushMap.keySet();
 	}
 
 	@Override
@@ -99,7 +145,7 @@ public class NaturalBushManager extends WorldSavedData
 	{
 		this.world = nbt.getInteger("world");
 		this.blockBush = Block.getBlockById(nbt.getInteger("blockId"));
-		this.bushMap = new HashMap<BlockPos, Set<BlockPos>>();
+		this.bushMap = new HashMap<ChunkPos, Set<BlockPos>>();
 		
 		NBTTagList chunkList = (NBTTagList) nbt.getTagList("chunkList", Constants.NBT.TAG_COMPOUND);
 		for(int chunkIdx = 0; chunkIdx < chunkList.tagCount(); chunkIdx ++)
@@ -115,7 +161,7 @@ public class NaturalBushManager extends WorldSavedData
 				bushes.add(new BlockPos(bushPos[0], bushPos[1], bushPos[2]));
 			}
 			
-			this.bushMap.put(new BlockPos(chunkPos[0], chunkPos[1], chunkPos[2]), bushes);
+			this.bushMap.put(new ChunkPos(chunkPos[0], chunkPos[1]), bushes);
 		}
 	}
 
@@ -139,7 +185,7 @@ public class NaturalBushManager extends WorldSavedData
 	 *     [
 	 *         (NBTTagCompound)
 	 *         {
-	 *             "chunkPos": (int[3]),
+	 *             "chunkPos": (int[2]),
 	 *             "bushList": (NBTTagList)
 	 *             [
 	 *                 (NBTTagCompound)
@@ -161,13 +207,13 @@ public class NaturalBushManager extends WorldSavedData
 		bushMapNBT.setInteger("blockId", Block.getIdFromBlock(this.blockBush));
 		
 		NBTTagList chunkList = new NBTTagList();
-		for(BlockPos chunkPos: bushMap.keySet())
+		for(ChunkPos chunkPos: this.bushMap.keySet())
 		{
 			NBTTagCompound chunk = new NBTTagCompound();
-			chunk.setIntArray("chunkPos", new int[]{chunkPos.getX(), chunkPos.getY(), chunkPos.getZ()});
+			chunk.setIntArray("chunkPos", new int[]{chunkPos.chunkXPos, chunkPos.chunkZPos});
 			
 			NBTTagList bushList = new NBTTagList();
-			for(BlockPos bushPos: bushMap.get(chunkPos))
+			for(BlockPos bushPos: this.bushMap.get(chunkPos))
 			{
 				NBTTagCompound bush = new NBTTagCompound();
 				bush.setIntArray("bushPos", new int[]{bushPos.getX(), bushPos.getY(), bushPos.getZ()});
@@ -221,6 +267,7 @@ public class NaturalBushManager extends WorldSavedData
 			if(nbm == null)
 			{
 				nbm = new NaturalBushManager(dataId, bush, world.provider.getDimension());
+				MinecraftForge.EVENT_BUS.register();
 				storage.setData(dataId, nbm);
 			}
 			
@@ -228,5 +275,20 @@ public class NaturalBushManager extends WorldSavedData
 		}
 		
 		return null;
+	}
+	
+	public class EventHandler
+	{
+		@SubscribeEvent(priority=EventPriority.NORMAL)
+		public void onChunkLoad(ChunkEvent.Load e)
+		{
+			NaturalBushManager.this.addChunk(e.getChunk().getChunkCoordIntPair());
+		}
+		
+		@SubscribeEvent(priority=EventPriority.NORMAL)
+		public void onChunkUnload(ChunkEvent.Unload e)
+		{
+			NaturalBushManager.this.removeChunk(e.getChunk().getChunkCoordIntPair());
+		}
 	}
 }

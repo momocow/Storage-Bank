@@ -22,10 +22,9 @@ public class ClientProxy extends CommonProxy{
 	}
 
 	@Override
-	public void displayGui(int guiID, Object... objects){
+	public void displayGui(int guiID, NBTTagCompound data){
 		switch(guiID){
 			case ID.Gui.GuiIDCard:
-				NBTTagCompound data = (NBTTagCompound) objects[0];
 				Minecraft.getMinecraft().displayGuiScreen(new GuiIDCard(data));
 				break;
 			default:

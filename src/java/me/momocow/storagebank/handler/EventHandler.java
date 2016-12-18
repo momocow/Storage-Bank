@@ -3,9 +3,13 @@ package me.momocow.storagebank.handler;
 import java.util.Random;
 
 import me.momocow.general.util.NaturalBushManager;
+import me.momocow.storagebank.StorageBank;
+import me.momocow.storagebank.init.ModBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -22,28 +26,20 @@ public class EventHandler {
 		if(e.phase == Phase.START && world.provider.getDimension() == 0 && world.getWorldInfo().isRaining())
 		{
 			
-			for(EntityPlayer p: world.playerEntities)
-			{
-				Random r = p.getRNG();
-				BlockPos playerChunkStartPos = new BlockPos(p.chunkCoordX * chunkSize, 0, p.chunkCoordZ * chunkSize),	//North-West
-				         playerChunkEndPos = new BlockPos((p.chunkCoordX + 1) * chunkSize, 0, (p.chunkCoordZ + 1) * chunkSize);	//South-East
-				int numMBT = 0,	maxAreaLength = 0;
-				
-				//find the largest square area which is loaded by the player
-				int distanceInChunks = 0, nexDistanceInblocks = (distanceInChunks + 1) * chunkSize;
-				for(; world.isAreaLoaded(playerChunkStartPos.north(nexDistanceInblocks).west(nexDistanceInblocks),
-							             playerChunkEndPos.south(nexDistanceInblocks).east(nexDistanceInblocks));
-					nexDistanceInblocks = (++distanceInChunks + 1) * chunkSize) {}
-				maxAreaLength = (distanceInChunks * 2 + 1) * chunkSize;
-				
-								
-//				p.addChatMessage(new TextComponentString("MaxSpawn: " + Config.MushroomBlueThin.MaxSpawn + " SpawnCooldown: " + Config.MushroomBlueThin.SpawnCooldown));
-				
-//				if(ModBlocks.BlockMushroomBlueThin.plantToSoil(, ))
-//				{
-//					numMBT++;
-//				}
-			}
+		}
+	}
+	
+	
+	/**
+	 * there is only one phase (PHASE.NORMAL) in the event
+	 */
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onWorldLoad(WorldEvent.Load e)
+	{
+		//get the NaturalBushManager
+		if(!StorageBank.proxy.isRemote && e.getWorld().provider.getDimension() == 0)
+		{
+			ModBlocks.BlockMushroomBlueThin.manager = NaturalBushManager.get(StorageBank.proxy.getWorld(0), "", ModBlocks.BlockMushroomBlueThin);
 		}
 	}
 }

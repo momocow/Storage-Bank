@@ -12,7 +12,7 @@ public class Config
 	
 	public static class MushroomBlueThin
 	{
-		public static int MaxSpawn = 3000;
+		public static float SpawnChanceScale = 1.0f;
 		public static int SpawnCooldown = 24000;
 	}
 	
@@ -27,14 +27,17 @@ public class Config
 	
 	public void initConfig()
 	{
+		//General category
+		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_GENERAL, CATEGORY_GENERAL);
+		
+		//MBT category
+		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_MUSHROOMBLUETHIN, CATEGORY_MUSHROOMBLUETHIN);
 		
-		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General configuration");
-		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin configuration");
-		MushroomBlueThin.MaxSpawn = cfg.getInt("MaxSpawn", CATEGORY_MUSHROOMBLUETHIN, 
-				                               MushroomBlueThin.MaxSpawn, 0, Integer.MAX_VALUE, 
-				                               "max value of blue-thin mushroooms spawn in the 21*21 chunks surrounding the player");
+		MushroomBlueThin.SpawnChanceScale = cfg.getFloat("SpawnChanceScale", CATEGORY_MUSHROOMBLUETHIN, 
+				                               MushroomBlueThin.SpawnChanceScale, 0, Float.MAX_VALUE, 
+				                               "scale value for natural spawn chance of MushroomBlueThin");
 		MushroomBlueThin.SpawnCooldown = cfg.getInt("SpawnCooldown", CATEGORY_MUSHROOMBLUETHIN, 
                                                     MushroomBlueThin.SpawnCooldown, 0, Integer.MAX_VALUE, 
                                                     "time measured in ticks (0.05 seconds) between each round of spawning");

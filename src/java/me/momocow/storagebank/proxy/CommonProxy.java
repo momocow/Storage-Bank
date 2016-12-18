@@ -5,6 +5,7 @@ import me.momocow.storagebank.network.C2SGuiPacket;
 import me.momocow.storagebank.network.S2CGuiPacket;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -22,9 +23,9 @@ public abstract class CommonProxy implements MoProxy
 		
 	public void broadcast(ITextComponent text){}
 	
-	public boolean isRemote()
+	public String prefix()
 	{
-		return this.getWorld(0).isRemote;
+		return (isRemote)?"CLIENT":"SERVER";
 	}
 	
 	/**packet system
@@ -50,5 +51,5 @@ public abstract class CommonProxy implements MoProxy
 	/**
 	 * [CLIENT only]
 	 */
-	public void displayGui(int guiID, Object... objects){}
+	public void displayGui(int guiID, NBTTagCompound data){}
 }

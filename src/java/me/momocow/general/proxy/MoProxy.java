@@ -14,6 +14,8 @@ public interface MoProxy {
 		
 	public void broadcast(ITextComponent text);	
 	
+	public String prefix();
+	
 	//key binding
 	public void registerKeyBindings();
 	

@@ -4,7 +4,6 @@ import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
 import me.momocow.general.util.NaturalBushManager;
-import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
@@ -12,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -21,7 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockMushroomBlueThin extends MoCrop
 {
-	public static NaturalBushManager manager;
+	public NaturalBushManager manager;
 	private static final String NAME = "BlockMushroomBlueThin";
 	private static final AxisAlignedBB[] AABB = new AxisAlignedBB[]
 			{
@@ -44,11 +42,6 @@ public class BlockMushroomBlueThin extends MoCrop
 	 */
 	public void init()
 	{
-		if(StorageBank.proxy.isRemote)
-		{
-			manager = NaturalBushManager.get(StorageBank.proxy.getWorld(0), "", this);
-		}
-		
 		this.setSuitableSoilList(Blocks.FARMLAND);
 		this.setSuitableSoilList(Blocks.DIRT);
 		this.setSuitableSoilList(Blocks.COBBLESTONE);
@@ -138,35 +131,6 @@ public class BlockMushroomBlueThin extends MoCrop
 		{
 			generateGiantMushroom(worldIn, pos, pos);
 		}
-	}
-	
-	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
-    {
-		if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
-        {
-            java.util.List<ItemStack> items = getDrops(worldIn, pos, state, fortune);
-            chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, chance, false, harvesters.get());
-
-            for (ItemStack item : items)
-            {
-                if (worldIn.rand.nextFloat() <= chance)
-                {
-                    spawnAsEntity(worldIn, pos, item);
-                    manager.removeBush(pos);
-                }
-            }
-        }
-    }
-	
-	@Override
-	public boolean plantToSoil(World worldIn, BlockPos pos){
-		if(super.plantToSoil(worldIn, pos))
-		{
-			manager.addBush(pos);
-			return true;
-		}
-		return false;
 	}
 	
 	//TODO
