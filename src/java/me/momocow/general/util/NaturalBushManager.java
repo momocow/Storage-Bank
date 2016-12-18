@@ -5,13 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import me.momocow.general.block.MoBush;
 import me.momocow.storagebank.StorageBank;
-import me.momocow.storagebank.handler.EventHandler;
-import me.momocow.storagebank.init.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
@@ -20,40 +22,25 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class NaturalBushManager extends WorldSavedData
 {
-	private Block blockBush;
+	private MoBush blockBush;
 	private int world;
 	private Map<ChunkPos, Set<BlockPos>> bushMap;
 	private int totalBushCount = 0;
 	
-	/**
-	 * <p>This constructor is supposed to be call from {@link MapStorage#getOrLoadData(Class, String)}. 
-	 * If you are seeking for an instance of {@link NaturalBushManager}, 
-	 * call {@linkplain #get(World, String, Block) the getter} instead.</p>
-	 * <p>If you still insist upon calling this constructor, 
-	 * the property {@link #blockBush Block blockBush} is initially set to {@link Blocks#AIR} and
-	 * {@link #world World world} is set to the id of the overworld (world id= 0).
-	 * You should manually call the {@link #readFromNBT(NBTTagCompound) readFromNBT(NBTTagCompound)} 
-	 * with required properties in appropriate NBT format.</p>
-	 * <p>Read {@link #toNBT() toNBT()} for further information about the NBT format.</p>
-	 * @see #toNBT()
-	 * @see #get(World, String, Block)
-	 */
-	public NaturalBushManager (String name)
-	{
-		this(name, Blocks.AIR, 0);
-	}
-	
-	private NaturalBushManager (String name, Block bush, int wd) {
+	private NaturalBushManager (String name, MoBush bush, int wd) {
 		super(name);
 		this.blockBush = bush;
 		this.world = wd;
 		this.bushMap = new HashMap<ChunkPos, Set<BlockPos>>();
+		
+		MinecraftForge.EVENT_BUS.register(new NaturalBushManager.EventHandler(this));
 	}
 	
 	public boolean addBush(BlockPos bush)
@@ -144,7 +131,7 @@ public class NaturalBushManager extends WorldSavedData
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		this.world = nbt.getInteger("world");
-		this.blockBush = Block.getBlockById(nbt.getInteger("blockId"));
+		this.blockBush = (MoBush) Block.getBlockFromName(nbt.getString("blockName"));
 		this.bushMap = new HashMap<ChunkPos, Set<BlockPos>>();
 		
 		NBTTagList chunkList = (NBTTagList) nbt.getTagList("chunkList", Constants.NBT.TAG_COMPOUND);
@@ -180,7 +167,7 @@ public class NaturalBushManager extends WorldSavedData
 	 * (NBTTagCompound)
 	 * {
 	 *     "world": (int),
-	 *     "blockId": (int),
+	 *     "block": (String),
 	 *     "chunkList": (NBTTagList)
 	 *     [
 	 *         (NBTTagCompound)
@@ -204,7 +191,7 @@ public class NaturalBushManager extends WorldSavedData
 	public NBTTagCompound toNBT(){
 		NBTTagCompound bushMapNBT = new NBTTagCompound();
 		bushMapNBT.setInteger("world", this.world);
-		bushMapNBT.setInteger("blockId", Block.getIdFromBlock(this.blockBush));
+		bushMapNBT.setString("blockName", this.blockBush.getRegistryName().toString());
 		
 		NBTTagList chunkList = new NBTTagList();
 		for(ChunkPos chunkPos: this.bushMap.keySet())
@@ -225,6 +212,45 @@ public class NaturalBushManager extends WorldSavedData
 		bushMapNBT.setTag("chunkList", chunkList);
 		
 		return bushMapNBT;
+	}
+	
+	/**
+	 * Planted by Player
+	 * @param stack ItemStack held by player
+	 * @param playerIn planter
+	 * @param worldIn the world
+	 * @param pos soil position
+	 * @param facing the side to plant the Plantable
+	 * @return
+	 */
+	public EnumActionResult plantToSoilByPlayer(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
+	{
+		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
+        {
+			if (this.plantToSoil(worldIn, pos.up()))
+			{
+				--stack.stackSize;
+				return EnumActionResult.SUCCESS;
+			}
+        }
+        return EnumActionResult.FAIL;
+	}
+	
+	/**
+	 * Planted to the soil at the certain position
+	 * @param worldIn the world
+	 * @param pos the position to plant
+	 * @return true if it is planted successfully; false if it does not
+	 */
+	public boolean plantToSoil(World worldIn, BlockPos pos){
+		if(this.blockBush.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos))
+		{
+			worldIn.setBlockState(pos, this.blockBush.getDefaultState());
+			this.addBush(pos);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -257,7 +283,7 @@ public class NaturalBushManager extends WorldSavedData
 	 * @param bush the block instance of the bush
 	 * @return Null is returned if any one of the parameters is null or the dataId is empty, otherwise an instance of NaturalBushManager will be returned.
 	 */
-	public static NaturalBushManager get(World world, String dataId, Block bush)
+	public static NaturalBushManager get(World world, String dataId, MoBush bush)
 	{
 		if(world != null || (dataId != null && !dataId.isEmpty()) || bush != null)
 		{
@@ -267,7 +293,6 @@ public class NaturalBushManager extends WorldSavedData
 			if(nbm == null)
 			{
 				nbm = new NaturalBushManager(dataId, bush, world.provider.getDimension());
-				MinecraftForge.EVENT_BUS.register();
 				storage.setData(dataId, nbm);
 			}
 			
@@ -277,23 +302,34 @@ public class NaturalBushManager extends WorldSavedData
 		return null;
 	}
 	
-	public class EventHandler
+	/**
+	 * should be register to ma
+	 */
+	public static class EventHandler
 	{
-		public EventHandler()
+		private NaturalBushManager manager;
+		
+		public EventHandler(NaturalBushManager m)
 		{
-			MinecraftForge.EVENT_BUS.register(new EventHandler());
+			manager = m;
 		}
 		
 		@SubscribeEvent(priority=EventPriority.NORMAL)
-		public void onChunkLoad(ChunkEvent.Load e)
+		public void onBreak(BlockEvent.BreakEvent e)
 		{
-			NaturalBushManager.this.addChunk(e.getChunk().getChunkCoordIntPair());
+			if(e.getState().getBlock() == manager.getBlock())
+			{
+				manager.removeBush(e.getPos());
+			}
 		}
 		
 		@SubscribeEvent(priority=EventPriority.NORMAL)
-		public void onChunkUnload(ChunkEvent.Unload e)
+		public void onHarvestDrops(BlockEvent.HarvestDropsEvent e)
 		{
-			NaturalBushManager.this.removeChunk(e.getChunk().getChunkCoordIntPair());
+			if(e.getState().getBlock() == manager.getBlock())
+			{
+				manager.removeBush(e.getPos());
+			}
 		}
 	}
 }

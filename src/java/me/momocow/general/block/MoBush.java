@@ -10,10 +10,6 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -63,45 +59,6 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
     {
 		return this.canBlockStay(worldIn, plantablePos, worldIn.getBlockState(plantablePos.down()));
     }
-	
-	/**
-	 * Planted by Player
-	 * @param stack ItemStack held by player
-	 * @param playerIn planter
-	 * @param worldIn the world
-	 * @param pos soil position
-	 * @param facing the side to plant the Plantable
-	 * @return
-	 */
-	public EnumActionResult plantToSoilByPlayer(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing)
-	{
-		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
-        {
-			if (this.plantToSoil(worldIn, pos.up()))
-			{
-				--stack.stackSize;
-				return EnumActionResult.SUCCESS;
-			}
-        }
-        return EnumActionResult.FAIL;
-	}
-	
-	/**
-	 * Planted to the soil at the certain position
-	 * @param worldIn the world
-	 * @param pos the position to plant
-	 * @return true if it is planted successfully; false if it does not
-	 */
-	public boolean plantToSoil(World worldIn, BlockPos pos){
-		if(this.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos))
-		{
-			
-			worldIn.setBlockState(pos, this.getDefaultState());
-			return true;
-		}
-		
-		return false;
-	}
 	
 	public void initModel() {}
 	

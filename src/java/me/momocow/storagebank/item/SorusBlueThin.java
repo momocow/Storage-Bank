@@ -1,10 +1,8 @@
 package me.momocow.storagebank.item;
 
-import javax.annotation.Nullable;
-
-import me.momocow.general.block.MoCrop;
 import me.momocow.general.item.MoItem;
 import me.momocow.general.item.MoSeed;
+import me.momocow.storagebank.block.BlockMushroomBlueThin;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.reference.Reference;
@@ -32,8 +30,7 @@ public class SorusBlueThin extends MoItem implements MoSeed{
 	/**
 	 * Should be called after preInit othrwise null will be returned
 	 */
-	@Nullable
-	public MoCrop getGrowable()
+	public BlockMushroomBlueThin getGrowable()
 	{
 		return ModBlocks.BlockMushroomBlueThin;
 	}
@@ -42,7 +39,7 @@ public class SorusBlueThin extends MoItem implements MoSeed{
 	//register to the game
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(!worldIn.isRemote) return getGrowable().plantToSoilByPlayer(stack, playerIn, worldIn, pos, facing);
+		if(!worldIn.isRemote) return getGrowable().manager.plantToSoilByPlayer(stack, playerIn, worldIn, pos, facing);
 		return EnumActionResult.FAIL;
     }
 }
