@@ -279,6 +279,11 @@ public class NaturalBushManager extends WorldSavedData
 	
 	public class EventHandler
 	{
+		public EventHandler()
+		{
+			MinecraftForge.EVENT_BUS.register(new EventHandler());
+		}
+		
 		@SubscribeEvent(priority=EventPriority.NORMAL)
 		public void onChunkLoad(ChunkEvent.Load e)
 		{
