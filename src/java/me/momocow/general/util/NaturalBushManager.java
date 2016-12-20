@@ -26,6 +26,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Deprecated
 public class NaturalBushManager extends WorldSavedData
 {
 	private MoBush blockBush;

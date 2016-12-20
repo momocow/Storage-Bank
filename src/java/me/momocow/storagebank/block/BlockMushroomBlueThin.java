@@ -3,7 +3,6 @@ package me.momocow.storagebank.block;
 import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
-import me.momocow.general.util.NaturalBushManager;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
@@ -19,7 +18,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockMushroomBlueThin extends MoCrop
 {
-	public NaturalBushManager manager;
 	private static final String NAME = "BlockMushroomBlueThin";
 	private static final AxisAlignedBB[] AABB = new AxisAlignedBB[]
 			{

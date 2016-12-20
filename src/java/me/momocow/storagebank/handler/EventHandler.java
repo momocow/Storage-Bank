@@ -1,13 +1,19 @@
 package me.momocow.storagebank.handler;
 
-import me.momocow.general.util.NaturalBushManager;
+import java.util.Collection;
+import java.util.Random;
+
+import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -15,7 +21,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 public class EventHandler {
 	private static final int chunkSize = (int) me.momocow.general.reference.Constants.CHUNK_SIZE_IN_BLOCKS;
-	private static final int LoadedChunkRadius = Config.MaxLoadedChunkRadius;
 	private int MBTSpawnCDCounter = 0;
 	
 	//WorldTickEvent: this is only posted by server
@@ -29,34 +34,33 @@ public class EventHandler {
 			World world = e.world;
 			if(world.provider.getDimension() == 0 && world.getWorldInfo().isRaining() && this.MBTSpawnCDCounter <= 0)
 			{
-				//find the loaded chunks
-				for (int playerIdx = 0; playerIdx < world.playerEntities.size(); playerIdx++)
-				{
-					BlockPos chunk = new ChunkPos(world.playerEntities.get(playerIdx).getPosition()).getBlock(0, 0, 0);
-					
-					int radiusIdx = 0;
-					for(radiusIdx = 0; radiusIdx <= LoadedChunkRadius; radiusIdx ++)
+				Collection<Chunk> loadedChunks = ((ChunkProviderServer)world.getChunkProvider()).getLoadedChunks();
+				for(Chunk chunk: loadedChunks)
+				{					
+					Iterable<BlockPos> chunkPlane = BlockPos.getAllInBox(new BlockPos(chunk.xPosition << 4, 0, chunk.zPosition << 4), 
+																		 new BlockPos(((chunk.xPosition + 1) << 4) - 1, 0, ((chunk.zPosition + 1) << 4) - 1));
+
+					for(BlockPos bedrock: chunkPlane)
 					{
-						
+						for(int h = 1; h <= chunk.getHeight(bedrock) + 1; h++)
+						{
+							BlockPos candidatePos = bedrock.up(h);
+							if(chunk.getBlockState(candidatePos).getBlock() == Blocks.AIR 
+									&& ModBlocks.BlockMushroomBlueThin.canBlockStay(world, candidatePos, chunk.getBlockState(candidatePos.down())))
+							{
+								Random r = chunk.getRandomWithSeed(ChunkPos.chunkXZ2Int(chunk.xPosition, chunk.zPosition));
+								if(r.nextFloat() <= 0.01 * Config.MushroomBlueThin.SpawnChanceScale)
+								{
+									world.setBlockState(candidatePos, ModBlocks.BlockMushroomBlueThin.getDefaultState(), 3);
+								}
+							}
+						}
 					}
 				}
 				
 				//reset the cooldown
 				this.MBTSpawnCDCounter = Config.MushroomBlueThin.SpawnCooldown;
 			}
-		}
-	}
-	
-	/**
-	 * there is only one phase (PHASE.NORMAL) in the event
-	 */
-	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onWorldLoad(WorldEvent.Load e)
-	{
-		//get the NaturalBushManager
-		if(!StorageBank.proxy.isRemote && e.getWorld().provider.getDimension() == 0)
-		{
-			ModBlocks.BlockMushroomBlueThin.manager = NaturalBushManager.get(StorageBank.proxy.getWorld(0), "", ModBlocks.BlockMushroomBlueThin);
 		}
 	}
 }
