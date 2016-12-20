@@ -10,6 +10,8 @@ public class Config
 {
 	private Configuration cfg;
 	
+	public static int MaxLoadedChunkRadius = 15;
+	
 	public static class MushroomBlueThin
 	{
 		public static float SpawnChanceScale = 1.0f;
@@ -30,6 +32,9 @@ public class Config
 		//General category
 		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_GENERAL, CATEGORY_GENERAL);
+		
+		Config.MaxLoadedChunkRadius = cfg.getInt("MaxLoadedChunkRadius", CATEGORY_GENERAL, Config.MaxLoadedChunkRadius, 3, 15,
+				                              "max radius in terms of chunks to be loaded for each client of MP server");
 		
 		//MBT category
 		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin configuration");

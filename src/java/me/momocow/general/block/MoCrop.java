@@ -1,5 +1,6 @@
 package me.momocow.general.block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -168,12 +169,15 @@ public abstract class MoCrop extends MoBush implements IGrowable
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		List<ItemStack> ret = super.getDrops(world, pos, state, fortune);
+		List<ItemStack> ret = null;
         int age = getAge(state);
-        Random rand = world instanceof World ? ((World)world).rand : new Random();
+        
 
         if (age >= getMaxAge())
         {
+        	ret = super.getDrops(world, pos, state, fortune);
+        	Random rand = world instanceof World ? ((World)world).rand : new Random();
+        	
             for (int i = 0; i < 3 + fortune; ++i)
             {
                 if (rand.nextInt(2 * getMaxAge()) <= age)
@@ -182,6 +186,12 @@ public abstract class MoCrop extends MoBush implements IGrowable
                 }
             }
         }
+        else
+        {
+        	ret = new ArrayList<ItemStack>();
+        	ret.add(new ItemStack(this.getSeed(), 1, 0));
+        }
+        
         return ret;
 	}
 	
