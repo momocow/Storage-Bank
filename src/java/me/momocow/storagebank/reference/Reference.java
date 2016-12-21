@@ -1,6 +1,7 @@
 package me.momocow.storagebank.reference;
 
-public class Reference {
+public class Reference 
+{
 	//mod
 	public static final String MOD_ID = "storagebank";
     public static final String MOD_NAME = "Storage Bank";

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import me.momocow.general.client.render.MoCustomModel;
+import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -115,7 +116,7 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 	{
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack))
         {
-			if (this.plantToSoil(worldIn, pos.up()))
+			if (this.plant(worldIn, pos.up(), 1.0f))
 			{
 				--stack.stackSize;
 				return EnumActionResult.SUCCESS;
@@ -128,12 +129,16 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 	 * Planted to the soil at the certain position
 	 * @param worldIn the world
 	 * @param pos the position to plant
+	 * @param chance ranges from 0 to 1 for bushes to spawn
 	 * @return true if it is planted successfully; false if it does not
 	 */
-	public boolean plantToSoil(World worldIn, BlockPos pos){
+	public boolean plant(World worldIn, BlockPos pos, float chance){
 		if(this.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos))
 		{
-			worldIn.setBlockState(pos, this.getDefaultState(), 3);
+			if(worldIn.rand.nextFloat() <= chance * Config.BushSpawnChanceScale)
+			{
+				worldIn.setBlockState(pos, this.getDefaultState(), 3);
+			}
 			return true;
 		}
 		

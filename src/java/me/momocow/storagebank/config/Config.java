@@ -9,10 +9,12 @@ import net.minecraftforge.common.config.Configuration;
 public class Config 
 {
 	private Configuration cfg;
+	
+	public static float BushSpawnChanceScale = 1.0f;
 		
 	public static class MushroomBlueThin
 	{
-		public static float SpawnChanceScale = 10.0f;
+		public static float SpawnChanceScale = 1.0f;
 		public static int SpawnCooldown = 1200;
 	}
 	
@@ -31,16 +33,19 @@ public class Config
 		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_GENERAL, CATEGORY_GENERAL);
 		
+		BushSpawnChanceScale = cfg.getFloat("BushSpawnChanceScale", CATEGORY_GENERAL, BushSpawnChanceScale, 0f, Float.MAX_VALUE, 
+				"scale value for the chance to spawn each bush");
+		
 		//MBT category
 		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_MUSHROOMBLUETHIN, CATEGORY_MUSHROOMBLUETHIN);
 		
 		MushroomBlueThin.SpawnChanceScale = cfg.getFloat("SpawnChanceScale", CATEGORY_MUSHROOMBLUETHIN, 
-				                               MushroomBlueThin.SpawnChanceScale, 0, Float.MAX_VALUE, 
-				                               "scale value for natural spawn chance of MushroomBlueThin");
+				MushroomBlueThin.SpawnChanceScale, 0, Float.MAX_VALUE, 
+				"scale value for natural spawn chance of MushroomBlueThin");
 		MushroomBlueThin.SpawnCooldown = cfg.getInt("SpawnCooldown", CATEGORY_MUSHROOMBLUETHIN, 
-                                                    MushroomBlueThin.SpawnCooldown, 0, Integer.MAX_VALUE, 
-                                                    "time measured in ticks (0.05 seconds) between each round of spawning");
+				MushroomBlueThin.SpawnCooldown, 0, Integer.MAX_VALUE, 
+				"time measured in ticks (0.05 seconds) between each round of spawning");
 	}
 	
 	public void read() 

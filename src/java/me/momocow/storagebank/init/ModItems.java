@@ -16,7 +16,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class ModItems {
+public class ModItems 
+{
 	public static RawCard RawCard;
 	public static IDCard IDCard;
 	public static SorusBlueThin SorusBlueThin;
