@@ -2,6 +2,12 @@ package me.momocow.storagebank.reference;
 
 public class ID 
 {
+	public final class Channel
+	{
+		//packet channel
+	    public static final String GUI_CHANNEL_NAME = "SB_GUIIO";
+	}
+	
 	public final class Packet
 	{
 		public static final byte C2SGuiInput = 1;

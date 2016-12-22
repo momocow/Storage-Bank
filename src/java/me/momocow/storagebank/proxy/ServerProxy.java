@@ -1,5 +1,7 @@
 package me.momocow.storagebank.proxy;
 
+import me.momocow.storagebank.StorageBank;
+import me.momocow.storagebank.config.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
@@ -44,6 +46,11 @@ public class ServerProxy extends CommonProxy{
 		}
 	}
 	
+	public boolean isOverloading()
+	{
+		return (getAvgTimePerTick() > Config.DedicatedServer.MaxMilliSecPerTick);
+	}
+	
 	public static WorldServer[] getWorlds()
 	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
@@ -51,5 +58,19 @@ public class ServerProxy extends CommonProxy{
 	
 	public static PlayerList getPlayerList() {
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+	}
+	
+	/**
+	 * @return average time per tick in micro second
+	 */
+	public static double getAvgTimePerTick()
+	{
+		long[] period = ((MinecraftServer)StorageBank.proxy.getGame()).tickTimeArray;
+		long tickSum = 0L;
+		for(long i: period)
+		{
+			tickSum += i;
+		}
+		return ((double)tickSum / (double)period.length) * 1.0E-6D;
 	}
 }

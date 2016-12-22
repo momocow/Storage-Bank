@@ -14,6 +14,8 @@ public interface MoProxy {
 		
 	public void broadcast(ITextComponent text);	
 	
+	public boolean isOverloading();
+	
 	public String prefix();
 	
 	//key binding

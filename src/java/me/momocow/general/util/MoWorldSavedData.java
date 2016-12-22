@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -16,6 +17,12 @@ public abstract class MoWorldSavedData extends WorldSavedData
 	protected World world;
 	protected Map<Long, NBTTagCompound> data = new HashMap<Long, NBTTagCompound>();
 
+	protected MoWorldSavedData(String dataId) {
+		super(dataId);
+		
+		this.world = null;
+	}
+	
 	protected MoWorldSavedData(String dataId, World w) {
 		super(dataId);
 		
@@ -71,6 +78,7 @@ public abstract class MoWorldSavedData extends WorldSavedData
 	{
 		this.touchChunk(chunkId);
 		this.data.get(chunkId).setInteger(dataKey, dataValue);
+		this.markDirty();
 	}
 	
 	public Integer getInteger(Chunk chunk, String dataKey)
@@ -104,5 +112,15 @@ public abstract class MoWorldSavedData extends WorldSavedData
 		{
 			this.data.put(chunkId, new NBTTagCompound());
 		}
+	}
+	
+	public void setWorld(World w)
+	{
+		this.world = w;
+	}
+	
+	public static int getHeightFromHeightMap(int[] heightMap, BlockPos pos)
+	{
+		return heightMap[(pos.getZ() & 15) << 4 | (pos.getX() & 15)];
 	}
 }

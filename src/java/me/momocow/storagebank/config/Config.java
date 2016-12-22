@@ -18,9 +18,15 @@ public class Config
 		public static int SpawnCooldown = 1200;
 	}
 	
+	public static class DedicatedServer
+	{
+		public static float MaxMilliSecPerTick = 50f;
+	}
+	
 	private final String CONFIG_FILE = "storagebank.cfg";
 	private final String CATEGORY_GENERAL = Reference.MOD_ID + ".General";
 	private final String CATEGORY_MUSHROOMBLUETHIN = Reference.MOD_ID + ".MushroomBlueThin";
+	private final String CATEGORY_DEDICATEDSERVER = Reference.MOD_ID + ".DedicatedServer";
 	
 	public Config(File directory)
 	{
@@ -30,14 +36,14 @@ public class Config
 	public void initConfig()
 	{
 		//General category
-		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General configuration");
+		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General Configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_GENERAL, CATEGORY_GENERAL);
 		
 		BushSpawnChanceScale = cfg.getFloat("BushSpawnChanceScale", CATEGORY_GENERAL, BushSpawnChanceScale, 0f, Float.MAX_VALUE, 
 				"scale value for the chance to spawn each bush");
 		
 		//MBT category
-		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin configuration");
+		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin Configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_MUSHROOMBLUETHIN, CATEGORY_MUSHROOMBLUETHIN);
 		
 		MushroomBlueThin.SpawnChanceScale = cfg.getFloat("SpawnChanceScale", CATEGORY_MUSHROOMBLUETHIN, 
@@ -46,6 +52,13 @@ public class Config
 		MushroomBlueThin.SpawnCooldown = cfg.getInt("SpawnCooldown", CATEGORY_MUSHROOMBLUETHIN, 
 				MushroomBlueThin.SpawnCooldown, 0, Integer.MAX_VALUE, 
 				"time measured in ticks (0.05 seconds) between each round of spawning");
+		
+		//Dedicated Server category
+		cfg.addCustomCategoryComment(CATEGORY_DEDICATEDSERVER, "StorageBank Dedicated Sevrer Configuration");
+		cfg.setCategoryLanguageKey(CATEGORY_DEDICATEDSERVER, CATEGORY_DEDICATEDSERVER);
+		
+		DedicatedServer.MaxMilliSecPerTick = cfg.getFloat("MaxMilliSecPerTick", CATEGORY_DEDICATEDSERVER, DedicatedServer.MaxMilliSecPerTick, 0, Float.MAX_VALUE, 
+				"max time in milliseconds to identify if a server is overloading or not");
 	}
 	
 	public void read() 

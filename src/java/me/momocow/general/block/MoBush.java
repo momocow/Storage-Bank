@@ -128,16 +128,16 @@ public abstract class MoBush extends BlockBush implements MoCustomModel
 	/**
 	 * Planted to the soil at the certain position
 	 * @param worldIn the world
-	 * @param pos the position to plant
+	 * @param pos the position of the plantable
 	 * @param chance ranges from 0 to 1 for bushes to spawn
 	 * @return true if it is planted successfully; false if it does not
 	 */
-	public boolean plant(World worldIn, BlockPos pos, float chance){
-		if(this.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos))
+	public boolean plant(World worldIn, BlockPos plantPos, float chance){
+		if(this.canPlaceBlockAt(worldIn, plantPos) && worldIn.isAirBlock(plantPos))
 		{
 			if(worldIn.rand.nextFloat() <= chance * Config.BushSpawnChanceScale)
 			{
-				worldIn.setBlockState(pos, this.getDefaultState(), 3);
+				worldIn.setBlockState(plantPos, this.getDefaultState(), 3);
 			}
 			return true;
 		}
