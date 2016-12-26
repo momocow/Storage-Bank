@@ -21,5 +21,6 @@ item.storagebank.DriedMushroomBlueThin.desc1=連眼淚都乾了...。･ﾟ･(�
 
 # Gui
 gui.storagebank.GuiIDCard.textTitle=倉銀提款卡
+gui.storagebank.GuiIDCard.textCardID=卡號
 gui.storagebank.GuiIDCard.textOwner=持卡人
 gui.storagebank.GuiIDCard.textDepositoryList=倉庫列表
