@@ -1,7 +1,6 @@
 package me.momocow.storagebank.item;
 
 import java.util.List;
-import java.util.UUID;
 
 import me.momocow.general.item.MoItem;
 import me.momocow.storagebank.StorageBank;
@@ -44,33 +43,25 @@ public class IDCard extends MoItem
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{	
-		if(worldIn.isRemote){
-			NBTTagCompound nbt = null;
-			//Every IDCard is supposed to has its NBT data after signed up from raw card
-			if(itemStackIn.hasTagCompound()) nbt = itemStackIn.getTagCompound();
-			else{
-				//It's supposed to be no case coming here; just in case for unpredictable situations
-				//=> Generate an empty-info NBT to display
-				nbt = new NBTTagCompound();
-				NBTTagList depoList = new NBTTagList();
-				nbt.setUniqueId("ownerID", UUID.fromString("Invalid Card"));
-				nbt.setString("ownerName", "");
-				nbt.setString("cardID", "");
-				nbt.setTag("depoList", depoList);
-			}
+		//Every IDCard is supposed to has its NBT data after signed up from raw card
+		if(worldIn.isRemote && itemStackIn.hasTagCompound())
+		{
+			NBTTagCompound nbt = itemStackIn.getTagCompound();
 			StorageBank.proxy.displayGui(ID.Gui.GuiIDCard, nbt);
+			
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 	}
 	
 	/**
-	 * [SERVER only] Sign up the IDCard
+	 * [SERVER] Sign up the IDCard
 	 * @param itemStackIn
 	 * @param worldIn
 	 * @param playerIn
 	 */
-	public static void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	public void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
 	{
 		if(!worldIn.isRemote){
 			if(!itemStackIn.hasTagCompound()){
@@ -82,8 +73,6 @@ public class IDCard extends MoItem
 				nbt.setTag("depoList", depoList);
 				itemStackIn.setTagCompound(nbt);
 			}
-		}
-		else{
 			playerIn.addChatMessage(new TextComponentString(I18n.format(ModItems.IDCard.getUnlocalizedName()+".announce.signedUp")));
 		}
 	}

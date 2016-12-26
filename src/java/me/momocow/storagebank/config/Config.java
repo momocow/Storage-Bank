@@ -15,7 +15,7 @@ public class Config
 	public static class MushroomBlueThin
 	{
 		public static float SpawnChanceScale = 1.0f;
-		public static int SpawnCooldown = 1200;
+		public static int SpawnCooldown = 24000;
 	}
 	
 	public static class DedicatedServer

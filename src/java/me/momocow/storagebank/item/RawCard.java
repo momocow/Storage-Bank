@@ -35,7 +35,7 @@ public class RawCard extends MoItem{
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand){
 		itemStackIn.stackSize--;
 		ItemStack toSign = new ItemStack(ModItems.IDCard, 1);
-		IDCard.signUp(toSign, worldIn, playerIn);	
+		ModItems.IDCard.signUp(toSign, worldIn, playerIn);	
 		playerIn.inventory.addItemStackToInventory(toSign);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}

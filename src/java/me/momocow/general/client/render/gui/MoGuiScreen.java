@@ -14,8 +14,7 @@ public abstract class MoGuiScreen extends GuiScreen{
 	}
 	
 	public MoGuiScreen(){
-		guiWidth = 0;
-		guiHeight = 0;
+		this(0, 0);
 	}
 	
 	public void setUnlocalizedName(String n){
@@ -24,5 +23,50 @@ public abstract class MoGuiScreen extends GuiScreen{
 	
 	public String getUnlocalizedName(){
 		return unlocalizedName;
+	}
+	
+	public int getWindowWidth()
+	{
+		return this.width;
+	}
+	
+	public int getWindowHeight()
+	{
+		return this.height;
+	}
+	
+	public int getGuiWidth()
+	{
+		return this.guiWidth;
+	}
+	
+	public int getGuiHeight()
+	{
+		return this.guiHeight;
+	}
+	
+	public int getRowHeight()
+	{
+		return this.rowHeight;
+	}
+	
+	public int getGlobalX(int guiX)
+	{
+		return ;
+	}
+	
+	public int getGlobalY(int guiY)
+	{
+		return ;
+	}
+	
+	public int getLocalX(int globalX)
+	{
+		return ;
+	}
+	
+	public int getLocalY(int globalY)
+	{
+		return ;
 	}
 }
