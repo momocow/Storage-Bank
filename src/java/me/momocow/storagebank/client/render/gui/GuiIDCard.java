@@ -1,9 +1,11 @@
 package me.momocow.storagebank.client.render.gui;
 
+import java.io.IOException;
+
 import me.momocow.general.client.render.gui.MoCenteredGuiScreen;
-import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.reference.Reference;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,12 +17,16 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	private final static ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID + ":textures/gui/idcard.png");
 	private final static String NAME = "GuiIDCard";
 	
+	//gui component
+//	GuiPageButtonList
+	
+	//label text
 	private String textTitle;
-	private String textCardID;
 	private String textOwner;
 	private String textDepository;
 	private String textDeleteDepo;
 	
+	//data
 	private NBTTagList depoList;
 	private int numDepository;
 	private String stringOwnerName;
@@ -35,7 +41,6 @@ public class GuiIDCard extends MoCenteredGuiScreen
 		
 		//gui text init
 		textTitle = I18n.format(getUnlocalizedName() + ".textTitle");
-		textCardID = I18n.format(getUnlocalizedName() + ".textCardID");
 		textOwner = I18n.format(getUnlocalizedName() + ".textOwner");
 		textDepository = I18n.format(getUnlocalizedName() + ".textDepositoryList");
 		textDeleteDepo = "X";
@@ -54,6 +59,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	public void initGui(){
 		this.buttonList.clear();
 		//this.buttonList.add(e);
+		
+		
 	}
 	
 	@Override
@@ -73,20 +80,41 @@ public class GuiIDCard extends MoCenteredGuiScreen
     public void drawBackgroundLayer()
     {
     	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    	Minecraft.getMinecraft().getTextureManager().bindTexture(GuiIDCard.TEXTURE);
+    	this.mc.getTextureManager().bindTexture(GuiIDCard.TEXTURE);
     	this.drawTexturedModalRect(this.offsetX, this.offsetY, 0, 0, this.getGuiWidth(), this.getGuiHeight());
     }
     
     public void drawForegroundLayer()
     {
-    	int rowIdx = 1;
+    	this.drawCenteredString(fontRendererObj, textTitle, this.getCenterX(), this.row(1), fontRendererObj.getColorCode('1'));
     	
-    	this.drawCenteredString(fontRendererObj, textTitle, this.getCenterX(), this.row(rowIdx), fontRendererObj.getColorCode('1'));
-    	rowIdx += 3;
-    	fontRendererObj.drawSplitString(textCardID + ": " + stringCardID, this.col(1), this.row(rowIdx), this.col(17) - this.col(1), fontRendererObj.getColorCode('0'));
-    	rowIdx += 2;
-    	fontRendererObj.drawString(textOwner + ": " + stringOwnerName, this.col(1), this.row(rowIdx++), fontRendererObj.getColorCode('0'));
-    	fontRendererObj.drawString(textDepository + ": ", this.col(1), this.row(rowIdx++), fontRendererObj.getColorCode('0'));
+    	int stop = fontRendererObj.drawString(textOwner + ": ", this.col(1), this.row(3), fontRendererObj.getColorCode('0'));
+    	fontRendererObj.drawString(stringOwnerName, stop, this.row(3), fontRendererObj.getColorCode('8'));
+    	fontRendererObj.drawString(textDepository + ": ", this.col(1), this.row(6), fontRendererObj.getColorCode('0'));
+    	fontRendererObj.drawSplitString(stringCardID, this.col(1), this.row(15), this.col(17) - this.col(1), fontRendererObj.getColorCode('7'));
+    	
+    	
+    }
+    
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    	super.keyTyped(typedChar, keyCode);
+    	
+    	if(keyCode == 18)	//press 'e' to exit
+    	{
+    		this.mc.displayGuiScreen((GuiScreen)null);
+
+            if (this.mc.currentScreen == null)
+            {
+                this.mc.setIngameFocus();
+            }
+    	}
+    }
+    
+    @Override
+    public void handleMouseInput() throws IOException {
+    	// TODO Auto-generated method stub
+    	super.handleMouseInput();
     }
     
     /**
