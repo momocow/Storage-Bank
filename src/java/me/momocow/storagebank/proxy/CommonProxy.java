@@ -1,10 +1,11 @@
 package me.momocow.storagebank.proxy;
 
 import me.momocow.general.proxy.MoProxy;
+import me.momocow.storagebank.StorageBank;
+import me.momocow.storagebank.handler.GuiHandler;
 import me.momocow.storagebank.network.C2SGuiPacket;
 import me.momocow.storagebank.network.S2CGuiPacket;
 import me.momocow.storagebank.reference.ID;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -14,6 +15,10 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class CommonProxy implements MoProxy
 {
+	/**packet system
+	 * channel_gui: gui sync and client input
+	 */
+	public static SimpleNetworkWrapper guiChannel;	//GUI channel instance
 	public boolean isRemote = true;
 	
 	public IThreadListener getGame() { return null; }
@@ -28,11 +33,6 @@ public abstract class CommonProxy implements MoProxy
 	{
 		return (isRemote)?"CLIENT":"SERVER";
 	}
-	
-	/**packet system
-	 * channel_gui: gui sync and client input
-	 */
-	public static SimpleNetworkWrapper guiChannel;	//GUI channel instance
 	
 	public void registerKeyBindings() {}
 
@@ -49,8 +49,8 @@ public abstract class CommonProxy implements MoProxy
 		guiChannel.registerMessage(S2CGuiPacket.Handler.class, S2CGuiPacket.class, ID.Packet.S2CGuiSync, Side.CLIENT);
     }
 	
-	/**
-	 * [CLIENT only]
-	 */
-	public void displayGui(int guiID, NBTTagCompound data){}
+	public void registerGuiHandler()
+	{
+		NetworkRegistry.INSTANCE.registerGuiHandler(StorageBank.instance, new GuiHandler());
+	}
 }

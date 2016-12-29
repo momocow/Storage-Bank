@@ -44,19 +44,36 @@ public class IDCard extends MoItem
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{	
 		//Every IDCard is supposed to has its NBT data after signed up from raw card
-		if(worldIn.isRemote && itemStackIn.hasTagCompound())
+		if(!itemStackIn.hasTagCompound())
 		{
-			NBTTagCompound nbt = itemStackIn.getTagCompound();
-			StorageBank.proxy.displayGui(ID.Gui.GuiIDCard, nbt);
-			
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 		}
-
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+		
+		//fires on the server and sync to the client by IGuiHandler
+		playerIn.openGui(StorageBank.instance, ID.Gui.GuiIDCard, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
+		
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
+
 	
 	/**
-	 * [SERVER] Sign up the IDCard
+	 * [SERVER] Sign up the IDCard by filling the required NBT fields
+	 * NBTTagCompound
+	 * {
+	 *     "ownerID": UUID,
+	 *     "ownerName" : String,
+	 *     "cardID": UUID,
+	 *     "depoList": NBTTagList
+	 *     [
+	 *         NBTTagCompound
+	 *         {
+	 *             "depoID": UUID,
+	 *             "depoName": String,
+	 *             "depoPos": int[3]
+	 *         },
+	 *         ...
+	 *     ]
+	 * }
 	 * @param itemStackIn
 	 * @param worldIn
 	 * @param playerIn
@@ -91,7 +108,7 @@ public class IDCard extends MoItem
 			NBTTagList depoList = (NBTTagList) itemStackIn.getTagCompound().getTag("depoList");
 			depo.setUniqueId("depoID", MathHelper.getRandomUUID());
 			depo.setString("depoName", depoName);
-			depo.setIntArray("depoCoord", new int[]{(int)depoX, (int)depoY, (int)depoZ});
+			depo.setIntArray("depoPos", new int[]{(int)depoX, (int)depoY, (int)depoZ});
 			depoList.appendTag(depo);
 		}
 	}

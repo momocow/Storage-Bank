@@ -48,6 +48,8 @@ public class StorageBank {
     	ModBlocks.init();
     	ModRecipes.init();
     	ModEvents.init();
+    	
+    	proxy.registerGuiHandler();
     }
         
     @EventHandler
