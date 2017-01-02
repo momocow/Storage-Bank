@@ -1,9 +1,7 @@
 package me.momocow.general.client.gui;
 
 import me.momocow.storagebank.reference.Reference;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 
 public class MoVanillaScrollBar implements MoScrollable
 {
@@ -18,11 +16,15 @@ public class MoVanillaScrollBar implements MoScrollable
 	private float zLevel;
 	private int minY;
 	private int maxY;
-	private int lastMouseY = 0;
 	private int stageNum = 1;
 	private int stage = 0;
-	private int textureCursor = 0;
-	private int stageSize = 0;
+	private int stageUnit;
+	/**
+	 * local position corresponding to the scrollbar gui which is clicked by the mouse
+	 * It is only meaningful when the gui is dragged
+	 */
+	private int clickedGuiY = 0;
+	
 	
 	public MoVanillaScrollBar(int x, int y, float z, int my, int w, int h, int s)
 	{
@@ -34,14 +36,16 @@ public class MoVanillaScrollBar implements MoScrollable
 		this.width = w;
 		this.height = h;
 		this.stageNum = Math.max(s, 1);
-		this.stageSize = (this.maxY - this.minY) / this.stageNum;
+		this.isEnabled = (this.stageNum > 1);
+
 		
-		this.validate();
+		this.stageUnit = (int)((double)(this.maxY - this.minY) / (double)(this.stageNum * 2 - 2));
 	}
 	
 	public void drawScrollBar()
 	{
-		MoGuiScreen.drawPartialScaleTexturedRect(MoVanillaScrollBar.TEXTURE, this.posX, this.posY, this.zLevel, this.textureCursor, 0, 12, 15, 24, 15, this.width, this.height);
+		int textureX = (this.isEnabled)? 0: 12;
+		MoGuiScreen.drawPartialScaleTexturedRect(MoVanillaScrollBar.TEXTURE, this.posX, this.posY, this.zLevel, textureX, 0, 12, 15, 24, 15, this.width, this.height);
 	}
 	
 	public boolean isDragged()
@@ -77,7 +81,7 @@ public class MoVanillaScrollBar implements MoScrollable
 	
 	public void moveBackStage()
 	{
-		this.setStage(this.stage -1);
+		this.setStage(this.stage - 1);
 	}
 	
 	public boolean isMouseClicked(int mouseX, int mouseY)
@@ -88,20 +92,25 @@ public class MoVanillaScrollBar implements MoScrollable
 	@Override
 	public void mouseClicked(int mouseX, int mouseY)
 	{
-		this.setLastMouseY(mouseY);
 		this.isDragged = true;
+		this.clickedGuiY = mouseY - this.posY;
     }
     
     @Override
 	public void mouseClickMove(int mouseX, int mouseY) 
 	{
-    	Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("mouseX: " + mouseX +" mouseY: " + mouseY));
-    	Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("this.posY: " + this.posY + " this.lastMouseY: " + this.lastMouseY));
-    	this.posY = this.posY +  mouseY - this.lastMouseY;
-    	this.setLastMouseY(mouseY);
-    	Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("this.posY: " + this.posY + " this.lastMouseY: " + this.lastMouseY));
+    	this.posY = mouseY - this.clickedGuiY;
+    	if(this.posY > this.maxY - this.height)
+    	{
+    		this.posY = this.maxY - this.height;
+    	}
+    	else if(this.posY < this.minY)
+    	{
+    		this.posY = this.minY;
+    	}
     	
-    	this.validate();
+    	//derive the stage from pos
+    	this.stage = getStageFromPos(this.posY);
     }
     
     @Override
@@ -109,20 +118,26 @@ public class MoVanillaScrollBar implements MoScrollable
     {
     	this.isDragged = false;
     	
-    	this.validate();
+    	this.posY = mouseY - this.clickedGuiY;
+    	if(this.posY > this.maxY - this.height)
+    	{
+    		this.posY = this.maxY - this.height;
+    	}
+    	else if(this.posY < this.minY)
+    	{
+    		this.posY = this.minY;
+    	}
+    	
+    	//derive the stage from pos
+    	this.stage = getStageFromPos(this.posY);
+    	this.compute();
     }
     
-    protected void setLastMouseY(int mouseY)
+    private int getStageFromPos(int pos)
     {
-    	this.lastMouseY = mouseY;
-    	if(this.lastMouseY > this.maxY - this.height)
-    	{
-    		this.lastMouseY = this.maxY - this.height;
-    	}
-    	else if(this.lastMouseY < this.minY)
-    	{
-    		this.lastMouseY = this.minY;
-    	}
+    	int deltaY = pos + this.height / 2 - this.minY,
+    			remain = (deltaY % this.stageUnit > 0)? 1: 0;
+    	return (int)Math.floor((double)(deltaY / this.stageUnit + remain) / 2.0D);
     }
     
     public int getStage()
@@ -135,57 +150,33 @@ public class MoVanillaScrollBar implements MoScrollable
     	return this.stageNum;
     }
     
+    /**
+     * compute the valid position with the given stage
+     */
     private void compute()
     {
-    	//check if it is enabled
-		if(!this.isEnabled)
+		//stage validation
+		if(this.stage < 0)
 		{
-			this.textureCursor = 12;
-			this.posY = this.minY;
-			
-			return;
+			this.stage = 0;
 		}
-		this.textureCursor = 0;
-    	
-		//set to the correct stage and the corresponding position
-		this.stage = (this.posY - this.minY) / stageSize;
-		if(!this.isDragged)
-		{
-			if(((this.posY - this.minY) % stageSize) >= (stageSize / 2))
-			{
-				this.posY = this.minY + stageSize * (this.stage + 1);
-				this.stage ++;
-			}
-			else
-			{
-				this.posY = this.minY + stageSize * this.stage;
-			}
-		}
-		
-		//set the position for the last stage
-		if(this.stageNum > 1 && this.stage >= this.stageNum - 1)
-		{
-			this.posY = this.maxY - this.height;
-		}
-		
-		//check if it is in the valid range
-    	if(this.posY > this.maxY - this.height)
-		{
-			this.posY = this.maxY - this.height;
-		}
-		else if(this.posY < this.minY)
-		{
-			this.posY = this.minY;
-		}
-    	
-    	//check if it is in the valid range
-    	if(this.stage > this.stageNum - 1)
+		else if(this.stage > this.stageNum - 1)
 		{
 			this.stage = this.stageNum - 1;
 		}
-		else if(this.stage < 0)
+		
+		//derive the position
+		if(this.stage == 0)
 		{
-			this.stage = 0;
+			this.posY = this.minY;
+		}
+		else if(this.isLastStage(this.stage))
+		{
+			this.posY = this.maxY - this.height;
+		}
+		else if(this.stage > 0 && this.stage < this.stageNum - 1)
+		{
+			this.posY = this.minY + 2 * this.stage * this.stageUnit - this.height / 2;
 		}
     }
 }

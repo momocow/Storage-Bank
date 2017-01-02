@@ -71,21 +71,20 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	 */
 	@Override
 	public void initGui(){
-		this.depoNum = this.depoList.tagCount();
+		//environment preparing
 		Keyboard.enableRepeatEvents(true);
 		this.buttonList.clear();
+		this.setCenter(width / 2, height / 2);	//init the offset of the Gui
 		
-		this.setCenter(width / 2, height / 2);
+		//required data
+		this.depoNum = this.depoList.tagCount();
+		this.pageCursor = 0;
 		
-		scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / maxDepoNumInPage + 1);
-		this.pageCursor = this.scrollbar.getStage();
+		//add the scrollbar
+		int remain = (this.depoNum % this.maxDepoNumInPage > 0)? 1: 0;
+		scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / this.maxDepoNumInPage + remain);
 		
-		if(this.depoNum > 7)
-		{
-			//enable the scrollbar
-			this.scrollbar.setEnabled(true);
-		}
-		
+		//add the button and the textfield
 		depoNames.clear();
 		for(int i = 0; i < this.depoNum; i++)
 		{
