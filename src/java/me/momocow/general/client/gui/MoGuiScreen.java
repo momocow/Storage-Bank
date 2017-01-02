@@ -163,7 +163,7 @@ public abstract class MoGuiScreen extends GuiScreen
 	 * @param imageHeight
 	 * @param scale
 	 */
-	public static void drawTexturedRect(ResourceLocation texture, double x, double y, double zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, double scale) {
+	public static void drawTexturedRect(ResourceLocation texture, double x, double y, double zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, double scaleWidth, double scaleHeight) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         double minU = (double)textureX / (double)imageWidth;
@@ -174,19 +174,19 @@ public abstract class MoGuiScreen extends GuiScreen
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(x + scale*(double)width, y + scale*(double)height, (double)zLevel).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos(x + scale*(double)width, y, zLevel).tex(maxU, minV).endVertex();
+        vertexbuffer.pos(x + scaleWidth*(double)width, y + scaleHeight*(double)height, (double)zLevel).tex(maxU, maxV).endVertex();
+        vertexbuffer.pos(x + scaleWidth*(double)width, y, zLevel).tex(maxU, minV).endVertex();
         vertexbuffer.pos(x, y, (double)zLevel).tex(minU, minV).endVertex();
-        vertexbuffer.pos(x, y + scale*(double)height, zLevel).tex(minU, maxV).endVertex();
+        vertexbuffer.pos(x, y + scaleHeight*(double)height, zLevel).tex(minU, maxV).endVertex();
         tessellator.draw();
     }
 	
 	/**
 	 * Casting the data type of parameters for the method {@linkplain #drawTexturedRect(ResourceLocation, double, double, int, int, int, int, int, int, double) drawTexturedRect}
 	 */
-	public static void drawTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, double scale)
+	public static void drawTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, double scaleWidth, double scaleHeight)
 	{
-		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scale);
+		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scaleWidth, scaleHeight);
 	}
 	
 	/**
@@ -204,10 +204,32 @@ public abstract class MoGuiScreen extends GuiScreen
 	 * @param guiWidth expected width of the gui
 	 * @param guiHeight expected height of the gui
 	 */
-	public static void drawTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, int guiWidth, int guiHeight)
+	public static void drawProportionTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, int guiWidth, int guiHeight)
 	{
 		double scale = Math.min(Math.floor((double)guiHeight / (double) height), Math.floor((double)guiWidth / (double)width));
-		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scale);
+		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scale, scale);
+	}
+	
+	/**
+	 * Auto-scale version of the method {@linkplain #drawTexturedRect(ResourceLocation, double, double, int, int, int, int, int, int, double) drawTexturedRect}
+	 * It will automatically scale to fit the expected size of Gui
+	 * @param texture
+	 * @param x
+	 * @param y
+	 * @param textureX
+	 * @param textureY
+	 * @param width
+	 * @param height
+	 * @param imageWidth
+	 * @param imageHeight
+	 * @param guiWidth expected width of the gui
+	 * @param guiHeight expected height of the gui
+	 */
+	public static void drawPartialScaleTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, int guiWidth, int guiHeight)
+	{
+		double scaleWidth = (double)guiWidth / (double)width;
+		double scaleHeight = (double)guiHeight / (double) height;
+		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scaleWidth, scaleHeight);
 	}
 	
 	@Override

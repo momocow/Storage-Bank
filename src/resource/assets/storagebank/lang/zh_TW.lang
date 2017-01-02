@@ -24,4 +24,4 @@ gui.storagebank.GuiIDCard.textTitle=倉銀提款卡
 gui.storagebank.GuiIDCard.textCardID=卡號
 gui.storagebank.GuiIDCard.textOwner=持卡人
 gui.storagebank.GuiIDCard.textDepositoryList=倉庫列表
-gui.storagebank.GuiIDCard.depoPage=第%d個到第%d個，共%d個
+gui.storagebank.GuiIDCard.depoPage=第%d頁/共%d頁

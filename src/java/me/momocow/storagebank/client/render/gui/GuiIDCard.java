@@ -29,10 +29,11 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	//gui component
 	private MoVanillaScrollBar scrollbar;
 	private List<GuiTextField> depoNames = new ArrayList<GuiTextField>();
-	private List<GuiButton> depoDeletes = new ArrayList<GuiButton>();
+	private List<GuiTextField> currentDepoNames = new ArrayList<GuiTextField>();
+	private final int maxDepoNumInPage =  7;
 	
 	//state
-	private int depoCursor = 0;
+	private int pageCursor = 0;
 	
 	//label text
 	private String textTitle;
@@ -70,33 +71,40 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	 */
 	@Override
 	public void initGui(){
+		this.depoNum = this.depoList.tagCount();
 		Keyboard.enableRepeatEvents(true);
+		this.buttonList.clear();
 		
 		this.setCenter(width / 2, height / 2);
 		
-		int compoNum = 0;
-		scrollbar = new MoVanillaScrollBar(compoNum++, this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(127), 12, 15);
+		scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / maxDepoNumInPage + 1);
+		this.pageCursor = this.scrollbar.getStage();
 		
-		this.depoNum = this.depoList.tagCount();
-		this.scrollbar.isEnabled = false;
 		if(this.depoNum > 7)
 		{
 			//enable the scrollbar
-			this.scrollbar.isEnabled = true;
+			this.scrollbar.setEnabled(true);
 		}
 		
 		depoNames.clear();
 		for(int i = 0; i < this.depoNum; i++)
 		{
-			GuiTextField depoName = new GuiTextField(compoNum++, this.fontRendererObj, this.getGlobalX(27),  this.getGlobalY(73 + 10 * i), 48, this.fontRendererObj.FONT_HEIGHT);
-			depoName.setEnabled(true);
+			//textfiled depoName
+			GuiTextField depoName = new GuiTextField(i, this.fontRendererObj, this.getGlobalX(27),  this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), 48, this.fontRendererObj.FONT_HEIGHT);
+			depoName.setEnabled(false);
 			depoName.setEnableBackgroundDrawing(false);
 			depoName.setVisible(false);
-			depoName.setMaxStringLength(12);
+			depoName.setMaxStringLength(20);
 			depoName.setCanLoseFocus(true);
-			depoName.setTextColor(11184810);
+			depoName.setTextColor(5592405);
+			depoName.setText(depoList.getCompoundTagAt(i).getString("depoName"));
 			depoName.setCursorPosition(0);
 			depoNames.add(depoName);
+
+			//button depoDelete
+			GuiButton bt = new GuiButton(i, this.getGlobalX(144), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), 10, 9, this.textDeleteDepo);
+			bt.visible = false;
+			this.buttonList.add(bt);
 		}
 	}
 	
@@ -109,9 +117,21 @@ public class GuiIDCard extends MoCenteredGuiScreen
      */
     @Override
     public void drawScreen(int parWidth, int parHeight, float partialTicks){
-    	super.drawScreen(parWidth, parHeight, partialTicks);
-    	
     	this.drawGui();
+    	
+    	//page changes
+    	if(this.scrollbar.getStage() != this.pageCursor)
+    	{
+    		for(GuiTextField depoName: currentDepoNames)
+    		{
+    			depoName.setEnabled(false);
+    			depoName.setFocused(false);
+    			depoName.setVisible(false);
+    		}
+    		currentDepoNames.clear();
+    		this.pageCursor = this.scrollbar.getStage();
+    	}
+    	
     	
     	//title
     	this.drawCenteredString(fontRendererObj, textTitle, this.getCenterX(), this.row(1), fontRendererObj.getColorCode('1'));
@@ -121,30 +141,42 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	fontRendererObj.drawString(stringOwnerName, stop, this.row(3), fontRendererObj.getColorCode('8'));
     	
     	//depo
-    	fontRendererObj.drawString(textDepository + " (" + I18n.format(this.getUnlocalizedName() + ".depoPage", this.depoCursor, Math.min(this.depoCursor + 6, this.depoNum), this.depoNum) + ")", this.col(1), this.row(6), fontRendererObj.getColorCode('0'));
-    	int drawDepoNum = Math.min(this.depoNum, 7);
-    	for(int i = 0; i < drawDepoNum; i++)
+    	fontRendererObj.drawString(textDepository + " (" + I18n.format(this.getUnlocalizedName() + ".depoPage", this.pageCursor + 1, this.scrollbar.getStageNum()) + ")", this.col(1), this.row(6), fontRendererObj.getColorCode('0'));
+    	int drawDepoNum = (this.scrollbar.isLastStage(this.pageCursor))? (this.depoNum % this.maxDepoNumInPage): this.maxDepoNumInPage;
+    	int startDepo = this.pageCursor * this.maxDepoNumInPage;
+    	for(int i = startDepo; i < drawDepoNum + startDepo; i++)
 		{
-    		fontRendererObj.drawString("#" + (i + 1),  this.col(1), this.getGlobalY(73 + 10 * i), fontRendererObj.getColorCode('0'));
+    		//row index
+    		fontRendererObj.drawString("#" + (i + 1),  this.col(1), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), fontRendererObj.getColorCode('0'));
     		
+    		//depo name
     		GuiTextField depoName = depoNames.get(i);
     		depoName.setVisible(true);
-    		MoGuiScreen.drawTexturedRect(GuiIDCard.ACTIVETEXTFIELD, this.getGlobalX(27), this.getGlobalY(73 + 10 * i), this.zLevel, 0, 0, 47, 8, 69, 8, 47, 8);
+    		depoName.setEnabled(true);
+    		MoGuiScreen.drawProportionTexturedRect(GuiIDCard.ACTIVETEXTFIELD, this.getGlobalX(27), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), this.zLevel, 0, 0, 47, 8, 69, 8, 47, 8);
     		depoName.drawTextBox();
+    		currentDepoNames.add(depoName);
     		
+    		//depo position
     		NBTTagCompound depo = depoList.getCompoundTagAt(i);
     		int[] depoPos = depo.getIntArray("depoPos");
-    		fontRendererObj.drawString(fontRendererObj.trimStringToWidth("(" + depoPos[0] + ", " + depoPos[1] + ", " + depoPos[2] + ")", 66), this.getGlobalX(78), this.getGlobalY(73 + 10 * i), fontRendererObj.getColorCode('0'));
+    		fontRendererObj.drawString(fontRendererObj.trimStringToWidth("(" + depoPos[0] + ", " + depoPos[1] + ", " + depoPos[2] + ")", 66), this.getGlobalX(78), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), fontRendererObj.getColorCode('0'));
+    		
+    		//depo delete
+    		this.buttonList.get(i).visible = true;
 		}
     	
     	//card id
     	fontRendererObj.drawSplitString(stringCardID, this.col(1), this.row(15), this.col(17) - this.col(1), fontRendererObj.getColorCode('7'));
+    	
+    	//draw button
+    	super.drawScreen(parWidth, parHeight, partialTicks);
     }
     
     public void drawGui()
     {
     	this.drawDefaultBackground();
-    	MoGuiScreen.drawTexturedRect(GuiIDCard.BGGUITEXTURE, this.offsetX, this.offsetY, this.zLevel, 0, 0, 176, 166, 256, 256, this.guiWidth, this.guiHeight);
+    	MoGuiScreen.drawProportionTexturedRect(GuiIDCard.BGGUITEXTURE, this.offsetX, this.offsetY, this.zLevel, 0, 0, 176, 166, 256, 256, this.guiWidth, this.guiHeight);
     	this.scrollbar.drawScrollBar();
     }
     
@@ -152,9 +184,14 @@ public class GuiIDCard extends MoCenteredGuiScreen
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
     	super.keyTyped(typedChar, keyCode);
     	
-    	for(GuiTextField depoName: depoNames)
+    	for(GuiTextField depoName: currentDepoNames)
 		{
-			if(depoName.isFocused()) depoName.textboxKeyTyped(typedChar, keyCode);
+			if(depoName.isFocused())	//if one of the text field is clicked
+			{
+				depoName.textboxKeyTyped(typedChar, keyCode);	//input
+				depoList.getCompoundTagAt(depoName.getId()).setString("depoName", depoName.getText());	//save to NBT data
+				return;
+			}
 		}
     		
     	
@@ -167,7 +204,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
                 this.mc.setIngameFocus();
             }
     	}
-    	else if (keyCode == 44)
+    	else if (keyCode == 44) //z
     	{
     		NBTTagCompound depo = new NBTTagCompound();
 			depo.setUniqueId("depoID", MathHelper.getRandomUUID());
@@ -178,9 +215,9 @@ public class GuiIDCard extends MoCenteredGuiScreen
 			
 			this.initGui();
     	}
-    	else if (keyCode == 45)
+    	else if (keyCode == 45) //x
     	{
-    		this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", new NBTTagList());;
+    		this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", depoList = new NBTTagList());;
     		this.initGui();
     	}
     }
@@ -194,13 +231,13 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	{
     		if(this.scrollbar.isMouseClicked(mouseX, mouseY))
     		{
-    			this.scrollbar.mouseClicked();
+    			this.scrollbar.mouseClicked(mouseX, mouseY);
     		}
 
-			for(GuiTextField depoName: depoNames)
-			{
-				depoName.mouseClicked(mouseX, mouseY, mouseButton);
-			}
+    		for(GuiTextField depoName: currentDepoNames)
+    		{
+        		depoName.mouseClicked(mouseX, mouseY, mouseButton);
+    		}
     	}
     }
     
@@ -222,7 +259,19 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	
     	if(this.scrollbar.isDragged())
     	{
-    		this.scrollbar.mouseReleased();
+    		this.scrollbar.mouseReleased(mouseX, mouseY);
+    	}
+    }
+    
+    @Override
+    public void mouseWheelMove(int wheelMove) {
+    	if(wheelMove < 0)
+    	{
+    		this.scrollbar.moveNextStage();
+    	}
+    	else if(wheelMove > 0)
+    	{
+    		this.scrollbar.moveBackStage();
     	}
     }
     
