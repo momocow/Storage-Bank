@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 
 public class GuiIDCard extends MoCenteredGuiScreen
 {
@@ -28,8 +29,9 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	
 	//gui component
 	private MoVanillaScrollBar scrollbar;
-	private List<GuiTextField> depoNames = new ArrayList<GuiTextField>();
-	private List<GuiTextField> currentDepoNames = new ArrayList<GuiTextField>();
+	private List<GuiTextField> depoNames = new ArrayList<GuiTextField>();	//a list of all depositories
+	private List<GuiTextField> currentDepoNames = new ArrayList<GuiTextField>();	//a cached list of currently visible depositories
+	private List<GuiButton> currentDepoDeletes = new ArrayList<GuiButton>();
 	private final int maxDepoNumInPage =  7;
 	
 	//state
@@ -53,6 +55,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	public GuiIDCard(NBTTagCompound data){
 		super(176, 166);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
+		this.pageCursor = 0;
 		
 		//gui text init
 		textTitle = I18n.format(getUnlocalizedName() + ".textTitle");
@@ -73,38 +76,59 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	public void initGui(){
 		//environment preparing
 		Keyboard.enableRepeatEvents(true);
-		this.buttonList.clear();
 		this.setCenter(width / 2, height / 2);	//init the offset of the Gui
+		
+		//reset
+		for(GuiTextField depoName: this.currentDepoNames)
+		{
+			depoName.setEnabled(false);
+			depoName.setFocused(false);
+			depoName.setVisible(false);
+		}
+		this.currentDepoNames.clear();
+		
+		for(GuiButton depoDelete: this.currentDepoDeletes)
+		{
+			depoDelete.visible = false;
+			depoDelete.enabled = false;
+		}
+		this.currentDepoDeletes.clear();
 		
 		//required data
 		this.depoNum = this.depoList.tagCount();
-		this.pageCursor = 0;
 		
 		//add the scrollbar
 		int remain = (this.depoNum % this.maxDepoNumInPage > 0)? 1: 0;
-		scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / this.maxDepoNumInPage + remain);
+		this.scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / this.maxDepoNumInPage + remain);
+		this.scrollbar.setStage(this.pageCursor);
 		
 		//add the button and the textfield
 		depoNames.clear();
-		for(int i = 0; i < this.depoNum; i++)
+		int btnIdx;
+		for(btnIdx = 0; btnIdx < this.depoNum; btnIdx++)
 		{
 			//textfiled depoName
-			GuiTextField depoName = new GuiTextField(i, this.fontRendererObj, this.getGlobalX(27),  this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), 48, this.fontRendererObj.FONT_HEIGHT);
+			GuiTextField depoName = new GuiTextField(btnIdx, this.fontRendererObj, this.getGlobalX(27),  this.getGlobalY(73 + 10 * (btnIdx % this.maxDepoNumInPage)), 48, this.fontRendererObj.FONT_HEIGHT);
 			depoName.setEnabled(false);
 			depoName.setEnableBackgroundDrawing(false);
 			depoName.setVisible(false);
 			depoName.setMaxStringLength(20);
 			depoName.setCanLoseFocus(true);
 			depoName.setTextColor(5592405);
-			depoName.setText(depoList.getCompoundTagAt(i).getString("depoName"));
+			depoName.setText(depoList.getCompoundTagAt(btnIdx).getString("depoName"));
 			depoName.setCursorPosition(0);
 			depoNames.add(depoName);
 
 			//button depoDelete
-			GuiButton bt = new GuiButton(i, this.getGlobalX(144), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), 10, 9, this.textDeleteDepo);
+			GuiButton bt = new GuiButton(btnIdx, this.getGlobalX(144), this.getGlobalY(73 + 10 * (btnIdx % this.maxDepoNumInPage)), 10, 9, this.textDeleteDepo);
 			bt.visible = false;
+			bt.enabled = false;
+			bt.packedFGColour = this.fontRendererObj.getColorCode('c');
 			this.buttonList.add(bt);
 		}
+		
+		//reset button
+		this.buttonList.add(new GuiButton(btnIdx, this.getGlobalX(125), this.row(5), 45, 20, I18n.format(this.getUnlocalizedName() + ".resetButton")));
 	}
 	
 	@Override
@@ -121,16 +145,23 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	//page changes
     	if(this.scrollbar.getStage() != this.pageCursor)
     	{
-    		for(GuiTextField depoName: currentDepoNames)
+    		for(GuiTextField depoName: this.currentDepoNames)
     		{
     			depoName.setEnabled(false);
     			depoName.setFocused(false);
     			depoName.setVisible(false);
     		}
-    		currentDepoNames.clear();
+    		this.currentDepoNames.clear();
+    		
+    		for(GuiButton depoDelete: this.currentDepoDeletes)
+    		{
+    			depoDelete.visible = false;
+    			depoDelete.enabled = false;
+    		}
+    		this.currentDepoDeletes.clear();
+    		
     		this.pageCursor = this.scrollbar.getStage();
     	}
-    	
     	
     	//title
     	this.drawCenteredString(fontRendererObj, textTitle, this.getCenterX(), this.row(1), fontRendererObj.getColorCode('1'));
@@ -141,7 +172,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	
     	//depo
     	fontRendererObj.drawString(textDepository + " (" + I18n.format(this.getUnlocalizedName() + ".depoPage", this.pageCursor + 1, this.scrollbar.getStageNum()) + ")", this.col(1), this.row(6), fontRendererObj.getColorCode('0'));
-    	int drawDepoNum = (this.scrollbar.isLastStage(this.pageCursor))? (this.depoNum % this.maxDepoNumInPage): this.maxDepoNumInPage;
+    	int drawDepoNum = (this.scrollbar.isLastStage(this.pageCursor))? (this.depoNum - this.maxDepoNumInPage * this.pageCursor): this.maxDepoNumInPage;
     	int startDepo = this.pageCursor * this.maxDepoNumInPage;
     	for(int i = startDepo; i < drawDepoNum + startDepo; i++)
 		{
@@ -162,7 +193,10 @@ public class GuiIDCard extends MoCenteredGuiScreen
     		fontRendererObj.drawString(fontRendererObj.trimStringToWidth("(" + depoPos[0] + ", " + depoPos[1] + ", " + depoPos[2] + ")", 66), this.getGlobalX(78), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), fontRendererObj.getColorCode('0'));
     		
     		//depo delete
-    		this.buttonList.get(i).visible = true;
+    		GuiButton depoDelete = this.buttonList.get(i);
+    		depoDelete.visible = true;
+    		depoDelete.enabled = true;
+    		currentDepoDeletes.add(depoDelete);
 		}
     	
     	//card id
@@ -212,11 +246,13 @@ public class GuiIDCard extends MoCenteredGuiScreen
 			depo.setIntArray("depoPos", new int[]{r.nextInt()%100000, r.nextInt()%256, r.nextInt()%100000});
 			depoList.appendTag(depo);
 			
+			this.buttonList.clear();
 			this.initGui();
     	}
     	else if (keyCode == 45) //x
     	{
-    		this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", depoList = new NBTTagList());;
+    		this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", depoList = new NBTTagList());
+    		this.buttonList.clear();
     		this.initGui();
     	}
     }
@@ -228,16 +264,40 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	
     	if(mouseButton == 0)
     	{
-    		if(this.scrollbar.isMouseClicked(mouseX, mouseY))
+    		//clicks on the scrollbar gui
+    		if(this.scrollbar.isScrollBarClicked(mouseX, mouseY))
     		{
     			this.scrollbar.mouseClicked(mouseX, mouseY);
     		}
-
-    		for(GuiTextField depoName: currentDepoNames)
+    		//clicks on the scroll field
+    		else if(this.scrollbar.isScrollFieldClicked(mouseX, mouseY))
     		{
-        		depoName.mouseClicked(mouseX, mouseY, mouseButton);
+    			this.scrollbar.scrollFieldClicked(mouseX, mouseY);
     		}
-    	}
+    		//buttons
+    		else
+    		{
+    			for(GuiButton depoDelete: this.currentDepoDeletes)
+    			{
+    				if(depoDelete.mousePressed(this.mc, mouseX, mouseY))
+    				{
+    					//remove the depo from depoList and the NBT (because 'depoList' is already the reference of the NBTTagList)
+    					depoList.removeTag(depoDelete.id);
+    					
+    					//regenerate Guis
+    					this.buttonList.clear();
+    					this.initGui();
+    					
+    					return;
+    				}
+    			}
+    			
+    			for(GuiTextField depoName: this.currentDepoNames)
+        		{
+            		depoName.mouseClicked(mouseX, mouseY, mouseButton);
+        		}
+    		}
+    	}    	
     }
     
     @Override
@@ -263,19 +323,14 @@ public class GuiIDCard extends MoCenteredGuiScreen
     }
     
     @Override
-    public void mouseWheelMove(int wheelMove) {
-    	if(wheelMove < 0)
-    	{
-    		this.scrollbar.moveNextStage();
-    	}
-    	else if(wheelMove > 0)
-    	{
-    		this.scrollbar.moveBackStage();
-    	}
+    public void mouseWheelMove(int wheelMove) 
+    {
+		this.scrollbar.mouseWheelMove(wheelMove);
     }
     
     @Override
-    public void onGuiClosed() {
+    public void onGuiClosed() 
+    {
     	super.onGuiClosed();
     	Keyboard.enableRepeatEvents(false);
     }

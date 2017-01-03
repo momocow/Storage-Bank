@@ -2,9 +2,11 @@ package me.momocow.general.client.gui;
 
 public interface MoScrollable 
 {
-	public void drawScrollBar();
-	public void mouseClicked(int mouseX, int mouseY);
-	public void mouseClickMove(int mouseX, int mouseY) ;
-	public void mouseReleased(int mouseX, int mouseY);
-	public boolean isMouseClicked(int mouseX, int mouseY);
+	void drawScrollBar();
+	void mouseClicked(int mouseX, int mouseY);
+	void mouseClickMove(int mouseX, int mouseY) ;
+	void mouseReleased(int mouseX, int mouseY);
+	boolean isScrollBarClicked(int mouseX, int mouseY);
+	boolean isScrollFieldClicked(int mouseX, int mouseY);
+	void mouseWheelMove(int wheelMove);
 }

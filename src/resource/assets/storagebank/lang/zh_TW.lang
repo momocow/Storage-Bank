@@ -25,3 +25,4 @@ gui.storagebank.GuiIDCard.textCardID=卡號
 gui.storagebank.GuiIDCard.textOwner=持卡人
 gui.storagebank.GuiIDCard.textDepositoryList=倉庫列表
 gui.storagebank.GuiIDCard.depoPage=第%d頁/共%d頁
+gui.storagebank.GuiIDCard.resetButton=清除全部

@@ -18,7 +18,7 @@ public class MoVanillaScrollBar implements MoScrollable
 	private int maxY;
 	private int stageNum = 1;
 	private int stage = 0;
-	private int stageUnit;
+	private double stageUnit = 0;
 	/**
 	 * local position corresponding to the scrollbar gui which is clicked by the mouse
 	 * It is only meaningful when the gui is dragged
@@ -38,8 +38,10 @@ public class MoVanillaScrollBar implements MoScrollable
 		this.stageNum = Math.max(s, 1);
 		this.isEnabled = (this.stageNum > 1);
 
-		
-		this.stageUnit = (int)((double)(this.maxY - this.minY) / (double)(this.stageNum * 2 - 2));
+		if(this.stageNum > 1)
+		{
+			this.stageUnit = (double)(this.maxY - this.height - this.minY) / (double)(this.stageNum - 1);
+		}
 	}
 	
 	public void drawScrollBar()
@@ -84,9 +86,16 @@ public class MoVanillaScrollBar implements MoScrollable
 		this.setStage(this.stage - 1);
 	}
 	
-	public boolean isMouseClicked(int mouseX, int mouseY)
+	@Override
+	public boolean isScrollBarClicked(int mouseX, int mouseY)
 	{
 		return this.isEnabled && mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.posY && mouseY <= this.posY + this.height;
+	}
+	
+	@Override
+	public boolean isScrollFieldClicked(int mouseX, int mouseY)
+	{
+		return this.isEnabled && !this.isScrollBarClicked(mouseX, mouseY) && mouseX >= this.posX && mouseX <= this.posX + this.width && mouseY >= this.minY && mouseY <= this.maxY;
 	}
 	 
 	@Override
@@ -95,6 +104,18 @@ public class MoVanillaScrollBar implements MoScrollable
 		this.isDragged = true;
 		this.clickedGuiY = mouseY - this.posY;
     }
+	
+	public void scrollFieldClicked(int mouseX, int mouseY)
+	{
+		if(mouseY < this.posY)
+		{
+			this.moveBackStage();
+		}
+		else if(mouseY > this.posY + this.height)
+		{
+			this.moveNextStage();
+		}
+	}
     
     @Override
 	public void mouseClickMove(int mouseX, int mouseY) 
@@ -133,11 +154,23 @@ public class MoVanillaScrollBar implements MoScrollable
     	this.compute();
     }
     
+    @Override
+    public void mouseWheelMove(int wheelMove) 
+    {
+    	if(wheelMove < 0)
+    	{
+    		this.moveNextStage();
+    	}
+    	else if(wheelMove > 0)
+    	{
+    		this.moveBackStage();
+    	}
+    }
+    
     private int getStageFromPos(int pos)
     {
-    	int deltaY = pos + this.height / 2 - this.minY,
-    			remain = (deltaY % this.stageUnit > 0)? 1: 0;
-    	return (int)Math.floor((double)(deltaY / this.stageUnit + remain) / 2.0D);
+    	int deltaY = pos - this.minY;
+    	return (int)Math.ceil((double)deltaY / this.stageUnit);
     }
     
     public int getStage()
@@ -165,18 +198,18 @@ public class MoVanillaScrollBar implements MoScrollable
 			this.stage = this.stageNum - 1;
 		}
 		
-		//derive the position
+		//derive the position from stage
 		if(this.stage == 0)
 		{
 			this.posY = this.minY;
 		}
-		else if(this.isLastStage(this.stage))
+		else if(this.stage == this.stageNum - 1)
 		{
 			this.posY = this.maxY - this.height;
 		}
-		else if(this.stage > 0 && this.stage < this.stageNum - 1)
+		else
 		{
-			this.posY = this.minY + 2 * this.stage * this.stageUnit - this.height / 2;
+			this.posY = this.minY + (int)(this.stageUnit * this.stage);
 		}
     }
 }
