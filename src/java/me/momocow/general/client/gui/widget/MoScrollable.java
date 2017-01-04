@@ -1,4 +1,4 @@
-package me.momocow.general.client.gui;
+package me.momocow.general.client.gui.widget;
 
 public interface MoScrollable 
 {

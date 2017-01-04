@@ -1,5 +1,6 @@
-package me.momocow.general.client.gui;
+package me.momocow.general.client.gui.widget;
 
+import me.momocow.general.client.gui.MoGuiScreen;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.util.ResourceLocation;
 

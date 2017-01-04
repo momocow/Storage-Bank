@@ -1,15 +1,14 @@
-package me.momocow.storagebank.client.render.gui;
+package me.momocow.storagebank.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
 import me.momocow.general.client.gui.MoCenteredGuiScreen;
 import me.momocow.general.client.gui.MoGuiScreen;
-import me.momocow.general.client.gui.MoVanillaScrollBar;
+import me.momocow.general.client.gui.widget.MoVanillaScrollBar;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,8 +17,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 
 public class GuiIDCard extends MoCenteredGuiScreen
 {
@@ -32,6 +29,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	private List<GuiTextField> depoNames = new ArrayList<GuiTextField>();	//a list of all depositories
 	private List<GuiTextField> currentDepoNames = new ArrayList<GuiTextField>();	//a cached list of currently visible depositories
 	private List<GuiButton> currentDepoDeletes = new ArrayList<GuiButton>();
+	private GuiButton resetButton;
 	private final int maxDepoNumInPage =  7;
 	
 	//state
@@ -128,7 +126,11 @@ public class GuiIDCard extends MoCenteredGuiScreen
 		}
 		
 		//reset button
-		this.buttonList.add(new GuiButton(btnIdx, this.getGlobalX(125), this.row(5), 45, 20, I18n.format(this.getUnlocalizedName() + ".resetButton")));
+		this.buttonList.add(this.resetButton = new GuiButton(btnIdx, this.getGlobalX(125), this.row(5), 45, 20, I18n.format(this.getUnlocalizedName() + ".resetButton")));
+		if(this.depoNum == 0)
+		{
+			this.resetButton.enabled = false;
+		}
 	}
 	
 	@Override
@@ -237,23 +239,13 @@ public class GuiIDCard extends MoCenteredGuiScreen
                 this.mc.setIngameFocus();
             }
     	}
-    	else if (keyCode == 44) //z
+    	else if(keyCode == 200)	//key '↑'
     	{
-    		NBTTagCompound depo = new NBTTagCompound();
-			depo.setUniqueId("depoID", MathHelper.getRandomUUID());
-			depo.setString("depoName", "");
-			Random r = new Random();
-			depo.setIntArray("depoPos", new int[]{r.nextInt()%100000, r.nextInt()%256, r.nextInt()%100000});
-			depoList.appendTag(depo);
-			
-			this.buttonList.clear();
-			this.initGui();
+    		this.scrollbar.moveBackStage();
     	}
-    	else if (keyCode == 45) //x
+    	else if(keyCode == 208)	//key '↓'
     	{
-    		this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", depoList = new NBTTagList());
-    		this.buttonList.clear();
-    		this.initGui();
+    		this.scrollbar.moveNextStage();
     	}
     }
     
@@ -277,6 +269,15 @@ public class GuiIDCard extends MoCenteredGuiScreen
     		//buttons
     		else
     		{
+    			//reset the depoList
+    			if(this.resetButton.mousePressed(this.mc, mouseX, mouseY))
+    			{
+    				this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", this.depoList = new NBTTagList());
+    	    		this.buttonList.clear();
+    	    		this.initGui();
+    				return;
+    			}
+    			
     			for(GuiButton depoDelete: this.currentDepoDeletes)
     			{
     				if(depoDelete.mousePressed(this.mc, mouseX, mouseY))

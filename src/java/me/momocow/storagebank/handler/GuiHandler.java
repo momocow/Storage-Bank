@@ -1,6 +1,6 @@
 package me.momocow.storagebank.handler;
 
-import me.momocow.storagebank.client.render.gui.GuiIDCard;
+import me.momocow.storagebank.client.gui.GuiIDCard;
 import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.reference.ID;
 import net.minecraft.entity.player.EntityPlayer;
