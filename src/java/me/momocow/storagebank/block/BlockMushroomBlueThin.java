@@ -3,7 +3,6 @@ package me.momocow.storagebank.block;
 import java.util.Random;
 
 import me.momocow.general.block.MoCrop;
-import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
@@ -29,7 +28,6 @@ public class BlockMushroomBlueThin extends MoCrop
 	public BlockMushroomBlueThin(){
 		super();
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
-		this.setCreativeTab(CreativeTab.MO_TAB);
 		this.setRegistryName(NAME);
 		
 		GameRegistry.register(this);

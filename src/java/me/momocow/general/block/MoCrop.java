@@ -27,6 +27,7 @@ public abstract class MoCrop extends MoBush implements IGrowable
 	
 	public MoCrop()
 	{
+		super();
 		this.setDefaultState(this.blockState.getBaseState().withProperty(this.getAgeProperty(), Integer.valueOf(0)));
 		this.setHardness(0.0F);
         this.setSoundType(SoundType.PLANT);

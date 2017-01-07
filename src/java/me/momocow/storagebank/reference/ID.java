@@ -16,6 +16,7 @@ public class ID
 	
 	public final class Gui
 	{
+		public static final byte NoGui = -1;
 		public static final byte GuiIDCard = 1;
 	}
 	

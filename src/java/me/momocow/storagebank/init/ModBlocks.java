@@ -6,6 +6,7 @@ import java.util.List;
 import me.momocow.general.block.MoBush;
 import me.momocow.general.client.render.MoCustomModel;
 import me.momocow.general.util.LogHelper;
+import me.momocow.storagebank.block.BlockATM;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModBlocks 
 {
 	public static BlockMushroomBlueThin BlockMushroomBlueThin;
+	public static BlockATM BlockATM;
 
 	//bush list
 	private static List<Block> blocks;
@@ -26,6 +28,7 @@ public class ModBlocks
 		blocks = new ArrayList<Block>();
 		
 		BlockMushroomBlueThin = (BlockMushroomBlueThin) initBlock(BlockMushroomBlueThin.class);
+		BlockATM = (BlockATM) initBlock(BlockATM.class);
 		
 		LogHelper.info("Mod Blocks pre-init... Done");
 	}

@@ -24,7 +24,6 @@ abstract public class MoBlock extends Block implements MoCustomModel{
 	
 	public MoBlock(Material material, MapColor materialMapColor) {
 		super(material, materialMapColor);
-		this.setTickRandomly(true);
 		this.setCreativeTab(CreativeTab.MO_TAB);
 	}
 

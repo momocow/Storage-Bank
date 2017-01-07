@@ -2,7 +2,7 @@
 itemGroup.storagebank=倉儲銀行
 
 # Block
-tile.storagebank.ATM.name=ATM
+tile.storagebank.BlockATM.name=ATM
 
 # Item
 item.storagebank.RawCard.name=空卡

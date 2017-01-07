@@ -1,0 +1,31 @@
+{
+	"parent": "storagebank:item/CustomModelItemblock",
+	
+	"display": {
+	    "gui": {
+	      "rotation": [ 30, 225, 0 ],
+	      "translation": [ 0, 0, 0],
+	      "scale":[ 0.625, 0.625, 0.625 ]
+	    },
+	    "ground": {
+	      "rotation": [ 0, 0, 0 ],
+	      "translation": [ 0, 3, 0],
+	      "scale":[ 0.3, 0.3, 0.3 ]
+	    },
+	    "fixed": {
+	      "rotation": [ 0, 0, 0 ],
+	      "translation": [ 0, 0, 0],
+	      "scale":[ 0.5, 0.5, 0.5 ]
+	    },
+	    "thirdperson_righthand": {
+	        "rotation": [ 46, 158, 0 ],
+	        "translation": [ -2.25, 4.50, 0.75 ],
+	        "scale": [ 0.50, 0.50, 0.50 ]
+	    },
+	    "firstperson_righthand": {
+	        "rotation": [ 0, 132, 0 ],
+	        "translation": [ 0.00, 0.00, -3.25 ],
+	        "scale": [ 0.75, 0.75, 0.75 ]
+	    }
+  }
+}
