@@ -35,7 +35,10 @@ public abstract class MoBlockHorizontalFacing extends MoBlock
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) 
 	{
-		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		if(!worldIn.isRemote)
+		{
+			worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		}
 	}
 	
 	@Override

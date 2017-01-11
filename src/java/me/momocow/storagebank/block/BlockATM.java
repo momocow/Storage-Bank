@@ -111,7 +111,8 @@ public class BlockATM extends MoBlockContainerHorizontalFacing
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) 
 	{
-		
+		//init the property FACING
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 	
 	/**

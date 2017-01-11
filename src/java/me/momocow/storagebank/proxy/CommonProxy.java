@@ -21,13 +21,22 @@ public abstract class CommonProxy implements MoProxy
 	public static SimpleNetworkWrapper guiChannel;	//GUI channel instance
 	public boolean isRemote = true;
 	
-	public IThreadListener getGame() { return null; }
+	public IThreadListener getGame() 
+	{ 
+		return null; 
+	}
 	
-	public World getWorld(int worldId) { return null; }
+	public World getWorld(int worldId) 
+	{
+		return null;
+	}
 		
 	public void broadcast(ITextComponent text){}
 	
-	public boolean isOverloading(){return false;}
+	public boolean isOverloading()
+	{
+		return false;
+	}
 	
 	public String prefix()
 	{

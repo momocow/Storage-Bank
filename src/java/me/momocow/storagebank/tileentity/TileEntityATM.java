@@ -1,6 +1,9 @@
 package me.momocow.storagebank.tileentity;
 
+import java.util.UUID;
+
 import me.momocow.general.tileentity.MoTileEntityInventory;
+import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -8,13 +11,12 @@ import net.minecraft.item.ItemStack;
 public class TileEntityATM extends MoTileEntityInventory
 {
 	private static final String NAME = "TileEntityATM";
+	private UUID owner;
 	
-	public TileEntityATM() {
-	}
 	
 	@Override
 	public int getGuiId() {
-		return 0;
+		return ID.Gui.GuiATM;
 	}
 	
 	@Override

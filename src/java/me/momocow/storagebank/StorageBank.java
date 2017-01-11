@@ -3,11 +3,13 @@ package me.momocow.storagebank;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
+import me.momocow.storagebank.init.ModEntities;
 import me.momocow.storagebank.init.ModEvents;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.init.ModRecipes;
 import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.Reference;
+import me.momocow.storagebank.world.storage.BankingController;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -25,7 +27,8 @@ public class StorageBank {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
 	public static CommonProxy proxy;
 	
-	public static Config config;
+	public static Config config;	//mod config
+	public static BankingController controller;	//Bank instance to control the interaction with StorageBank
      
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) throws Exception{
@@ -36,6 +39,7 @@ public class StorageBank {
     	
     	ModItems.preinit();
 		ModBlocks.preinit();
+		ModEntities.preInit();
 		
     	proxy.registerRender();
     	proxy.registerChannel();

@@ -2,13 +2,15 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
+import me.momocow.general.entity.item.MoEntityItem;
 import me.momocow.general.item.MoItem;
+import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
-import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,7 +19,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -81,16 +82,7 @@ public class IDCard extends MoItem
 	public void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
 	{
 		if(!worldIn.isRemote){
-			if(!itemStackIn.hasTagCompound()){
-				NBTTagCompound nbt = new NBTTagCompound();
-				NBTTagList depoList = new NBTTagList();
-				nbt.setUniqueId("ownerID", playerIn.getUniqueID());
-				nbt.setString("ownerName", playerIn.getDisplayNameString());
-				nbt.setUniqueId("cardID", MathHelper.getRandomUUID());
-				nbt.setTag("depoList", depoList);
-				itemStackIn.setTagCompound(nbt);
-			}
-			playerIn.addChatMessage(new TextComponentString(I18n.format(ModItems.IDCard.getUnlocalizedName()+".announce.signedUp")));
+			StorageBank.controller.register(playerIn, itemStackIn);
 		}
 	}
 	
@@ -120,5 +112,20 @@ public class IDCard extends MoItem
 		if(stack.hasTagCompound()) textOwner = stack.getTagCompound().getString("ownerName");
 		tooltip.add(TextFormatting.YELLOW + I18n.format(getUnlocalizedName() + ".desc1") + ": " + textOwner);
 		tooltip.add(TextFormatting.AQUA + I18n.format(getUnlocalizedName() + ".desc2"));
+	}
+	
+	@Override
+	public boolean hasCustomEntity(ItemStack stack) 
+	{
+		return true;
+	}
+	
+	@Override
+	public Entity createEntity(World world, Entity location, ItemStack itemstack)
+	{
+		LogHelper.info("pos: "+location.posX + " " +location.posY + " " +location.posZ);
+		LogHelper.info("lastTick: "+location.lastTickPosX + " " +location.lastTickPosY + " " +location.lastTickPosZ);
+		LogHelper.info("prev: " + location.prevPosX + " " +location.prevPosY + " " +location.prevPosZ);
+		return new MoEntityItem(world, location.posX, location.posY+1, location.posZ, itemstack);
 	}
 }

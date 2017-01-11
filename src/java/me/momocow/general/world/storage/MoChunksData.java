@@ -1,4 +1,4 @@
-package me.momocow.general.util;
+package me.momocow.general.world.storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,21 +12,33 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class MoWorldSavedData extends WorldSavedData
+public abstract class MoChunksData extends WorldSavedData
 {
+	//Data fields
 	protected World world;
+	protected boolean isInit = false;
 	protected Map<Long, NBTTagCompound> data = new HashMap<Long, NBTTagCompound>();
-
-	protected MoWorldSavedData(String dataId) {
-		super(dataId);
-		
-		this.world = null;
-	}
 	
-	protected MoWorldSavedData(String dataId, World w) {
-		super(dataId);
+	protected MoChunksData(String dataId, World w) {
+		this(dataId);
 		
 		this.world = w;
+	}
+	
+	protected MoChunksData(String dataId) {
+		super(dataId);
+	}
+	
+	public void init(World w)
+	{
+		this.world = w;
+		
+		this.isInit = true;
+	}
+	
+	public boolean isInit()
+	{
+		return this.isInit;
 	}
 
 	@Override
@@ -44,6 +56,7 @@ public abstract class MoWorldSavedData extends WorldSavedData
 	/**
 	 * NBTTagCompound
 	 * {
+	 * 	   "world": int,
 	 *     "chunkList": NBTTagList
 	 *     [
 	 *         NBTTagCompound
@@ -57,6 +70,7 @@ public abstract class MoWorldSavedData extends WorldSavedData
 	 */
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("world", this.world.provider.getDimension());
 		NBTTagList chunkList = new NBTTagList();
 		for(long chunkId: data.keySet())
 		{
@@ -112,11 +126,6 @@ public abstract class MoWorldSavedData extends WorldSavedData
 		{
 			this.data.put(chunkId, new NBTTagCompound());
 		}
-	}
-	
-	public void setWorld(World w)
-	{
-		this.world = w;
 	}
 	
 	public static int getHeightFromHeightMap(int[] heightMap, BlockPos pos)

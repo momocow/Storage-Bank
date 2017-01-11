@@ -18,10 +18,12 @@ public class ID
 	{
 		public static final byte NoGui = -1;
 		public static final byte GuiIDCard = 1;
+		public static final byte GuiATM = 2;
 	}
 	
-	public final class MoWorldSavedData
+	public final class WorldSavedData
 	{
 		public static final String WorldGenMushroomBlueThin = "MBTChunkCoolDown";
+		public static final String BankingController = "BankGlobalData";
 	}
 }

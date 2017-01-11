@@ -1,7 +1,13 @@
 {
   "forge_marker": 1,
   "defaults": {
-  	"model":"storagebank:BlockATM"
+  	"model":"storagebank:BlockATM",
+  	"custom": {
+  		"flip-v": true
+  	},
+  	"textures": {
+      "#None": "storagebank:block/BlockATM"
+    }
   },
   "variants": {
     "normal": [{}],
