@@ -2,9 +2,8 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.general.entity.item.MoEntityItem;
+import me.momocow.general.entity.MoEntityItem;
 import me.momocow.general.item.MoItem;
-import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.reference.ID;
@@ -123,9 +122,6 @@ public class IDCard extends MoItem
 	@Override
 	public Entity createEntity(World world, Entity location, ItemStack itemstack)
 	{
-		LogHelper.info("pos: "+location.posX + " " +location.posY + " " +location.posZ);
-		LogHelper.info("lastTick: "+location.lastTickPosX + " " +location.lastTickPosY + " " +location.lastTickPosZ);
-		LogHelper.info("prev: " + location.prevPosX + " " +location.prevPosY + " " +location.prevPosZ);
-		return new MoEntityItem(world, location.posX, location.posY+1, location.posZ, itemstack);
+		return new MoEntityItem(world, location, itemstack);
 	}
 }

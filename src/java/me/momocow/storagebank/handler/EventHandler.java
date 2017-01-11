@@ -1,6 +1,6 @@
 package me.momocow.storagebank.handler;
 
-import me.momocow.general.event.item.MoItemDyingEvent;
+import me.momocow.general.event.item.MoItemDestroyEvent;
 import me.momocow.general.reference.Constants;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.item.IDCard;
@@ -35,7 +35,7 @@ public class EventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-	public void onItemDying(MoItemDyingEvent e)
+	public void onItemDestroy(MoItemDestroyEvent e)
 	{
 		ItemStack stack = e.getEntityItem().getEntityItem();
 		if(!StorageBank.proxy.isRemote && stack.getItem() instanceof IDCard && stack.hasTagCompound())
