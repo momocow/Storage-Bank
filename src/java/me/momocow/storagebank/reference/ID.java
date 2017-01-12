@@ -5,13 +5,13 @@ public class ID
 	public final class Channel
 	{
 		//packet channel
-	    public static final String GUI_CHANNEL_NAME = "SB_GUIIO";
+	    public static final String BroadcastChannel = "SB.Broadcast";
 	}
 	
 	public final class Packet
 	{
-		public static final byte C2SGuiInput = 1;
-		public static final byte S2CGuiSync = 2;
+		public static final byte C2SBroadcast = 0;
+		public static final byte S2CBroadcast = 1;
 	}
 	
 	public final class Gui
@@ -23,7 +23,7 @@ public class ID
 	
 	public final class WorldSavedData
 	{
-		public static final String WorldGenMushroomBlueThin = "MBTChunkCoolDown";
-		public static final String BankingController = "BankGlobalData";
+		public static final String WorldGenMushroomBlueThin = Reference.MOD_ID +".MBTChunkCoolDown";
+		public static final String BankingController = Reference.MOD_ID +".BankGlobalData";
 	}
 }

@@ -4,6 +4,7 @@ import me.momocow.general.event.item.MoItemDestroyEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -18,6 +19,7 @@ public class MoEntityItem extends EntityItem
 	public MoEntityItem(World world)
 	{
 		super(world);
+		this.setPickupDelay(40);
 	}
 	
     public MoEntityItem(World worldIn, Entity vanilla, ItemStack stack) 
@@ -30,8 +32,14 @@ public class MoEntityItem extends EntityItem
 	}
     
     @Override
-    public void setDead() {
-    	super.setDead();
-    	MinecraftForge.EVENT_BUS.post(new MoItemDestroyEvent(this));
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+    	boolean ret = super.attackEntityFrom(source, amount);
+    	
+    	if(this.isDead)
+    	{
+    		MinecraftForge.EVENT_BUS.post(new MoItemDestroyEvent(this, source));
+    	}
+    	
+    	return ret;
     }
 }

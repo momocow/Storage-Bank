@@ -1,6 +1,7 @@
 package me.momocow.general.event.item;
 
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.item.ItemEvent;
 
 /**
@@ -9,7 +10,16 @@ import net.minecraftforge.event.entity.item.ItemEvent;
  */
 public class MoItemDestroyEvent extends ItemEvent
 {
-	public MoItemDestroyEvent(EntityItem itemEntity) {
+	DamageSource source;
+	
+	public MoItemDestroyEvent(EntityItem itemEntity, DamageSource src) {
 		super(itemEntity);
+		
+		this.source = src;
+	}
+	
+	public DamageSource getSource()
+	{
+		return this.source;
 	}
 }

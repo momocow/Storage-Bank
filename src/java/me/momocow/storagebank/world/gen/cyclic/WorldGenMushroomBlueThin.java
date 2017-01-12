@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import me.momocow.general.reference.Constants;
-import me.momocow.general.util.LogHelper;
 import me.momocow.general.world.storage.MoChunksData;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.config.Config;
@@ -42,33 +41,26 @@ public final class WorldGenMushroomBlueThin extends MoChunksData
 	public WorldGenMushroomBlueThin(String dataID)
 	{
 		super(dataID);
-		LogHelper.info("Data[\"" + dataID + "\"] is resumed.");
 	}
 	
 	private WorldGenMushroomBlueThin(World w)
 	{
 		super(DATA_ID);
-		LogHelper.info("Data[\"" + this.mapName + "\"] is created.");
 		this.init(w);
 	}
 	
 	@Override
 	public void init(World w) {
 		super.init(w);
-		
-		LogHelper.info("Data[\"" + this.mapName + "\"] for WorldDim#" + this.world.provider.getDimension() + " is initialized.");
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
-		LogHelper.info("Data[\"" + DATA_ID + "\"] is loaded from NBT.");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		LogHelper.info("Data[\"" + DATA_ID + "\"] is written to NBT.");
 		return super.writeToNBT(nbt);
 	}
 	
@@ -166,7 +158,6 @@ public final class WorldGenMushroomBlueThin extends MoChunksData
 
 			return worldgen;
 		}
-		
 		return null;
 	}
 }

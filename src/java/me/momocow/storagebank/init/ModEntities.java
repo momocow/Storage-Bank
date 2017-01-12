@@ -10,11 +10,6 @@ public class ModEntities
 	
 	public static void preInit()
 	{
-		EntityRegistry.registerModEntity(MoEntityItem.class, MoEntityItem.RegistryName, entityID++, StorageBank.instance, 64, 4, false);
-	}
-	
-	public static void initModels()
-	{
-		
+		EntityRegistry.registerModEntity(MoEntityItem.class, MoEntityItem.RegistryName, entityID++, StorageBank.instance, 64, 1, false);
 	}
 }
