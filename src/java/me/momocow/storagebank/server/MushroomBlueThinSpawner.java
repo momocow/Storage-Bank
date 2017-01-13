@@ -1,4 +1,4 @@
-package me.momocow.storagebank.world.gen.cyclic;
+package me.momocow.storagebank.server;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +21,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
-public final class WorldGenMushroomBlueThin extends MoChunksData
+public final class MushroomBlueThinSpawner extends MoChunksData
 {
 	private static final String DATA_ID = ID.WorldSavedData.WorldGenMushroomBlueThin;
 	
@@ -29,7 +29,7 @@ public final class WorldGenMushroomBlueThin extends MoChunksData
 	 * Required Constructors
 	 * for {@linkplain MapStorage#getOrLoadData(Class, String) MapStorage#getOrLoadData}
 	 */
-	public WorldGenMushroomBlueThin()
+	public MushroomBlueThinSpawner()
 	{
 		this(DATA_ID);
 	}
@@ -38,12 +38,12 @@ public final class WorldGenMushroomBlueThin extends MoChunksData
 	 * Required Constructors
 	 * for {@linkplain MapStorage#getOrLoadData(Class, String) MapStorage#getOrLoadData}
 	 */
-	public WorldGenMushroomBlueThin(String dataID)
+	public MushroomBlueThinSpawner(String dataID)
 	{
 		super(dataID);
 	}
 	
-	private WorldGenMushroomBlueThin(World w)
+	private MushroomBlueThinSpawner(World w)
 	{
 		super(DATA_ID);
 		this.init(w);
@@ -139,16 +139,16 @@ public final class WorldGenMushroomBlueThin extends MoChunksData
 	 * @return WorldGenMushroomBlueThin
 	 */
 	@Nullable
-	public static WorldGenMushroomBlueThin get(World w)
+	public static MushroomBlueThinSpawner get(World w)
 	{
 		if(!w.isRemote && w.provider.getDimension() == Constants.WorldDim.OVERWORLD)
 		{
 			MapStorage storage = w.getPerWorldStorage();
-			WorldGenMushroomBlueThin worldgen = (WorldGenMushroomBlueThin) storage.getOrLoadData(WorldGenMushroomBlueThin.class, DATA_ID);
+			MushroomBlueThinSpawner worldgen = (MushroomBlueThinSpawner) storage.getOrLoadData(MushroomBlueThinSpawner.class, DATA_ID);
 	
 			if(worldgen == null)	//create new Spawner for MBT
 			{
-				worldgen = new WorldGenMushroomBlueThin(w);
+				worldgen = new MushroomBlueThinSpawner(w);
 				storage.setData(DATA_ID, worldgen);
 			}
 			else if(!worldgen.isInit())	//resume the old one

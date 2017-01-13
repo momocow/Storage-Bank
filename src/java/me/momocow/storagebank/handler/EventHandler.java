@@ -5,7 +5,7 @@ import me.momocow.general.reference.Constants;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.init.ModWorldGens;
 import me.momocow.storagebank.item.IDCard;
-import me.momocow.storagebank.world.storage.BankingController;
+import me.momocow.storagebank.server.BankingController;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -45,7 +45,7 @@ public class EventHandler
 		ItemStack stack = e.getEntityItem().getEntityItem();
 		if(!world.isRemote && stack.getItem() instanceof IDCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("cardID"))
 		{
-//			StorageBank.controller.deregister(stack.getTagCompound().getUniqueId("cardID"));
+			StorageBank.controller.deregister(stack);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class EventHandler
 		ItemStack stack = e.getEntityItem().getEntityItem();
 		if(!world.isRemote && stack.getItem() instanceof IDCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("cardID"))
 		{
-//			StorageBank.controller.deregister(stack.getTagCompound().getUniqueId("cardID"));
+			StorageBank.controller.deregister(stack);
 		}
 	}
 }

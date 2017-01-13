@@ -1,5 +1,6 @@
-package me.momocow.storagebank.world.storage;
+package me.momocow.storagebank.server;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -8,19 +9,19 @@ import javax.annotation.Nullable;
 
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.item.IDCard;
-import me.momocow.storagebank.network.S2CBroadcastPacket;
-import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.proxy.ServerProxy;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapStorage;
 
 public class BankingController extends WorldSavedData
@@ -62,53 +63,49 @@ public class BankingController extends WorldSavedData
 		return null;
 	}
 	
+	private UUID getIDFromItemStack(ItemStack stack)
+	{
+		return (stack.hasTagCompound() && stack.getTagCompound().hasKey(Reference.MOD_ID) && stack.getTagCompound().getCompoundTag(Reference.MOD_ID).hasKey("cardID"))? stack.getTagCompound().getCompoundTag(Reference.MOD_ID).getUniqueId("cardID"): null;
+	}
+	
+	/**
+	 * verify if the card is a legal card by the equivalent of stack's NBTTagCompound and the one specified by its carID stored in the bank db
+	 * @param stack
+	 * @return
+	 */
+	public boolean isRegistered(ItemStack stack)
+	{
+		UUID card = this.getIDFromItemStack(stack);
+		if(card != null && this.bankDB.containsKey(card))
+		{
+			NBTTagCompound storedData = (NBTTagCompound)this.bankDB.get(this.getIDFromItemStack(stack), Tables.CARD);
+			if(storedData != null && storedData.equals(stack.getTagCompound().getCompoundTag(Reference.MOD_ID))) return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Return the player with the specified card id
 	 * @param uuid
 	 * @return
 	 */
 	@Nullable
-	public EntityPlayer getOwnerByID(UUID card)
-	{
-		for(WorldServer world: ServerProxy.getWorlds())
-		{
-			EntityPlayer player = world.getPlayerEntityByUUID((UUID) this.bankDB.get(card, Tables.MEMBER));
-			if(player != null)
-			{
-				return player;
-			}
-		}
-		
-		return null;
+	public EntityPlayer getOwnerByID(ItemStack stack)
+	{	
+		return (this.isRegistered(stack))? ServerProxy.getPlayerList().getPlayerByUUID((UUID)this.bankDB.get(this.getIDFromItemStack(stack), Tables.MEMBER)): null;
 	}
 	
 	/**
-	 * if an entry is found with the specified uuid but null is returned, the entry is automacally remove
+	 * Return the player uuid with the specified member id
 	 * @param uuid
 	 * @return
 	 */
-//	@Nullable
-//	public ItemStack getCardByUUID(UUID uuid)
-//	{
-//		ItemStack card = this.mapID2Card.get(uuid);
-////		if(card == null && (this.mapID2Player.containsKey(uuid) || this.mapID2Card.containsKey(uuid)))	//remove the redundant entry
-////		{
-////			this.deregister(uuid);
-////		}
-//		
-//		return card;
-//	}
-//	
-//	/**
-//	 * Return the player uuid with the specified member id
-//	 * @param uuid
-//	 * @return
-//	 */
-//	public UUID getOwnerUniqueIDByID(UUID mid)
-//	{
-//		EntityPlayer player = this.getOwnerByUUID(uuid);
-//		return (player == null)? null: player.getUniqueID();
-//	}
+	@Nullable
+	public UUID getOwnerUniqueIDByID(ItemStack stack)
+	{
+		return (this.isRegistered(stack))? (UUID)this.bankDB.get(this.getIDFromItemStack(stack), Tables.MEMBER): null;
+	}
 	
 	/**
 	 * Use the specified UUID to register an entry for the IDCard and set up into the NBT of the IDCard
@@ -157,7 +154,7 @@ public class BankingController extends WorldSavedData
 				this.bankDB.set(uuid, playerIn.getUniqueID(), data);
 
 				//response
-				//CommonProxy.broadcastChannel.sendToAll(new S2CBroadcastPacket("anno." + UnlocalizedName + ".signedUp"));
+				playerIn.addChatMessage(new TextComponentTranslation("anno." + UnlocalizedName + ".signedUp"));
 			}
 			else
 			{
@@ -165,39 +162,21 @@ public class BankingController extends WorldSavedData
 			}
 		}
 	}
-//	
-//	public void deregister(UUID uuid)
-//	{
-//		LogHelper.info("uuid: "+uuid.toString());
-//		LogHelper.info("isRegister: "+this.isRegistered(uuid));
-//		if(uuid != null && this.isRegistered(uuid))
-//		{
-//			EntityPlayer player = this.mapID2Player.remove(uuid);
-//			ItemStack card = this.mapID2Card.remove(uuid);
-//			
-//			if(player != null)
-//			{
-//				player.addChatMessage(new TextComponentString(I18n.format("anno." + UnlocalizedName + ".deregistered", card.getDisplayName())));
-//			}
-//			
-//			if(card != null)
-//			{
-//				card.setTagCompound(null);
-//			}
-//		}
-//	}
-//	
-//	/**
-//	 * Return true if the key specified by uuid exists in both maps, ID-Card map and ID-Player map and the value of the specified key are both non-null; otherwise false is returned
-//	 * @param uuid
-//	 * @return
-//	 */
-//	public boolean isRegistered(UUID uuid)
-//	{
-//		return this.mapID2Card.containsKey(uuid) && this.mapID2Player.containsKey(uuid);
-//	}
 	
-
+	public void deregister(ItemStack stack)
+	{
+		if(this.isRegistered(stack))
+		{
+			EntityPlayer player = this.getOwnerByID(stack);
+			this.bankDB.delete(this.getIDFromItemStack(stack));
+			
+			if(player != null)
+			{
+				player.addChatMessage(new TextComponentTranslation("anno." + UnlocalizedName + ".deregistered", stack.getDisplayName()));
+			}
+		}
+	}
+	
 	/**
 	 * Called by Server only
 	 * @param world
@@ -266,25 +245,42 @@ public class BankingController extends WorldSavedData
 		 */
 		private boolean validate(UUID index)
 		{
-			boolean isValid = this.mapID2Card.containsKey(index) && this.mapID2Player.containsKey(index) && this.mapID2Card.get(index) != null && this.mapID2Player.get(index) != null;
-			if(!isValid)
+			boolean isValid = index != null && this.mapID2Card.containsKey(index) && this.mapID2Player.containsKey(index) && this.mapID2Card.get(index) != null && this.mapID2Player.get(index) != null;
+			if(index != null && !isValid)
 			{
-				this.mapID2Card.remove(index);
-				this.mapID2Player.remove(index);	
+				this.delete(index);	
 			}
 			return isValid;
 		}
 		
+		/**
+		 * Alias for validate
+		 * @param index
+		 * @return
+		 */
 		public boolean containsKey(UUID index)
 		{
 			return this.validate(index);
 		}
 		
+		public Map.Entry<UUID, NBTTagCompound> delete(UUID index)
+		{
+			return new SimpleEntry<UUID, NBTTagCompound>(this.mapID2Player.remove(index), this.mapID2Card.remove(index));
+		}
+		
+		/**
+		 * init from NBT
+		 * @param nbt
+		 */
 		public void importFrom(NBTTagCompound nbt)
 		{
 			
 		}
 		
+		/**
+		 * save all to NBT
+		 * @return
+		 */
 		public NBTTagCompound export()
 		{
 			NBTTagCompound bundle = new NBTTagCompound();

@@ -9,7 +9,7 @@ import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.init.ModRecipes;
 import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.Reference;
-import me.momocow.storagebank.world.storage.BankingController;
+import me.momocow.storagebank.server.BankingController;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;

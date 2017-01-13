@@ -5,7 +5,7 @@ public class ID
 	public final class Channel
 	{
 		//packet channel
-	    public static final String BroadcastChannel = "SB.Broadcast";
+	    public static final String Chat = "SB.Chat";
 	}
 	
 	public final class Packet

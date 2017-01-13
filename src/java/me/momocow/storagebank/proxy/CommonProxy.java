@@ -3,14 +3,11 @@ package me.momocow.storagebank.proxy;
 import me.momocow.general.proxy.MoProxy;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.handler.GuiHandler;
-import me.momocow.storagebank.network.S2CBroadcastPacket;
-import me.momocow.storagebank.reference.ID;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class CommonProxy implements MoProxy
 {
@@ -51,8 +48,7 @@ public abstract class CommonProxy implements MoProxy
 	
 	public void registerChannel() 
 	{
-		broadcastChannel = NetworkRegistry.INSTANCE.newSimpleChannel(ID.Channel.BroadcastChannel);
-		broadcastChannel.registerMessage(S2CBroadcastPacket.Handler.class, S2CBroadcastPacket.class, ID.Packet.S2CBroadcast, Side.CLIENT);
+//		broadcastChannel = NetworkRegistry.INSTANCE.newSimpleChannel(ID.Channel.Chat);
     }
 	
 	public void registerGuiHandler()

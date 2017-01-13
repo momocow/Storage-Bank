@@ -18,7 +18,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -87,8 +86,6 @@ public class IDCard extends MoItem
 		if(!worldIn.isRemote){
 			StorageBank.controller.register(playerIn, itemStackIn);
 		}
-		if(!worldIn.isRemote && itemStackIn.hasTagCompound() && itemStackIn.getTagCompound().hasKey(Reference.MOD_ID))
-		playerIn.addChatMessage(new TextComponentString(StorageBank.controller.getOwnerByID(itemStackIn.getTagCompound().getCompoundTag(Reference.MOD_ID).getUniqueId("cardID")).getDisplayNameString()));
 	}
 	
 	/**

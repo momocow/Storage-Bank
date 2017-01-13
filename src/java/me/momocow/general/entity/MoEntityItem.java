@@ -26,9 +26,11 @@ public class MoEntityItem extends EntityItem
     {
     	super(worldIn, vanilla.posX, vanilla.posY, vanilla.posZ, stack);
     	this.setPickupDelay(40);
-    	this.setVelocity(vanilla.motionX, vanilla.motionY, vanilla.motionZ);
     	this.setThrower(((EntityItem)vanilla).getThrower());
     	this.setOwner(((EntityItem)vanilla).getOwner());
+    	this.motionX = vanilla.motionX; 
+    	this.motionY = vanilla.motionY;
+    	this.motionZ = vanilla.motionZ;
 	}
     
     @Override
