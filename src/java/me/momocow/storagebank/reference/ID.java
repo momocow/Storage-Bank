@@ -1,29 +1,60 @@
 package me.momocow.storagebank.reference;
 
+import me.momocow.general.EnumToInt;
+
 public class ID 
 {
-	public final class Channel
+	public static final class Channel
 	{
 		//packet channel
-	    public static final String Chat = "SB.Chat";
+	    public static final String guiInput = "SB:guiInput";
 	}
 	
-	public final class Packet
+	public static final class Packet
 	{
-		public static final byte C2SBroadcast = 0;
-		public static final byte S2CBroadcast = 1;
+		public static final byte C2SDeregister = 0;
+		public static final byte C2SGuiInput = 1;
 	}
 	
-	public final class Gui
+	public static final class Gui
 	{
 		public static final byte NoGui = -1;
 		public static final byte GuiIDCard = 1;
 		public static final byte GuiATM = 2;
 	}
 	
-	public final class WorldSavedData
+	public static final class WorldSavedData
 	{
 		public static final String WorldGenMushroomBlueThin = Reference.MOD_ID +".MBTChunkCoolDown";
-		public static final String BankingController = Reference.MOD_ID +".BankGlobalData";
+	}
+	
+	public enum GuiInput implements EnumToInt
+	{
+		GuiIDCard(0);
+		
+		private final int value;
+		
+		private GuiInput(int v)
+		{
+			this.value = v;
+		}
+		
+		@Override
+		public int toInt() {
+			return this.value;
+		}
+		
+		public static GuiInput getEnum(int intVal)
+		{
+			for(GuiInput enumVal: GuiInput.values())
+			{
+				if(enumVal.value == intVal)
+				{
+					return enumVal;
+				}
+			}
+			
+			return null;
+		}
 	}
 }

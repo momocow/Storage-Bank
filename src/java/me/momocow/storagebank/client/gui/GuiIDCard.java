@@ -9,14 +9,17 @@ import org.lwjgl.input.Keyboard;
 import me.momocow.general.client.gui.MoCenteredGuiScreen;
 import me.momocow.general.client.gui.MoGuiScreen;
 import me.momocow.general.client.gui.widget.MoVanillaScrollBar;
+import me.momocow.storagebank.network.C2SGuiInputPacket;
+import me.momocow.storagebank.proxy.CommonProxy;
+import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 public class GuiIDCard extends MoCenteredGuiScreen
 {
@@ -42,6 +45,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	private String textDeleteDepo;
 	
 	//data
+	private NBTTagCompound cachedData;
 	private NBTTagList depoList;
 	private int depoNum;
 	private String stringOwnerName;
@@ -62,6 +66,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 		textDeleteDepo = "X";
 		
 		//data collection
+		this.cachedData = data;
 		depoList = (NBTTagList)data.getTag("depoList");
 		stringCardID = data.getUniqueId("cardID").toString();
 		stringOwnerName = data.getString("ownerName");
@@ -113,7 +118,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
 			depoName.setMaxStringLength(20);
 			depoName.setCanLoseFocus(true);
 			depoName.setTextColor(5592405);
-			depoName.setText(depoList.getCompoundTagAt(btnIdx).getString("depoName"));
+			String dpName = (depoList.getCompoundTagAt(btnIdx).hasKey("depoName"))? depoList.getCompoundTagAt(btnIdx).getString("depoName"): I18n.format(this.getUnlocalizedName() + ".defaultDepoName");
+			depoName.setText(dpName);
 			depoName.setCursorPosition(0);
 			depoNames.add(depoName);
 
@@ -191,8 +197,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
     		
     		//depo position
     		NBTTagCompound depo = depoList.getCompoundTagAt(i);
-    		int[] depoPos = depo.getIntArray("depoPos");
-    		fontRendererObj.drawString(fontRendererObj.trimStringToWidth("(" + depoPos[0] + ", " + depoPos[1] + ", " + depoPos[2] + ")", 66), this.getGlobalX(78), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), fontRendererObj.getColorCode('0'));
+    		BlockPos depoPos = BlockPos.fromLong(depo.getLong("depoPos"));
+    		fontRendererObj.drawString(fontRendererObj.trimStringToWidth("(" + depoPos.getX() + ", " + depoPos.getY() + ", " + depoPos.getZ() + ")", 66), this.getGlobalX(78), this.getGlobalY(73 + 10 * (i % this.maxDepoNumInPage)), fontRendererObj.getColorCode('0'));
     		
     		//depo delete
     		GuiButton depoDelete = this.buttonList.get(i);
@@ -217,8 +223,6 @@ public class GuiIDCard extends MoCenteredGuiScreen
     
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-    	super.keyTyped(typedChar, keyCode);
-    	
     	for(GuiTextField depoName: currentDepoNames)
 		{
 			if(depoName.isFocused())	//if one of the text field is clicked
@@ -230,14 +234,9 @@ public class GuiIDCard extends MoCenteredGuiScreen
 		}
     		
     	
-    	if(keyCode == 18)	//press 'e' to exit
+    	if(keyCode == 18 || keyCode == 1)	//press 'e' or 'esc' to exit
     	{
-    		this.mc.displayGuiScreen((GuiScreen)null);
-
-            if (this.mc.currentScreen == null)
-            {
-                this.mc.setIngameFocus();
-            }
+    		this.changeGui(null);
     	}
     	else if(keyCode == 200)	//key '↑'
     	{
@@ -272,7 +271,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
     			//reset the depoList
     			if(this.resetButton.mousePressed(this.mc, mouseX, mouseY))
     			{
-    				this.mc.thePlayer.getHeldItemMainhand().getTagCompound().setTag("depoList", this.depoList = new NBTTagList());
+	    			this.cachedData.setTag("depoList", this.depoList = new NBTTagList());
+    				
     	    		this.buttonList.clear();
     	    		this.initGui();
     				return;
@@ -332,8 +332,13 @@ public class GuiIDCard extends MoCenteredGuiScreen
     @Override
     public void onGuiClosed() 
     {
-    	super.onGuiClosed();
     	Keyboard.enableRepeatEvents(false);
+    	
+    	//store data to the server
+    	NBTTagCompound data = new NBTTagCompound();
+    	data.setTag("depoList", this.depoList);
+    	data.setUniqueId("cardID", this.cachedData.getUniqueId("cardID"));
+    	CommonProxy.guiInputChannel.sendToServer(new C2SGuiInputPacket(data, ID.GuiInput.GuiIDCard));
     }
     
     /**

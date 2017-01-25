@@ -6,18 +6,21 @@ import me.momocow.general.entity.MoEntityItem;
 import me.momocow.general.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
+import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
+import me.momocow.storagebank.server.BankingController;
+import me.momocow.storagebank.tileentity.TileEntityDepoController;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -44,7 +47,7 @@ public class IDCard extends MoItem
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{	
 		//Every IDCard is supposed to has its NBT data after signed up from raw card
-		if(!itemStackIn.hasTagCompound())
+		if(!worldIn.isRemote && !StorageBank.controller.isCardRegistered(itemStackIn))
 		{
 			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 		}
@@ -54,29 +57,28 @@ public class IDCard extends MoItem
 		
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
-
 	
+	@Override
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
+			EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) 
+	{
+		if(!world.isRemote && world.getBlockState(pos).getBlock() == ModBlocks.BlockDepoController)
+		{
+			TileEntity tile = world.getTileEntity(pos);
+			if(tile instanceof TileEntityDepoController)
+			{
+				StorageBank.controller.addDepoList(stack, ((TileEntityDepoController)tile), player);
+			}
+			
+			return EnumActionResult.SUCCESS;
+		}
+		
+		return EnumActionResult.PASS;
+	}
+
 	/**
 	 * <p>[SERVER] Sign up the IDCard by filling the required NBT fields</p>
-	 * <pre>NBTTagCompound
-	 * {
-	 *     {@link Reference#MOD_ID}: NBTTagCompound
-	 *     {
-	 *         "ownerID": UUID,
-	 *         "ownerName" : String,
-	 *         "cardID": UUID,
-	 *         "depoList": NBTTagList
-	 *         [
-	 *             #: NBTTagCompound
-	 *             {
-	 *                 "depoID": UUID,
-	 *                 "depoName": String,
-	 *                 "depoPos": int[3]
-	 *             },
-	 *             ...
-	 *         ]
-	 *     }
-	 * }</pre>
+	 * @see BankingController#register(EntityPlayer, ItemStack)
 	 * @param itemStackIn
 	 * @param worldIn
 	 * @param playerIn
@@ -97,13 +99,7 @@ public class IDCard extends MoItem
 	public static void addDepository(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, float depoX, float depoY, float depoZ, String depoName)
 	{
 		if(!worldIn.isRemote && itemStackIn.hasTagCompound()){
-			//write NBT tag
-			NBTTagCompound depo = new NBTTagCompound();
-			NBTTagList depoList = (NBTTagList) itemStackIn.getTagCompound().getTag("depoList");
-			depo.setUniqueId("depoID", MathHelper.getRandomUUID());
-			depo.setString("depoName", depoName);
-			depo.setIntArray("depoPos", new int[]{(int)depoX, (int)depoY, (int)depoZ});
-			depoList.appendTag(depo);
+			
 		}
 	}
 	
@@ -111,7 +107,7 @@ public class IDCard extends MoItem
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
 	{
 		String textOwner = "";
-		if(stack.hasTagCompound()) textOwner = stack.getTagCompound().getString("ownerName");
+		if(stack.hasTagCompound()) textOwner = stack.getTagCompound().getCompoundTag(Reference.MOD_ID).getString("ownerName");
 		tooltip.add(TextFormatting.YELLOW + I18n.format(getUnlocalizedName() + ".desc1") + ": " + textOwner);
 		tooltip.add(TextFormatting.AQUA + I18n.format(getUnlocalizedName() + ".desc2"));
 	}

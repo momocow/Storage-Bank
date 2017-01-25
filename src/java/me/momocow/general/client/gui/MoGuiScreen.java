@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class MoGuiScreen extends GuiScreen
 {
-	protected String unlocalizedName;
+	protected String unlocalizedName = "";
 	public int rowHeight = 10;
 	public int colWidth = 10;
 	public int guiHeight = 0;
@@ -244,4 +244,14 @@ public abstract class MoGuiScreen extends GuiScreen
     }
 
 	public void mouseWheelMove(int wheelMove) {}
+
+	public void changeGui(GuiScreen screen)
+    {
+    	this.mc.displayGuiScreen((GuiScreen)screen);
+
+        if (this.mc.currentScreen == null)
+        {
+            this.mc.setIngameFocus();
+        }
+    }
 }

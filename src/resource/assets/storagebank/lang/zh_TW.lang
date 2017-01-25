@@ -17,6 +17,8 @@ item.storagebank.DriedMushroomBlueThin.name=乾癟的藍瘦香菇
 item.storagebank.DriedMushroomBlueThin.desc1=連眼淚都乾了...。･ﾟ･(─  ─)･ﾟ･
 
 # Tile
+tile.storagebank.BlockDepoController.name=倉庫主控器
+tile.storagebank.BlockDepoController.desc1=持卡右鍵以登錄本倉庫
 
 # Gui
 gui.storagebank.GuiIDCard.textTitle=倉銀提款卡
@@ -25,8 +27,17 @@ gui.storagebank.GuiIDCard.textOwner=持卡人
 gui.storagebank.GuiIDCard.textDepositoryList=倉庫列表
 gui.storagebank.GuiIDCard.depoPage=第%d頁/共%d頁
 gui.storagebank.GuiIDCard.resetButton=清除全部
+gui.storagebank.GuiIDCard.defaultDepoName=不知名倉庫
 
 #Bank Announce
-anno.storagebank.BankingController.signedUp=歡迎加入倉儲銀行！
-anno.storagebank.BankingController.failedToSignUp=卡片錯誤！
-anno.storagebank.BankingController.deregistered=卡片[%s]已註銷。
+anno.storagebank.BankingController.signedUp=[倉銀] <通知> 歡迎加入倉儲銀行！
+anno.storagebank.BankingController.failedToSignUp=[倉銀] <通知> 卡片錯誤！
+anno.storagebank.BankingController.deregistered=[倉銀] <通知> 卡片[%s]已註銷。
+anno.storagebank.BankingController.depoRegistered=[倉銀] <通知> 已建立新倉庫。
+anno.storagebank.BankingController.cardStolen=[倉銀] <緊急> %s嘗試在您的卡片登錄新倉庫(名稱：%s, 座標：[%d, %d, %d], 擁有人：%s)。
+anno.storagebank.BankingController.depoRobbed=[倉銀] <緊急> %s嘗試將您的倉庫(名稱：%s, 座標：[%d, %d, %d], 擁有人：%s)登錄至卡片(持卡人：%s)。
+anno.storagebank.BankingController.crime=你將因%s而遭受懲罰！
+anno.storagebank.BankingController.accuseOfStealing=盜刷卡片
+anno.storagebank.BankingController.accuseOfRobbing=搶劫倉庫
+anno.storagebank.BankingController.accuseOfStealingAndRobbing=盜卡搶劫
+anno.storagebank.BankingController.duplicateDepo=該倉庫已經登錄過了。

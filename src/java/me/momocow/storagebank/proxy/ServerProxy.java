@@ -2,6 +2,7 @@ package me.momocow.storagebank.proxy;
 
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.config.Config;
+import me.momocow.storagebank.server.BankingController;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
@@ -44,6 +45,11 @@ public class ServerProxy extends CommonProxy{
 		{
 			p.addChatMessage(text);
 		}
+	}
+	
+	@Override
+	public void createController() {
+		StorageBank.controller = new BankingController();
 	}
 	
 	public boolean isOverloading()

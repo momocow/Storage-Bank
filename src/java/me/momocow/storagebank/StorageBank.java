@@ -18,7 +18,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
-public class StorageBank {
+public class StorageBank 
+{
 	//mod instance
 	@Mod.Instance(Reference.MOD_ID)
     public static StorageBank instance;
@@ -31,7 +32,8 @@ public class StorageBank {
 	public static BankingController controller;	//Bank instance to control the interaction with StorageBank
      
     @EventHandler
-    public void preInit(FMLPreInitializationEvent e) throws Exception{
+    public void preInit(FMLPreInitializationEvent e) throws Exception
+    {
     	LogHelper.info("Stage: Pre-Init");
     	
     	config = new Config(e.getModConfigurationDirectory());
@@ -41,12 +43,14 @@ public class StorageBank {
 		ModBlocks.preinit();
 		ModEntities.preInit();
 		
+		proxy.createController();
     	proxy.registerRender();
     	proxy.registerChannel();
     }
         
     @EventHandler
-    public void init(FMLInitializationEvent e) throws Exception{
+    public void init(FMLInitializationEvent e) throws Exception
+    {
     	LogHelper.info("Stage: Init");
     	
     	ModBlocks.init();
@@ -57,7 +61,8 @@ public class StorageBank {
     }
         
     @EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
+    public void postInit(FMLPostInitializationEvent e) 
+    {
     	LogHelper.info("Stage: Post-Init");
     	
     	config.save();

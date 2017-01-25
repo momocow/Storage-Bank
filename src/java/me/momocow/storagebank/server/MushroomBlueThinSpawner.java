@@ -66,7 +66,7 @@ public final class MushroomBlueThinSpawner extends MoChunksData
 	
 	private float getChance(BlockPos plantPos)
 	{
-		float chance = 0.005f;
+		float chance = 0.0001f;
 		
 		if(this.world.getBlockState(plantPos.north()).getBlock() == ModBlocks.BlockMushroomBlueThin)
 		{
