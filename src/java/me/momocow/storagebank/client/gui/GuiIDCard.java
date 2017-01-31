@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import me.momocow.general.client.gui.MoCenteredGuiScreen;
-import me.momocow.general.client.gui.MoGuiScreen;
-import me.momocow.general.client.gui.widget.MoVanillaScrollBar;
+import me.momocow.moapi.client.gui.MoCenteredGuiScreen;
+import me.momocow.moapi.client.gui.MoGuiScreen;
+import me.momocow.moapi.client.gui.widget.MoVanillaScrollBar;
 import me.momocow.storagebank.network.C2SGuiInputPacket;
 import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.ID;
@@ -25,6 +25,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 {
 	private final static ResourceLocation BGGUITEXTURE = new ResourceLocation(Reference.MOD_ID + ":textures/gui/idcard.png");
 	private final static ResourceLocation ACTIVETEXTFIELD = new ResourceLocation(Reference.MOD_ID + ":textures/gui/depoNameActive.png");
+	private final static ResourceLocation SCROLLBAR = new ResourceLocation(Reference.MOD_ID + ":textures/gui/scrollbar.png");
 	private final static String NAME = "GuiIDCard";
 	
 	//gui component
@@ -102,7 +103,7 @@ public class GuiIDCard extends MoCenteredGuiScreen
 		
 		//add the scrollbar
 		int remain = (this.depoNum % this.maxDepoNumInPage > 0)? 1: 0;
-		this.scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / this.maxDepoNumInPage + remain);
+		this.scrollbar = new MoVanillaScrollBar(this.getGlobalX(158), this.getGlobalY(73), this.zLevel, this.getGlobalY(142), 12, 15, this.depoNum / this.maxDepoNumInPage + remain, SCROLLBAR);
 		this.scrollbar.setStage(this.pageCursor);
 		
 		//add the button and the textfield
@@ -233,11 +234,11 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	//press 'e' or 'esc' to exit
     	super.keyTyped(typedChar, keyCode);
     		
-    	if(keyCode == 200)	//key '���'
+    	if(keyCode == 200)	//key up
     	{
     		this.scrollbar.moveBackStage();
     	}
-    	else if(keyCode == 208)	//key '���'
+    	else if(keyCode == 208)	//key down
     	{
     		this.scrollbar.moveNextStage();
     	}

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import me.momocow.general.util.NBTHelper;
+import me.momocow.moapi.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.proxy.ClientProxy;
 import me.momocow.storagebank.reference.Reference;
@@ -116,6 +116,7 @@ public class BankingController
 			this.mapCardGuiOnOpen.put(cardID, stack);
 			this.mapCardDepoList.put(cardID, IDCardHelper.getDepoMap(stack));
 		}
+		
 	}
 	
 	public void updateDepoList(UUID cid, NBTTagList newList)

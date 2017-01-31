@@ -1,7 +1,7 @@
 package me.momocow.storagebank.client.gui;
 
-import me.momocow.general.client.gui.MoCenteredGuiScreen;
-import me.momocow.general.client.gui.MoGuiScreen;
+import me.momocow.moapi.client.gui.MoCenteredGuiScreen;
+import me.momocow.moapi.client.gui.MoGuiScreen;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.util.ResourceLocation;
 
@@ -9,7 +9,8 @@ public class GuiATM extends MoCenteredGuiScreen
 {
 	private final static ResourceLocation BGGUITEXTURE = new ResourceLocation(Reference.MOD_ID + ":textures/gui/atm.png");
 
-	public GuiATM() {
+	public GuiATM() 
+	{
 		super(176, 166);
 	}
 	

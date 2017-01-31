@@ -2,7 +2,7 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.general.item.MoItem;
+import me.momocow.moapi.item.MoItem;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.client.resources.I18n;
@@ -15,7 +15,7 @@ public class MushroomBlueThin extends MoItem{
 	private static final String NAME = "MushroomBlueThin";
 	
 	public MushroomBlueThin(){
-		this.setCreativeTab(CreativeTab.MO_TAB);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
 		this.setMaxStackSize(64);

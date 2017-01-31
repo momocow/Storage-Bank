@@ -1,8 +1,8 @@
 package me.momocow.storagebank.block;
 
-import me.momocow.general.block.MoBlockContainerHorizontalFacing;
-import me.momocow.general.block.MoBlockHorizontalFacing;
+import me.momocow.moapi.block.MoBlockHorizontalFacing;
 import me.momocow.storagebank.client.render.block.RenderATM;
+import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.reference.Reference;
 import me.momocow.storagebank.tileentity.TileEntityATM;
 import net.minecraft.block.material.Material;
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockATM extends MoBlockContainerHorizontalFacing
+public class BlockATM extends BasicBlockContainerHorizontalFacing
 {
 	private static final String BLOCKNAME = "BlockATM";
 	private static final String TILENAME = "TileEntityATM";
@@ -34,6 +34,7 @@ public class BlockATM extends MoBlockContainerHorizontalFacing
 		super(Material.ROCK);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + BLOCKNAME);
 		this.setRegistryName(BLOCKNAME);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setHardness(5F);
 		this.setResistance(10F);
 		this.setHarvestLevel("pickaxe", 2);

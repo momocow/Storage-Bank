@@ -1,7 +1,7 @@
 package me.momocow.storagebank.item;
 
-import me.momocow.general.item.MoItem;
-import me.momocow.general.item.MoSeed;
+import me.momocow.moapi.item.MoItem;
+import me.momocow.moapi.item.MoSeed;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;
@@ -19,7 +19,7 @@ public class SorusBlueThin extends MoItem implements MoSeed{
 	private static final String NAME = "SorusBlueThin";
 	
 	public SorusBlueThin(){
-		this.setCreativeTab(CreativeTab.MO_TAB);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
 		this.setMaxStackSize(64);

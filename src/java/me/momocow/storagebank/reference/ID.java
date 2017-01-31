@@ -1,6 +1,6 @@
 package me.momocow.storagebank.reference;
 
-import me.momocow.general.EnumToInt;
+import me.momocow.moapi.util.EnumToInt;
 
 public class ID 
 {
@@ -14,8 +14,7 @@ public class ID
 	{
 		public static final byte C2SDeregister = 0;
 		public static final byte C2SGuiInput = 1;
-		public static final byte C2SAuthRequest = 2;
-		public static final byte S2CAuthResponse = 3;
+		public static final byte S2COpenGui = 2;
 	}
 	
 	public static final class Gui
@@ -50,36 +49,6 @@ public class ID
 		public static GuiInput getEnum(int intVal)
 		{
 			for(GuiInput enumVal: GuiInput.values())
-			{
-				if(enumVal.value == intVal)
-				{
-					return enumVal;
-				}
-			}
-			
-			return null;
-		}
-	}
-	
-	public enum GuiAuth implements EnumToInt
-	{
-		PlayerOpenCard(0);
-		
-		private final int value;
-		
-		private GuiAuth(int v)
-		{
-			this.value = v;
-		}
-		
-		@Override
-		public int toInt() {
-			return this.value;
-		}
-		
-		public static GuiAuth getEnum(int intVal)
-		{
-			for(GuiAuth enumVal: GuiAuth.values())
 			{
 				if(enumVal.value == intVal)
 				{

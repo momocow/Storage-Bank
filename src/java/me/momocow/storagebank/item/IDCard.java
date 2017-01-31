@@ -2,12 +2,12 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.general.entity.MoEntityItem;
-import me.momocow.general.item.MoItem;
+import me.momocow.moapi.entity.MoEntityItem;
+import me.momocow.moapi.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;
-import me.momocow.storagebank.network.C2SAuthRequestPacket;
+import me.momocow.storagebank.network.S2COpenGuiPacket;
 import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
@@ -15,6 +15,7 @@ import me.momocow.storagebank.tileentity.TileEntityDepoCore;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
@@ -32,7 +33,7 @@ public class IDCard extends MoItem
 	
 	public IDCard()
 	{
-		this.setCreativeTab(CreativeTab.MO_TAB);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
 		this.setMaxStackSize(1);
@@ -47,13 +48,10 @@ public class IDCard extends MoItem
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
-		if(worldIn.isRemote)
-		{
-			CommonProxy.guiChannel.sendToServer(new C2SAuthRequestPacket(itemStackIn, ID.GuiAuth.PlayerOpenCard));
-		}
-		else if(StorageBank.controller.authorize(playerIn, itemStackIn))
+		if(playerIn instanceof EntityPlayerMP && StorageBank.controller.authorize(playerIn, itemStackIn))
 		{
 			playerIn.openGui(StorageBank.instance, ID.Gui.GuiIDCard, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
+			CommonProxy.guiChannel.sendTo(new S2COpenGuiPacket(ID.Gui.GuiIDCard, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ), (EntityPlayerMP)playerIn);
 		}
 		
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);

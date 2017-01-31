@@ -3,9 +3,10 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.momocow.general.block.MoBush;
-import me.momocow.general.client.render.MoCustomModel;
-import me.momocow.general.util.LogHelper;
+import me.momocow.moapi.block.MoBush;
+import me.momocow.moapi.client.render.MoCustomModel;
+import me.momocow.moapi.util.LogHelper;
+import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.block.BlockATM;
 import me.momocow.storagebank.block.BlockDepoCore;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
@@ -21,6 +22,8 @@ public class ModBlocks
 	public static BlockMushroomBlueThin BlockMushroomBlueThin;
 	public static BlockATM BlockATM;
 	public static BlockDepoCore BlockDepoCore;
+	
+	private static LogHelper logger = StorageBank.logger;
 
 	//bush list
 	private static List<Block> blocks;
@@ -33,7 +36,7 @@ public class ModBlocks
 		BlockATM = (BlockATM) initBlock(BlockATM.class);
 		BlockDepoCore = (BlockDepoCore) initBlock(BlockDepoCore.class);
 		
-		LogHelper.info("Mod Blocks pre-init... Done");
+		logger.info("Mod Blocks pre-init... Done");
 	}
 	
 	private static Block initBlock(Class<? extends Block> blockClass) throws Exception
@@ -44,7 +47,7 @@ public class ModBlocks
 			return block;
 		}
 		catch (Exception e){
-			LogHelper.info("EXCEPTION: instancing fail: "+ blockClass);
+			logger.info("EXCEPTION: instancing fail: "+ blockClass);
 			throw e;
 		}
 	}
@@ -58,7 +61,7 @@ public class ModBlocks
 			}
         }
 		
-		LogHelper.info("Mod Blocks init... Done");
+		logger.info("Mod Blocks init... Done");
 	}
 	
 	private static void initBush(MoBush bush) throws Exception
@@ -73,6 +76,6 @@ public class ModBlocks
 			((MoCustomModel)block).initModel(); 
         }
 		
-		LogHelper.info("Block Models register... Done");
+		logger.info("Block Models register... Done");
 	}
 }

@@ -2,7 +2,7 @@ package me.momocow.storagebank.block;
 
 import java.util.List;
 
-import me.momocow.general.block.MoBlockContainerHorizontalFacing;
+import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.reference.Reference;
 import me.momocow.storagebank.tileentity.TileEntityDepoCore;
 import net.minecraft.block.material.Material;
@@ -20,7 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockDepoCore extends MoBlockContainerHorizontalFacing
+public class BlockDepoCore extends BasicBlockContainerHorizontalFacing
 {
 	private static final String BLOCKNAME = "BlockDepoCore";
 	private static final String TILENAME = "TileEntityDepoCore";
@@ -30,6 +30,7 @@ public class BlockDepoCore extends MoBlockContainerHorizontalFacing
 		super(Material.ROCK);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + BLOCKNAME);
 		this.setRegistryName(BLOCKNAME);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setHardness(5F);
 		this.setResistance(10F);
 		this.setHarvestLevel("pickaxe", 2);

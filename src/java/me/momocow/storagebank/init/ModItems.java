@@ -3,8 +3,9 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.momocow.general.item.MoItem;
-import me.momocow.general.util.LogHelper;
+import me.momocow.moapi.item.MoItem;
+import me.momocow.moapi.util.LogHelper;
+import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.item.DriedMushroomBlueThin;
 import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.item.MushroomBlueThin;
@@ -18,6 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModItems 
 {
+	private static LogHelper logger = StorageBank.logger;
+	
 	public static RawCard RawCard;
 	public static IDCard IDCard;
 	public static SorusBlueThin SorusBlueThin;
@@ -37,7 +40,7 @@ public class ModItems
 		MushroomBlueThin = (MushroomBlueThin) initItem(MushroomBlueThin.class);
 		DriedMushroomBlueThin = (DriedMushroomBlueThin) initItem(DriedMushroomBlueThin.class);
 		
-		LogHelper.info("Mod Items pre-init... Done");
+		logger.info("Mod Items pre-init... Done");
 	}
 	
 	private static MoItem initItem(Class<? extends MoItem> itemClass) throws Exception
@@ -48,7 +51,7 @@ public class ModItems
 			return i;
 		}
 		catch (Exception e){
-			LogHelper.info("EXCEPTION: instancing fail: "+itemClass);
+			logger.info("EXCEPTION: instancing fail: "+itemClass);
 			throw e;
 		}
 	}
@@ -59,6 +62,6 @@ public class ModItems
         for(MoItem item: Items){
         	item.initModel(); 
         }
-        LogHelper.info("Item Models register... Done");
+        logger.info("Item Models register... Done");
     }
 }

@@ -2,7 +2,7 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.general.item.MoItem;
+import me.momocow.moapi.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
@@ -23,7 +23,7 @@ public class RawCard extends MoItem{
 	private static final String NAME = "RawCard";
 	
 	public RawCard(){
-		this.setCreativeTab(CreativeTab.MO_TAB);
+		this.setCreativeTab(CreativeTab.TAB_StorageBank);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + NAME);
 		this.setRegistryName(NAME);
 		this.setMaxStackSize(64);

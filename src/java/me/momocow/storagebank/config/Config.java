@@ -2,15 +2,15 @@ package me.momocow.storagebank.config;
 
 import java.io.File;
 
-import me.momocow.general.util.LogHelper;
+import me.momocow.moapi.util.LogHelper;
+import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.common.config.Configuration;
 
 public class Config 
 {
 	private Configuration cfg;
-	
-	public static float BushSpawnChanceScale = 1.0f;
+	private static LogHelper logger = StorageBank.logger;
 		
 	public static class MushroomBlueThin
 	{
@@ -38,9 +38,6 @@ public class Config
 		//General category
 		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "StorageBank General Configuration");
 		cfg.setCategoryLanguageKey(CATEGORY_GENERAL, CATEGORY_GENERAL);
-		
-		BushSpawnChanceScale = cfg.getFloat("BushSpawnChanceScale", CATEGORY_GENERAL, BushSpawnChanceScale, 0f, Float.MAX_VALUE, 
-				"scale value for the chance to spawn each bush");
 		
 		//MBT category
 		cfg.addCustomCategoryComment(CATEGORY_MUSHROOMBLUETHIN, "StorageBank MushroomBlueThin Configuration");
@@ -70,14 +67,14 @@ public class Config
         }
         catch (Exception e)
         {
-            LogHelper.error("Fail to init the config!" + e);
+        	logger.error("Fail to init the config!" + e);
         }
         finally 
         {
             this.save();
         }
         
-        LogHelper.info("Config read!");
+        logger.info("Config read!");
     }
 	
 	public void save()
@@ -85,8 +82,8 @@ public class Config
 		if (this.cfg.hasChanged()) 
 		{
 			this.cfg.save();
-			LogHelper.info("Config save!");
+			logger.info("Config save!");
 		}
-		else LogHelper.info("Nothing changed in config!");
+		else logger.info("Nothing changed in config!");
 	}
 }

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import me.momocow.general.tileentity.MoTileEntity;
-import me.momocow.general.util.NBTHelper;
+import me.momocow.moapi.tileentity.MoTileEntity;
+import me.momocow.moapi.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;

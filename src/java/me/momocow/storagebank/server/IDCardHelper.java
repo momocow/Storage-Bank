@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import me.momocow.general.util.NBTHelper;
+import me.momocow.moapi.util.NBTHelper;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.proxy.ServerProxy;
 import me.momocow.storagebank.reference.Reference;
