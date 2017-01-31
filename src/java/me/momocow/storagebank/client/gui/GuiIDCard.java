@@ -78,8 +78,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
 	@Override
 	public void initGui(){
 		//environment preparing
+		super.initGui();
 		Keyboard.enableRepeatEvents(true);
-		this.setCenter(width / 2, height / 2);	//init the offset of the Gui
 		
 		//reset
 		for(GuiTextField depoName: this.currentDepoNames)
@@ -138,10 +138,6 @@ public class GuiIDCard extends MoCenteredGuiScreen
 			this.resetButton.enabled = false;
 		}
 	}
-	
-	@Override
-    public void updateScreen() {
-    }
 	
 	/**
      * Draws the screen and all the components in it.
@@ -222,7 +218,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
     }
     
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) throws IOException 
+    {
     	for(GuiTextField depoName: currentDepoNames)
 		{
 			if(depoName.isFocused())	//if one of the text field is clicked
@@ -232,17 +229,15 @@ public class GuiIDCard extends MoCenteredGuiScreen
 				return;
 			}
 		}
-    		
     	
-    	if(keyCode == 18 || keyCode == 1)	//press 'e' or 'esc' to exit
-    	{
-    		this.changeGui(null);
-    	}
-    	else if(keyCode == 200)	//key '↑'
+    	//press 'e' or 'esc' to exit
+    	super.keyTyped(typedChar, keyCode);
+    		
+    	if(keyCode == 200)	//key '���'
     	{
     		this.scrollbar.moveBackStage();
     	}
-    	else if(keyCode == 208)	//key '↓'
+    	else if(keyCode == 208)	//key '���'
     	{
     		this.scrollbar.moveNextStage();
     	}
@@ -336,18 +331,8 @@ public class GuiIDCard extends MoCenteredGuiScreen
     	
     	//store data to the server
     	NBTTagCompound data = new NBTTagCompound();
-    	data.setTag("depoList", this.depoList);
+    	if(!this.depoList.hasNoTags()) data.setTag("depoList", this.depoList);
     	data.setUniqueId("cardID", this.cachedData.getUniqueId("cardID"));
-    	CommonProxy.guiInputChannel.sendToServer(new C2SGuiInputPacket(data, ID.GuiInput.GuiIDCard));
-    }
-    
-    /**
-     * Returns true if this GUI should pause the game when it is displayed in 
-     * single-player
-     */
-    @Override
-    public boolean doesGuiPauseGame()
-    {
-        return false;
+    	CommonProxy.guiChannel.sendToServer(new C2SGuiInputPacket(data, ID.GuiInput.GuiIDCard));
     }
 }

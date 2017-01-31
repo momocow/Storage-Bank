@@ -8,23 +8,36 @@ import java.util.UUID;
 import me.momocow.general.tileentity.MoTileEntity;
 import me.momocow.general.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
-import me.momocow.storagebank.server.BankingController;
+import me.momocow.storagebank.reference.ID;
+import me.momocow.storagebank.reference.Reference;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-public class TileEntityDepoController extends MoTileEntity
-{
-	private BankingController controller = StorageBank.controller;
-	
+public class TileEntityDepoCore extends MoTileEntity
+{	
+	public TileEntityDepoCore() {
+		super(Reference.MOD_ID);
+	}
+
 	private String depoName = "";
-	private UUID depoID;
+	private UUID depoID = MathHelper.getRandomUUID();
 	private UUID ownerID;
 	private Set<UUID> associatedCards = new HashSet<UUID>();
+	
+	@Override
+	public int getGuiId() {
+		return ID.Gui.GuiDepoCore;
+	}
 	
 	public ITextComponent getDepoName()
 	{
@@ -38,7 +51,8 @@ public class TileEntityDepoController extends MoTileEntity
 	
 	public void setDepoName(String n)
 	{
-		if(n != null) this.depoName = n;
+		this.depoName = n;
+		this.markDirty();
 	}
 	
 	public UUID getId()
@@ -46,27 +60,33 @@ public class TileEntityDepoController extends MoTileEntity
 		return this.depoID;
 	}
 	
-	public void setId(UUID did)
-	{
-		if(this.depoID == null) this.depoID = did;
-	}
-	
 	public UUID getOwnerId()
 	{
 		return this.ownerID;
 	}
 	
-	public void setOwnerId(UUID oid)
+	public void setOwner(EntityPlayer player)
 	{
-		if(this.ownerID == null) this.ownerID = oid;
+		this.ownerID = player.getUniqueID();
+		this.markDirty();
 	}
-	
+
 	public void setAssociation(UUID card)
 	{
 		if(card != null)
 		{
 			this.associatedCards.add(card);
+			this.markDirty();
 		}
+	}
+	
+	public boolean isAssociated(UUID card)
+	{
+		if(card != null)
+		{
+			return this.associatedCards.contains(card);
+		}
+		return false;
 	}
 	
 	public void removeAssociation(UUID card)
@@ -74,39 +94,36 @@ public class TileEntityDepoController extends MoTileEntity
 		if(card != null)
 		{
 			this.associatedCards.remove(card);
+			this.markDirty();
 		}
 	}
 	
 	public void clearAssociation()
 	{
 		this.associatedCards.clear();
-	}
-	
-	@Override
-	public boolean isInit() {
-		return this.depoID != null && ownerID != null;
-	}
-	
-	@Override
-	public void init(NBTTagCompound compound, EntityPlayer placer) {
-		if(compound != null && placer != null)
-		{
-			//import from NBT
-			super.init(compound, placer);
-			
-			//validated by bank controller
-			if(!this.controller.isDepoRegistered(this.depoID))
-			{
-				this.controller.registerDepository(this, placer);
-			}
-		}
+		this.markDirty();
 	}
 	
 //	should the tile entity refreshes when new blockstate is applied to the position
+//	default: if new blockstate is not equal to new one, return true to force the refresh
 //	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
 
 	@Override
-	public void importFromNBT(NBTTagCompound data) {		
+	public void onBlockPlacedBy(EntityPlayer placer, ItemStack stack)
+	{
+		this.setOwner(placer);
+		super.onBlockPlacedBy(placer, stack);
+	}
+	
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) 
+	{
+		if(!worldIn.isRemote) StorageBank.controller.authorize(player, this);
+	}
+	
+	@Override
+	public void importFromNBT(NBTTagCompound data) 
+	{
 		if(data != null)
 		{
 			this.associatedCards.clear();
@@ -139,14 +156,11 @@ public class TileEntityDepoController extends MoTileEntity
 	}
 	
 	@Override
-	public NBTTagCompound exportToNBT() {
-		NBTTagCompound SBTileData = new NBTTagCompound();
-		SBTileData.setString("depoName", this.depoName);
-		if(this.isInit()) 
-		{
-			SBTileData.setUniqueId("depoID", this.depoID);
-			SBTileData.setUniqueId("ownerID", this.ownerID);
-		}
+	public NBTTagCompound exportToNBT(NBTTagCompound SBTileData) 
+	{
+		if(!this.depoName.isEmpty()) SBTileData.setString("depoName", this.depoName);
+		if(this.depoID != null) SBTileData.setUniqueId("depoID", this.depoID);
+		if(this.ownerID != null) SBTileData.setUniqueId("ownerID", this.ownerID);
 		NBTTagList cardList = new NBTTagList();
 		for(UUID cid: new ArrayList<UUID>(this.associatedCards))
 		{

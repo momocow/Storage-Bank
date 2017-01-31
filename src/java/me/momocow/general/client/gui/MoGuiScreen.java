@@ -145,6 +145,15 @@ public abstract class MoGuiScreen extends GuiScreen
 		return this.getGlobalX(colIdx * this.colWidth);
 	}
 	
+	@Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException 
+	{
+		if(keyCode == 18 || keyCode == 1)	//press 'e' or 'esc' to exit
+    	{
+    		this.changeGui(null);
+    	}
+	}
+	
 	/**
 	 * <p>Compatible texture drawing method for any size of images</p>
 	 * <p>Parameters, x and y, define the right top point on the screen.</p>

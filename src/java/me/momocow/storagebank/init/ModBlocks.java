@@ -7,7 +7,7 @@ import me.momocow.general.block.MoBush;
 import me.momocow.general.client.render.MoCustomModel;
 import me.momocow.general.util.LogHelper;
 import me.momocow.storagebank.block.BlockATM;
-import me.momocow.storagebank.block.BlockDepoController;
+import me.momocow.storagebank.block.BlockDepoCore;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
@@ -20,7 +20,7 @@ public class ModBlocks
 {
 	public static BlockMushroomBlueThin BlockMushroomBlueThin;
 	public static BlockATM BlockATM;
-	public static BlockDepoController BlockDepoController;
+	public static BlockDepoCore BlockDepoCore;
 
 	//bush list
 	private static List<Block> blocks;
@@ -31,7 +31,7 @@ public class ModBlocks
 		
 		BlockMushroomBlueThin = (BlockMushroomBlueThin) initBlock(BlockMushroomBlueThin.class);
 		BlockATM = (BlockATM) initBlock(BlockATM.class);
-		BlockDepoController = (BlockDepoController) initBlock(BlockDepoController.class);
+		BlockDepoCore = (BlockDepoCore) initBlock(BlockDepoCore.class);
 		
 		LogHelper.info("Mod Blocks pre-init... Done");
 	}

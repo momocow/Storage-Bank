@@ -7,10 +7,11 @@ import me.momocow.general.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;
+import me.momocow.storagebank.network.C2SAuthRequestPacket;
+import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
-import me.momocow.storagebank.server.BankingController;
-import me.momocow.storagebank.tileentity.TileEntityDepoController;
+import me.momocow.storagebank.tileentity.TileEntityDepoCore;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,15 +46,15 @@ public class IDCard extends MoItem
 	 */
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
-	{	
-		//Every IDCard is supposed to has its NBT data after signed up from raw card
-		if(!worldIn.isRemote && !StorageBank.controller.isCardRegistered(itemStackIn))
+	{
+		if(worldIn.isRemote)
 		{
-			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+			CommonProxy.guiChannel.sendToServer(new C2SAuthRequestPacket(itemStackIn, ID.GuiAuth.PlayerOpenCard));
 		}
-		
-		//fires on the server and sync to the client by IGuiHandler
-		playerIn.openGui(StorageBank.instance, ID.Gui.GuiIDCard, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
+		else if(StorageBank.controller.authorize(playerIn, itemStackIn))
+		{
+			playerIn.openGui(StorageBank.instance, ID.Gui.GuiIDCard, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
+		}
 		
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
@@ -62,45 +63,18 @@ public class IDCard extends MoItem
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
 			EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) 
 	{
-		if(!world.isRemote && world.getBlockState(pos).getBlock() == ModBlocks.BlockDepoController)
+		if(!world.isRemote && world.getBlockState(pos).getBlock() == ModBlocks.BlockDepoCore)
 		{
 			TileEntity tile = world.getTileEntity(pos);
-			if(tile instanceof TileEntityDepoController)
+			if(tile instanceof TileEntityDepoCore && StorageBank.controller.authorize(player, stack, (TileEntityDepoCore)tile))
 			{
-				StorageBank.controller.addDepoList(stack, ((TileEntityDepoController)tile), player);
+				StorageBank.controller.associate(stack, (TileEntityDepoCore)tile);
 			}
 			
 			return EnumActionResult.SUCCESS;
 		}
 		
 		return EnumActionResult.PASS;
-	}
-
-	/**
-	 * <p>[SERVER] Sign up the IDCard by filling the required NBT fields</p>
-	 * @see BankingController#register(EntityPlayer, ItemStack)
-	 * @param itemStackIn
-	 * @param worldIn
-	 * @param playerIn
-	 */
-	public void signUp(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
-	{
-		if(!worldIn.isRemote){
-			StorageBank.controller.register(playerIn, itemStackIn);
-		}
-	}
-	
-	/**
-	 * [SERVER only] Add a depository to the depoList in the IDCard's NBT data
-	 * @param itemStackIn
-	 * @param worldIn
-	 * @param playerIn
-	 */
-	public static void addDepository(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, float depoX, float depoY, float depoZ, String depoName)
-	{
-		if(!worldIn.isRemote && itemStackIn.hasTagCompound()){
-			
-		}
 	}
 	
 	@Override

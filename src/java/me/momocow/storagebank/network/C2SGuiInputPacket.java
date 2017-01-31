@@ -1,11 +1,14 @@
 package me.momocow.storagebank.network;
 
 import io.netty.buffer.ByteBuf;
+import me.momocow.general.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.ID.GuiInput;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -53,7 +56,31 @@ public class C2SGuiInputPacket implements IMessage
 					{
 						@Override
 						public void run() {
-							StorageBank.controller.updateDepoList(data);
+							/**
+							 * NBTTagCompound
+							 * {
+							 *     "cardID": UUID,
+							 *     "depoList": NBTTagList
+							 *     [
+							 *         NBTTagCompound
+							 *         {
+							 *             "depoID": UUID,
+							 *             "depoName": String,	//only exists if the String is non-empty
+							 *             "depoPos": Long,
+							 *             "depoWorld": int
+							 *         }
+							 *     ]
+							 * }
+							 */
+							if(data != null && NBTHelper.hasKey(data, "cardID"))
+							{
+								NBTTagList newList = null;
+								if(data.hasKey("depoList"))
+								{
+									newList = data.getTagList("depoList", Constants.NBT.TAG_COMPOUND);
+								}
+								StorageBank.controller.updateDepoList(data.getUniqueId("cardID"), newList);
+							}
 						}
 					};
 					break;

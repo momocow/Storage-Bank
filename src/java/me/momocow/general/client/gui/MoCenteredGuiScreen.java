@@ -14,4 +14,9 @@ public class MoCenteredGuiScreen extends MoGuiScreen
 	{
 		this(100, 100);
 	}
+	
+	@Override
+	public void initGui() {
+		this.setCenter(width / 2, height / 2);	//init the offset of the Gui
+	}
 }

@@ -3,30 +3,27 @@ package me.momocow.storagebank.proxy;
 import me.momocow.general.proxy.MoProxy;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.handler.GuiHandler;
+import me.momocow.storagebank.network.C2SAuthRequestPacket;
 import me.momocow.storagebank.network.C2SDeregisterPacket;
 import me.momocow.storagebank.network.C2SGuiInputPacket;
+import me.momocow.storagebank.network.S2CAuthResponsePacket;
 import me.momocow.storagebank.reference.ID;
+import me.momocow.storagebank.server.BankingController;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class CommonProxy implements MoProxy
 {
-	public static SimpleNetworkWrapper guiInputChannel;
+	public static SimpleNetworkWrapper guiChannel;
 	
-	public boolean isRemote = true;
+	public boolean isClientSide = true;
 	
 	public IThreadListener getGame() 
 	{ 
 		return null; 
-	}
-	
-	public World getWorld(int worldId) 
-	{
-		return null;
 	}
 		
 	public void broadcast(ITextComponent text){}
@@ -38,10 +35,14 @@ public abstract class CommonProxy implements MoProxy
 	
 	public String prefix()
 	{
-		return (isRemote)?"CLIENT":"SERVER";
+		return (isClientSide)?"CLIENT":"SERVER";
 	}
 	
-	public void createController() {}
+	public void createController() 
+	{
+		StorageBank.controller = new BankingController();
+	}
+	
 	public void registerKeyBindings() {}
 
 	/**
@@ -51,9 +52,11 @@ public abstract class CommonProxy implements MoProxy
 	
 	public void registerChannel() 
 	{
-		guiInputChannel = NetworkRegistry.INSTANCE.newSimpleChannel(ID.Channel.guiInput);
-		guiInputChannel.registerMessage(C2SDeregisterPacket.Handler.class, C2SDeregisterPacket.class, ID.Packet.C2SDeregister, Side.SERVER);
-		guiInputChannel.registerMessage(C2SGuiInputPacket.Handler.class, C2SGuiInputPacket.class, ID.Packet.C2SGuiInput, Side.SERVER);
+		guiChannel = NetworkRegistry.INSTANCE.newSimpleChannel(ID.Channel.guiInput);
+		guiChannel.registerMessage(C2SDeregisterPacket.Handler.class, C2SDeregisterPacket.class, ID.Packet.C2SDeregister, Side.SERVER);
+		guiChannel.registerMessage(C2SGuiInputPacket.Handler.class, C2SGuiInputPacket.class, ID.Packet.C2SGuiInput, Side.SERVER);
+		guiChannel.registerMessage(C2SAuthRequestPacket.Handler.class, C2SAuthRequestPacket.class, ID.Packet.C2SAuthRequest, Side.SERVER);
+		guiChannel.registerMessage(S2CAuthResponsePacket.Handler.class, S2CAuthResponsePacket.class, ID.Packet.S2CAuthResponse, Side.CLIENT);
     }
 	
 	public void registerGuiHandler()

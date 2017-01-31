@@ -1062,7 +1062,7 @@ public class GuiContainerCreativeModified extends InventoryEffectRenderer
                     	ItemStack stack = slot.getStack();
                     	if(stack.getItem() instanceof IDCard)
                     	{
-                    		CommonProxy.guiInputChannel.sendToServer(new C2SDeregisterPacket(stack));
+                    		CommonProxy.guiChannel.sendToServer(new C2SDeregisterPacket(stack));
                     	}
                     	
                         slot.putStack((ItemStack)null);

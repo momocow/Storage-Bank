@@ -4,7 +4,7 @@ import java.util.List;
 
 import me.momocow.general.block.MoBlockContainerHorizontalFacing;
 import me.momocow.storagebank.reference.Reference;
-import me.momocow.storagebank.tileentity.TileEntityDepoController;
+import me.momocow.storagebank.tileentity.TileEntityDepoCore;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -20,12 +20,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockDepoController extends MoBlockContainerHorizontalFacing
+public class BlockDepoCore extends MoBlockContainerHorizontalFacing
 {
-	private static final String BLOCKNAME = "BlockDepoController";
-	private static final String TILENAME = "TileEntityDepoController";
+	private static final String BLOCKNAME = "BlockDepoCore";
+	private static final String TILENAME = "TileEntityDepoCore";
 	
-	public BlockDepoController()
+	public BlockDepoCore()
 	{
 		super(Material.ROCK);
 		this.setUnlocalizedName(Reference.MOD_ID + "." + BLOCKNAME);
@@ -36,7 +36,7 @@ public class BlockDepoController extends MoBlockContainerHorizontalFacing
 
 		GameRegistry.register(this);
 		GameRegistry.register(new ItemBlock(this), this.getRegistryName());
-		GameRegistry.registerTileEntity(TileEntityDepoController.class, Reference.MOD_ID + "." +TILENAME);
+		GameRegistry.registerTileEntity(TileEntityDepoCore.class, Reference.MOD_ID + "." +TILENAME);
 	}
 	
 	@Override
@@ -95,6 +95,6 @@ public class BlockDepoController extends MoBlockContainerHorizontalFacing
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDepoController();
+		return new TileEntityDepoCore();
 	}
 }

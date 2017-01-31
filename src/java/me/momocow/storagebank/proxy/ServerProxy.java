@@ -1,8 +1,9 @@
 package me.momocow.storagebank.proxy;
 
+import java.util.UUID;
+
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.config.Config;
-import me.momocow.storagebank.server.BankingController;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 public class ServerProxy extends CommonProxy{	
 	public ServerProxy()
 	{
-		super.isRemote = false;
+		super.isClientSide = false;
 	}
 	
 	@Override
@@ -23,7 +24,25 @@ public class ServerProxy extends CommonProxy{
 	}
 	
 	@Override
-	public WorldServer getWorld(int worldId)
+	public void broadcast(ITextComponent text)
+	{
+		for(EntityPlayer p: getGame().getPlayerList().getPlayerList())
+		{
+			p.addChatMessage(text);
+		}
+	}
+	
+	public boolean isOverloading()
+	{
+		return (getAvgTimePerTick() > Config.DedicatedServer.MaxMilliSecPerTick);
+	}
+	
+	public static WorldServer[] getWorlds()
+	{
+		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+	}
+	
+	public static WorldServer getWorld(int worldId)
 	{
 		WorldServer[] worlds = getWorlds();
 				
@@ -38,32 +57,13 @@ public class ServerProxy extends CommonProxy{
 		return null;
 	}
 	
-	@Override
-	public void broadcast(ITextComponent text)
-	{
-		for(EntityPlayer p: getGame().getPlayerList().getPlayerList())
-		{
-			p.addChatMessage(text);
-		}
-	}
-	
-	@Override
-	public void createController() {
-		StorageBank.controller = new BankingController();
-	}
-	
-	public boolean isOverloading()
-	{
-		return (getAvgTimePerTick() > Config.DedicatedServer.MaxMilliSecPerTick);
-	}
-	
-	public static WorldServer[] getWorlds()
-	{
-		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
-	}
-	
 	public static PlayerList getPlayerList() {
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+	}
+	
+	public static EntityPlayer getPlayer(UUID player)
+	{
+		return getPlayerList().getPlayerByUUID(player);
 	}
 	
 	/**

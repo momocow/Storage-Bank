@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube_all",
+  
+  "textures": {
+  	"particle": "storagebank:block/DepoCore_side",
+    "up": "storagebank:block/DepoCore_top_down",
+    "down": "storagebank:block/DepoCore_top_down",
+    "east": "storagebank:block/DepoCore_side",
+    "west": "storagebank:block/DepoCore_side",
+    "north": "storagebank:block/DepoCore_front",
+    "south": "storagebank:block/DepoCore_side"
+  }
+}

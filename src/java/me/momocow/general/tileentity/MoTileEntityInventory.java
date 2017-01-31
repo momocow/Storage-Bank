@@ -11,8 +11,9 @@ public abstract class MoTileEntityInventory extends MoTileEntity implements IInv
 	protected ItemStack[] inventory;
 	protected String customName;
 	
-	public MoTileEntityInventory()
+	public MoTileEntityInventory(String modid)
 	{
+		super(modid);
 		this.inventory = new ItemStack[this.getSizeInventory()];
 	}
 	

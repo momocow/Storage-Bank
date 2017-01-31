@@ -1,6 +1,9 @@
 package me.momocow.storagebank;
 
+import java.io.File;
+
 import me.momocow.general.util.LogHelper;
+import me.momocow.general.util.MailBox;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModEntities;
@@ -16,6 +19,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class StorageBank 
@@ -30,12 +34,15 @@ public class StorageBank
 	
 	public static Config config;	//mod config
 	public static BankingController controller;	//Bank instance to control the interaction with StorageBank
-     
+    public static MailBox mailbox;
+	
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) throws Exception
     {
     	LogHelper.info("Stage: Pre-Init");
     	
+    	if(e.getSide() == Side.SERVER) mailbox = new MailBox(new File(e.getModConfigurationDirectory().getPath() + File.separator + ".." + File.separator + "mods"));
+    
     	config = new Config(e.getModConfigurationDirectory());
     	config.read();
     	

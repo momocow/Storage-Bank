@@ -48,7 +48,7 @@ public class C2SDeregisterPacket implements IMessage
 					@Override
 					public void run() 
 					{
-						StorageBank.controller.deregister(stack);
+						StorageBank.controller.destroyCard(stack);
 					}
 				});
 			}

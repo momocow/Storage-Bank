@@ -7,12 +7,16 @@ import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityATM extends MoTileEntityInventory
 {
 	private static final String NAME = "TileEntityATM";
 	private UUID owner;
 	
+	public TileEntityATM() {
+		super(Reference.MOD_ID);
+	}
 	
 	@Override
 	public int getGuiId() {
@@ -104,5 +108,14 @@ public class TileEntityATM extends MoTileEntityInventory
 	@Override
 	public String getUnlocalizedName() {
 		return Reference.MOD_ID + "." + NAME;
+	}
+
+	@Override
+	public void importFromNBT(NBTTagCompound data) {
+	}
+
+	@Override
+	public NBTTagCompound exportToNBT(NBTTagCompound data) {
+		return data;
 	}
 }

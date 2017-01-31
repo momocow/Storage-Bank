@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class ClientProxy extends CommonProxy{
 	public ClientProxy()
 	{
-		super.isRemote = true;
+		super.isClientSide = true;
 	}
 	
 	@Override
@@ -28,8 +28,7 @@ public class ClientProxy extends CommonProxy{
 		return Minecraft.getMinecraft();
 	}
 	
-	@Override
-	public WorldClient getWorld(int worldId)
+	public static WorldClient getWorld()
 	{
 		return Minecraft.getMinecraft().theWorld;
 	}

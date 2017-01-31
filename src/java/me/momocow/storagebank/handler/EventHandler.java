@@ -2,12 +2,10 @@ package me.momocow.storagebank.handler;
 
 import me.momocow.general.event.item.MoItemDestroyEvent;
 import me.momocow.general.reference.Constants;
-import me.momocow.general.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.client.gui.GuiContainerCreativeModified;
 import me.momocow.storagebank.init.ModWorldGens;
-import me.momocow.storagebank.item.IDCard;
-import me.momocow.storagebank.server.BankingController;
+import me.momocow.storagebank.server.IDCardHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -50,9 +48,9 @@ public class EventHandler
 	{
 		World world = e.getEntityItem().getEntityWorld();
 		ItemStack stack = e.getEntityItem().getEntityItem();
-		if(!world.isRemote && stack.getItem() instanceof IDCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("cardID"))
+		if(!world.isRemote && IDCardHelper.isCard(stack))
 		{
-			StorageBank.controller.deregister(stack);
+			StorageBank.controller.destroyCard(stack);
 		}
 	}
 	
@@ -62,9 +60,9 @@ public class EventHandler
 		World world = e.getEntityItem().getEntityWorld();
 		ItemStack stack = e.getEntityItem().getEntityItem();
 
-		if(!world.isRemote && stack.getItem() instanceof IDCard && stack.hasTagCompound() && NBTHelper.hasKey(StorageBank.controller.getDataTag(stack), "cardID"))
+		if(!world.isRemote && IDCardHelper.isCard(stack))
 		{
-			StorageBank.controller.deregister(stack);
+			StorageBank.controller.destroyCard(stack);
 		}
 	}
 	

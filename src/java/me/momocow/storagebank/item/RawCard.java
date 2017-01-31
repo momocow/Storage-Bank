@@ -3,6 +3,7 @@ package me.momocow.storagebank.item;
 import java.util.List;
 
 import me.momocow.general.item.MoItem;
+import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.reference.Reference;
@@ -38,7 +39,7 @@ public class RawCard extends MoItem{
 		ItemStack toSign = new ItemStack(ModItems.IDCard, 1);
 		if(!worldIn.isRemote)
 		{
-			ModItems.IDCard.signUp(toSign, worldIn, playerIn);	
+			StorageBank.controller.signUpCard(toSign, playerIn);
 		}
 		playerIn.inventory.addItemStackToInventory(toSign);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
