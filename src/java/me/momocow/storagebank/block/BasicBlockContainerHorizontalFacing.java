@@ -1,7 +1,7 @@
 package me.momocow.storagebank.block;
 
-import me.momocow.moapi.block.MoBlockContainerHorizontalFacing;
-import me.momocow.moapi.tileentity.MoTileEntity;
+import me.momocow.mobasic.block.MoBlockContainerHorizontalFacing;
+import me.momocow.mobasic.tileentity.MoTileEntity;
 import me.momocow.storagebank.StorageBank;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;

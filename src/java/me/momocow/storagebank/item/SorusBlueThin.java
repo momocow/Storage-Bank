@@ -1,7 +1,7 @@
 package me.momocow.storagebank.item;
 
-import me.momocow.moapi.item.MoItem;
-import me.momocow.moapi.item.MoSeed;
+import me.momocow.mobasic.item.MoItem;
+import me.momocow.mobasic.item.MoSeed;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;

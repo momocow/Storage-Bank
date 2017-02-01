@@ -1,6 +1,6 @@
 package me.momocow.storagebank.init;
 
-import me.momocow.moapi.util.LogHelper;
+import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.handler.EventHandler;
 import net.minecraftforge.common.MinecraftForge;

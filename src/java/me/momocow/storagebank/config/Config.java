@@ -2,7 +2,7 @@ package me.momocow.storagebank.config;
 
 import java.io.File;
 
-import me.momocow.moapi.util.LogHelper;
+import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.common.config.Configuration;

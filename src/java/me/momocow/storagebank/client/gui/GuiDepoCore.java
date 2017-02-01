@@ -1,6 +1,6 @@
 package me.momocow.storagebank.client.gui;
 
-import me.momocow.moapi.client.gui.MoCenteredGuiScreen;
+import me.momocow.mobasic.client.gui.MoCenteredGuiScreen;
 
 public class GuiDepoCore extends MoCenteredGuiScreen
 {

@@ -1,6 +1,6 @@
 package me.momocow.storagebank.block;
 
-import me.momocow.moapi.block.MoBlockHorizontalFacing;
+import me.momocow.mobasic.block.MoBlockHorizontalFacing;
 import me.momocow.storagebank.client.render.block.RenderATM;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.reference.Reference;

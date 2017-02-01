@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import me.momocow.moapi.util.NBTHelper;
+import me.momocow.mobasic.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.proxy.ClientProxy;
 import me.momocow.storagebank.reference.Reference;
@@ -123,7 +123,7 @@ public class BankingController
 	{
 		ItemStack card = this.mapCardGuiOnOpen.remove(cid);
 		Map<UUID, NBTTagCompound> originDepo = this.mapCardDepoList.remove(cid);
-		Set<UUID> diff = new HashSet<>(originDepo.keySet());
+		Set<UUID> diff = new HashSet<UUID>(originDepo.keySet());
 		
 		if(IDCardHelper.validateData(card))
 		{

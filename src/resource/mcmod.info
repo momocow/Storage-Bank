@@ -3,8 +3,8 @@
   "modid": "storagebank",
   "name": "Storage Bank",
   "description": "Secure private storage on multiple player servers",
-  "version": "",
-  "mcversion": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "logoFile": "",
   "url": "http://minecraft.momocow.me/mods",
   "updateUrl": "http://minecraft.momocow.me/mods/storagebank.versions.json",
@@ -12,6 +12,6 @@
   "credits": "",
   "parent": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["Forge", "MoBasic"]
 }
 ]

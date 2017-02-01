@@ -3,20 +3,17 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.momocow.moapi.block.MoBush;
-import me.momocow.moapi.client.render.MoCustomModel;
-import me.momocow.moapi.util.LogHelper;
+import me.momocow.mobasic.block.MoBush;
+import me.momocow.mobasic.client.render.MoCustomModel;
+import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.block.BlockATM;
 import me.momocow.storagebank.block.BlockDepoCore;
 import me.momocow.storagebank.block.BlockMushroomBlueThin;
-import me.momocow.storagebank.reference.Reference;
 import net.minecraft.block.Block;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModBlocks 
 {
 	public static BlockMushroomBlueThin BlockMushroomBlueThin;

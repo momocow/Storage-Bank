@@ -3,20 +3,17 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.momocow.moapi.item.MoItem;
-import me.momocow.moapi.util.LogHelper;
+import me.momocow.mobasic.item.MoItem;
+import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.item.DriedMushroomBlueThin;
 import me.momocow.storagebank.item.IDCard;
 import me.momocow.storagebank.item.MushroomBlueThin;
 import me.momocow.storagebank.item.RawCard;
 import me.momocow.storagebank.item.SorusBlueThin;
-import me.momocow.storagebank.reference.Reference;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModItems 
 {
 	private static LogHelper logger = StorageBank.logger;

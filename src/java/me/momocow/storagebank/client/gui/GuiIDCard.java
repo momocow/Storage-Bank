@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import me.momocow.moapi.client.gui.MoCenteredGuiScreen;
-import me.momocow.moapi.client.gui.MoGuiScreen;
-import me.momocow.moapi.client.gui.widget.MoVanillaScrollBar;
+import me.momocow.mobasic.client.gui.MoCenteredGuiScreen;
+import me.momocow.mobasic.client.gui.MoGuiScreen;
+import me.momocow.mobasic.client.gui.widget.MoVanillaScrollBar;
 import me.momocow.storagebank.network.C2SGuiInputPacket;
 import me.momocow.storagebank.proxy.CommonProxy;
 import me.momocow.storagebank.reference.ID;

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import me.momocow.moapi.util.NBTHelper;
+import me.momocow.mobasic.util.NBTHelper;
 import me.momocow.storagebank.init.ModItems;
 import me.momocow.storagebank.proxy.ServerProxy;
 import me.momocow.storagebank.reference.Reference;
@@ -187,7 +187,7 @@ public final class IDCardHelper
 	
 	public static Set<UUID> getDepoSet(ItemStack stack)
 	{
-		Set<UUID> ret = new HashSet<>();
+		Set<UUID> ret = new HashSet<UUID>();
 		if(validateData(stack))
 		{
 			NBTTagList depoList = NBTHelper.getDataTag(stack, modid).getTagList("depoList", Constants.NBT.TAG_COMPOUND);

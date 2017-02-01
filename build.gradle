@@ -24,6 +24,9 @@ version = "0.0.1.0"
 group= "me.momocow.storagebank"
 archivesBaseName = "storagebank-1.9.4"
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 sourceSets {
     main {
         java { srcDirs = ["$projectDir/src/java"] }
@@ -45,6 +48,7 @@ minecraft {
 }
 
 dependencies {
+    compile files("libs/MoBasic-1.9.4-0.0.1.0.jar")
 }
 
 processResources

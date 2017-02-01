@@ -1,6 +1,6 @@
 package me.momocow.storagebank.reference;
 
-import me.momocow.moapi.util.EnumToInt;
+import me.momocow.mobasic.util.EnumToInt;
 
 public class ID 
 {

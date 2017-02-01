@@ -1,6 +1,6 @@
 package me.momocow.storagebank.init;
 
-import me.momocow.moapi.entity.MoEntityItem;
+import me.momocow.mobasic.entity.MoEntityItem;
 import me.momocow.storagebank.StorageBank;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 

@@ -2,8 +2,8 @@ package me.momocow.storagebank.item;
 
 import java.util.List;
 
-import me.momocow.moapi.entity.MoEntityItem;
-import me.momocow.moapi.item.MoItem;
+import me.momocow.mobasic.entity.MoEntityItem;
+import me.momocow.mobasic.item.MoItem;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.creativetab.CreativeTab;
 import me.momocow.storagebank.init.ModBlocks;

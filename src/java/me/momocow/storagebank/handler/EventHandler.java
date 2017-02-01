@@ -1,7 +1,7 @@
 package me.momocow.storagebank.handler;
 
-import me.momocow.moapi.event.item.MoItemDestroyEvent;
-import me.momocow.moapi.reference.Constants;
+import me.momocow.mobasic.event.item.MoItemDestroyEvent;
+import me.momocow.mobasic.reference.Constants;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.client.gui.GuiContainerCreativeModified;
 import me.momocow.storagebank.init.ModWorldGens;

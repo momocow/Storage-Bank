@@ -1,6 +1,6 @@
 package me.momocow.storagebank;
 
-import me.momocow.moapi.util.LogHelper;
+import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModEntities;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES)
 public class StorageBank 
 {
 	//mod instance

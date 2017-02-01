@@ -5,8 +5,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import me.momocow.moapi.reference.Constants;
-import me.momocow.moapi.world.storage.MoChunksData;
+import me.momocow.mobasic.reference.Constants;
+import me.momocow.mobasic.world.storage.MoChunksData;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;

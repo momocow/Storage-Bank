@@ -2,7 +2,7 @@ package me.momocow.storagebank.tileentity;
 
 import java.util.UUID;
 
-import me.momocow.moapi.tileentity.MoTileEntityInventory;
+import me.momocow.mobasic.tileentity.MoTileEntityInventory;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;

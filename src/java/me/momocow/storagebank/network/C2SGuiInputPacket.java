@@ -1,7 +1,7 @@
 package me.momocow.storagebank.network;
 
 import io.netty.buffer.ByteBuf;
-import me.momocow.moapi.util.NBTHelper;
+import me.momocow.mobasic.util.NBTHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.ID;
 import me.momocow.storagebank.reference.ID.GuiInput;
