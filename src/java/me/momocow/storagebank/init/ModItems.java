@@ -3,8 +3,9 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.mobasic.item.MoItem;
-import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.item.DriedMushroomBlueThin;
 import me.momocow.storagebank.item.IDCard;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems 
 {
-	private static LogHelper logger = StorageBank.logger;
+	private static Logger logger = StorageBank.logger;
 	
 	public static RawCard RawCard;
 	public static IDCard IDCard;

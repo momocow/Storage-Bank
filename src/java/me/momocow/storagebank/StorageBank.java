@@ -1,6 +1,8 @@
 package me.momocow.storagebank;
 
-import me.momocow.mobasic.util.LogHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.storagebank.config.Config;
 import me.momocow.storagebank.init.ModBlocks;
 import me.momocow.storagebank.init.ModEntities;
@@ -30,7 +32,7 @@ public class StorageBank
 	
 	public static Config config;	//mod config
 	public static BankingController controller;	//Bank instance to control the interaction with StorageBank
-    public static LogHelper logger = new LogHelper(Reference.MOD_NAME);
+    public static Logger logger = LogManager.getLogger(Reference.MOD_ID);
 	
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) throws Exception

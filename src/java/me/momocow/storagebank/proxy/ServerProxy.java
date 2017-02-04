@@ -26,10 +26,7 @@ public class ServerProxy extends CommonProxy{
 	@Override
 	public void broadcast(ITextComponent text)
 	{
-		for(EntityPlayer p: getGame().getPlayerList().getPlayerList())
-		{
-			p.addChatMessage(text);
-		}
+		getGame().getPlayerList().sendChatMsg(text);
 	}
 	
 	public boolean isOverloading()

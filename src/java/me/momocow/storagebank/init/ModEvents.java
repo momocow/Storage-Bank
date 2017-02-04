@@ -1,12 +1,13 @@
 package me.momocow.storagebank.init;
 
-import me.momocow.mobasic.util.LogHelper;
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.handler.EventHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ModEvents {
-	private static LogHelper logger = StorageBank.logger;
+	private static Logger logger = StorageBank.logger;
 	
 	public static void init()
 	{

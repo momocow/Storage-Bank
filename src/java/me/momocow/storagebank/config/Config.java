@@ -2,7 +2,8 @@ package me.momocow.storagebank.config;
 
 import java.io.File;
 
-import me.momocow.mobasic.util.LogHelper;
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.reference.Reference;
 import net.minecraftforge.common.config.Configuration;
@@ -10,7 +11,7 @@ import net.minecraftforge.common.config.Configuration;
 public class Config 
 {
 	private Configuration cfg;
-	private static LogHelper logger = StorageBank.logger;
+	private static Logger logger = StorageBank.logger;
 		
 	public static class MushroomBlueThin
 	{

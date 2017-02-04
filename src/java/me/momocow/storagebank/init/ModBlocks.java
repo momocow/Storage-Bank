@@ -3,9 +3,10 @@ package me.momocow.storagebank.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.mobasic.block.MoBush;
 import me.momocow.mobasic.client.render.MoCustomModel;
-import me.momocow.mobasic.util.LogHelper;
 import me.momocow.storagebank.StorageBank;
 import me.momocow.storagebank.block.BlockATM;
 import me.momocow.storagebank.block.BlockDepoCore;
@@ -20,7 +21,7 @@ public class ModBlocks
 	public static BlockATM BlockATM;
 	public static BlockDepoCore BlockDepoCore;
 	
-	private static LogHelper logger = StorageBank.logger;
+	private static Logger logger = StorageBank.logger;
 
 	//bush list
 	private static List<Block> blocks;

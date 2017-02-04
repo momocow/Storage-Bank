@@ -1,13 +1,14 @@
 package me.momocow.storagebank.init;
 
-import me.momocow.mobasic.util.LogHelper;
+import org.apache.logging.log4j.Logger;
+
 import me.momocow.storagebank.StorageBank;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModRecipes {
-	private static LogHelper logger = StorageBank.logger;
+	private static Logger logger = StorageBank.logger;
 	
 	public static void init()
 	{
